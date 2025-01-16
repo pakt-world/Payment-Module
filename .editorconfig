@@ -1,0 +1,39 @@
+# EditorConfig is awesome: https://editorconfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# 2 space indentation for JavaScript, TypeScript, JSON, HTML, CSS, and other files
+[*.{js,jsx,ts,tsx,json,html,css,scss,md}]
+indent_style = space
+indent_size = 2
+
+# 4 space indentation for YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 4
+
+# Specific rules for Markdown files
+[*.md]
+trim_trailing_whitespace = false
+
+# Prevent trimming trailing whitespace in Markdown files
+[*.md]
+trim_trailing_whitespace = false
+
+# Prevent trimming trailing whitespace in JSON files
+[*.json]
+trim_trailing_whitespace = false
+
+# Tab indentation for Makefiles
+[Makefile]
+indent_style = tab
+
+# Binary files - Do not trim trailing whitespace
+[*.{png,jpg,jpeg,gif,ico,bmp,tiff,svg}]
+indent_style = ignore

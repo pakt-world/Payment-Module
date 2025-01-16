@@ -1,0 +1,12 @@
+node_modules
+yarn.lock
+package-lock.json
+public
+.vscode
+README.md
+.eslintrc.js
+rollup.config.mjs
+tailwind.config.ts
+postcss.config.js
+rename-types.js
+global.d.ts

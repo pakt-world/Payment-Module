@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Issue Resolution</title>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- ES Module compatible versions of React and ReactDOM from esm.sh -->
+        <script type="importmap">
+            {
+                "imports": {
+                    "react": "https://esm.sh/react@18.3.0",
+                    "react-dom": "https://esm.sh/react-dom@18.3.0",
+                    "react-dom/client": "https://esm.sh/react-dom@18.3.0/client"
+                }
+            }
+        </script>
+        <script type="module" src="/dist/issue-resolution/multi-entry.js"></script>
+    </body>
+</html>
