@@ -14,7 +14,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { setAxiosInstance } from "lib/axios-instance";
 import { setGlobalErrorHandler } from "lib/error-handler";
 import { applyTheme } from "utils";
-import { ITheme } from "utils/types";
+import { ITheme } from "types";
 import defaultTheme from "styles/default-theme";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../styles/index.scss";

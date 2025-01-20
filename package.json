@@ -2,13 +2,13 @@
     "name": "@pakt-world/payment-module",
     "license": "MIT",
     "version": "1.0.0",
-    "repository": "git://github.com/pakt-world/Payment-Module.git",
+    "repository": "git://github.com/pakt-world/payment-module.git",
     "description": "",
     "author": "Pakt",
     "main": "dist/bundle-cjs/multi-entry.js",
     "module": "dist/bundle-es/multi-entry.js",
     "jsnext:main": "dist/bundle-es/multi-entry.js",
-    "browser": "dist/issue-resolution/multi-entry.js",
+    "browser": "dist/payment-module/multi-entry.js",
     "scripts": {
         "flush": "rm -rf dist",
         "build": "yarn flush && NODE_ENV=production rollup -c",
@@ -23,7 +23,7 @@
         "build:patch": "yarn version --patch && git push origin main && yarn publish --non-interactive",
         "postbuild": "node rename-types.js"
     },
-    "homepage": "https://github.com/pakt-world/Payment-Module#readme",
+    "homepage": "https://github.com/pakt-world/payment-module#readme",
     "devDependencies": {
         "@babel/core": "^7.25.2",
         "@babel/plugin-transform-class-properties": "^7.25.4",

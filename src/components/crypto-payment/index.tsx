@@ -31,7 +31,6 @@ const MakePaymentModal = ({
                     <h2 className="text-lg font-bold text-title sm:text-2xl">
                         Make Payment
                     </h2>
-                    
 
                     <button
                         className="flex items-center justify-center rounded-full border border-[#DFDFE6] p-1 text-black duration-200 hover:border-danger hover:text-danger max-sm:size-[24px] sm:p-2"
@@ -65,21 +64,21 @@ const MakePaymentModal = ({
 
                         <Tabs.Content value="connect-wallet">
                             <ConnectWallet
-                              // jobId={jobId}
-                              closeModel={closeModal}
-                              amount={amount}
-                              depositAddress={depositAddress}
-                              contractAddress={contractAddress}
-                              tokenDecimal={tokenDecimal}
-                              chainId={chainId}
+                                // jobId={jobId}
+                                closeModel={closeModal}
+                                amount={amount}
+                                depositAddress={depositAddress}
+                                contractAddress={contractAddress}
+                                tokenDecimal={tokenDecimal}
+                                chainId={chainId}
                             />
                         </Tabs.Content>
                         <Tabs.Content value="deposit-to-address">
                             <DepositToAddress
-                              coin={coin}
-                              closeModel={closeModal}
-                              amount={amount}
-                              depositAddress={depositAddress}
+                                coin={coin}
+                                closeModel={closeModal}
+                                amount={amount}
+                                depositAddress={depositAddress}
                             />
                         </Tabs.Content>
                     </Tabs.Root>

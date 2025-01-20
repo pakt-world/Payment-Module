@@ -1,0 +1,26 @@
+.title-blot {
+    font-weight: 700;
+    &[data-placeholder] {
+        font-weight: 700;
+    }
+}
+
+.title-blot,
+.subtext-blot {
+    &[data-placeholder] {
+        position: relative;
+
+        &::before {
+            content: attr(data-placeholder);
+            color: #9ca3af80;
+            pointer-events: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        &:not(.empty)::before {
+            content: "";
+        }
+    }
+}

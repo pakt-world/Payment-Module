@@ -10,8 +10,16 @@
         "isolatedModules": false,
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
-        "baseUrl": "./src"
+        "baseUrl": "./src",
+        "paths": {
+          "@/*": ["src/*"],
+        }
     },
-    "include": ["src/**/*", "rename-types.ts", "global.d.ts"],
+    "include": [
+      "src/**/*", 
+      "rename-types.ts", 
+      "global.d.ts",
+      ".eslintrc.js",
+    ],
     "exclude": ["node_modules", "dist"]
 }

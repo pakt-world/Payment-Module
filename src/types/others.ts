@@ -1,7 +1,3 @@
-
-
 type IAny = any;
 
-export {
-  type IAny,
-}
+export { type IAny };
