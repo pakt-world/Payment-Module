@@ -1,17 +1,17 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "jsx": "react-jsx",
-    "module": "esnext",
-    "strict": true,
-    "downlevelIteration": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports":true,
-    "isolatedModules": false,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src"
-  },
-  "include": ["src/**/*", "rename-types.ts" , "global.d.ts"],
-  "exclude": ["node_modules", "dist"]
+    "compilerOptions": {
+        "target": "esnext",
+        "jsx": "react-jsx",
+        "module": "esnext",
+        "strict": true,
+        "downlevelIteration": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": false,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": "./src"
+    },
+    "include": ["src/**/*", "rename-types.ts", "global.d.ts"],
+    "exclude": ["node_modules", "dist"]
 }
