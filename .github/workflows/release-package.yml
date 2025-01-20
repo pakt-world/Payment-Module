@@ -1,0 +1,93 @@
+name: Publish Package to GitHub Packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: yarn install
+
+      # - name: Run tests
+        # run: yarn test
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com/
+    
+      - name: Restore Node.js modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Set Git user for versioning
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Detect version bump type
+        id: version_type
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          MAJOR=${VERSION%%.*}
+          MINOR=${VERSION#*.}
+          MINOR=${MINOR%%.*}
+          PATCH=${VERSION##*.}
+          if [[ "$MINOR" == "0" && "$PATCH" == "0" ]]; then
+            echo "::set-output name=type::major"
+          elif [[ "$PATCH" == "0" ]]; then
+            echo "::set-output name=type::minor"
+          else
+            echo "::set-output name=type::patch"
+          fi
+
+      - name: Bump version and publish
+        run: |
+          if [ "${{ steps.version_type.outputs.type }}" = "major" ]; then
+            yarn build:major
+          elif [ "${{ steps.version_type.outputs.type }}" = "minor" ]; then
+            yarn build:minor
+          else
+            yarn build:patch
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
