@@ -51,7 +51,7 @@ export const DepositUSDC = ({
     const {
         writeContract,
         error: writeError,
-        isLoading: writeLoading,
+        isPending: writeLoading,
     } = useWriteContract({
         mutation: {
             onSuccess() {

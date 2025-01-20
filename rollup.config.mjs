@@ -49,7 +49,7 @@ const author = pkg.author;
 const bundles = {
     es: "dist/bundle-es",
     cjs: "dist/bundle-cjs",
-    browser: "dist/issue-resolution",
+    browser: "dist/payment-module",
 };
 
 const banner = `

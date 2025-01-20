@@ -32,7 +32,7 @@ export const ConnectWallet = ({
         connector: activeConnector,
         status,
     } = useAccount();
-    const { connect, connectors, isLoading } = useConnect();
+    const { connect, connectors, isPending:isLoading } = useConnect();
     const { switchChain } = useSwitchChain();
     const [selectedConnector, setSelectedConnector] = useState<
         ConnectorProps | undefined

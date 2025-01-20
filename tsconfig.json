@@ -12,14 +12,9 @@
         "forceConsistentCasingInFileNames": true,
         "baseUrl": "./src",
         "paths": {
-          "@/*": ["src/*"],
+            "@/*": ["src/*"]
         }
     },
-    "include": [
-      "src/**/*", 
-      "rename-types.ts", 
-      "global.d.ts",
-      ".eslintrc.js",
-    ],
+    "include": ["src/**/*", "rename-types.ts", "global.d.ts", ".eslintrc.js", "rollup.config.mjs", "examples/app/test.tsx", "examples/app"],
     "exclude": ["node_modules", "dist"]
 }
