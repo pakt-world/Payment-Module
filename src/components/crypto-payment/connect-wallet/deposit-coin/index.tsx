@@ -56,7 +56,7 @@ export const DepositAvax = ({
 
     const {
         sendTransaction,
-        isLoading: txSending,
+        isPending: txSending,
         error: txError,
     } = useSendTransaction();
 
@@ -106,7 +106,7 @@ export const DepositAvax = ({
         <div>
             {/* @ts-ignore */}
             {selectedConnector &&
-                ((isError && isError.name != "ChainMismatchError") ||
+                ((isError && isError?.name != "ConnectorChainMismatchError") ||
                     txError) && (
                     <div className="mb-4 flex flex-col items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-2 text-sm text-red-500">
                         <span>

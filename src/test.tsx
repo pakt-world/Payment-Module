@@ -1,5 +1,5 @@
 /**
- * issue-resolution.js
+ * payment-module.js
  * @remarks
  * This test environment uses
  */
@@ -14,7 +14,7 @@ import { createRoot } from "react-dom/client";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import App from "app";
+import App from "./app";
 
 const domNode = document.querySelector("#app");
 

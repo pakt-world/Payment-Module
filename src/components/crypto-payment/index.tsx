@@ -14,7 +14,7 @@ import { PoweredByPakt } from "components/powdered-by-pakt";
 import { ConnectWallet } from "./connect-wallet";
 import { DepositToAddress } from "./deposit-to-address";
 
-const MakePaymentModal = ({
+const MakeCryptoPaymentModal = ({
     closeModal,
     amount,
     coin,
@@ -93,4 +93,4 @@ const MakePaymentModal = ({
     );
 };
 
-export default MakePaymentModal;
+export default MakeCryptoPaymentModal;

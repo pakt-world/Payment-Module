@@ -6,6 +6,7 @@ import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import { type AxiosInstance } from "axios";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider, type Config } from "wagmi";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -30,6 +31,7 @@ interface ConfigContextType {
     errorHandler?: (errorMessage: string) => void; //  Callback to handle Error
     theme?: ITheme; // colors to theme the package
     [key: string]: any; // You can extend with any other configs
+    wagmiConfig: Config
 }
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
@@ -47,7 +49,7 @@ interface WrappedQueryComponentProps {
 }
 
 const WrappedQueryComponent = ({ children }: WrappedQueryComponentProps) => {
-    const { queryClient } = useConfig(); // Get the queryClient from config
+    const { queryClient, wagmiConfig } = useConfig(); // Get the queryClient from config
 
     // Conditionally create a fallback QueryClient only if queryClient is not provided
     return queryClient ? (
@@ -66,7 +68,9 @@ const WrappedQueryComponent = ({ children }: WrappedQueryComponentProps) => {
                 })
             }
         >
+		      <WagmiProvider config={wagmiConfig}>
             {children}
+          </WagmiProvider>
         </QueryClientProvider>
     );
 };
