@@ -1,9 +1,16 @@
 import type { OnrampAppearanceOptions, StripeOnramp } from "@stripe/crypto";
 import { ReactNode } from "react";
-import { IAny } from "types";
+import { BasicModalProps, IAny } from "types";
 
-interface StripeModalProps {
+type CHAIN_TYPES = "avalanche";
 
+interface StripeModalProps extends BasicModalProps {
+  publicKey: string;
+  amount: number;
+  chain: CHAIN_TYPES;
+  coin: string;
+  depositAddress: string; 
+  secretKey: string;
 }
 
 interface StripeContextProps {
