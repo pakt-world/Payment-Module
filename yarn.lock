@@ -2206,6 +2206,16 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
+"@stripe/crypto@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@stripe/crypto/-/crypto-0.0.4.tgz#51dbcb3750c75a6b8a6c8775381af82367359146"
+  integrity sha512-gcD/aG0N90ZrNVppWYf9ADPECptw6PVtF67VIeaFP7fhgd2NvNx8erkzlcvk3VIVSY+bZ6YGX7c7cASoySX74Q==
+
+"@stripe/stripe-js@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-5.5.0.tgz#ae01b0258b9c3f874fd15766260a67fb6726fb1b"
+  integrity sha512-lkfjyAd34aeMpTKKcEVfy8IUyEsjuAT3t9EXr5yZDtdIUncnZpedl/xLV16Dkd4z+fQwixScsCCDxSMNtBOgpQ==
+
 "@tanstack/eslint-plugin-query@^5.59.2":
   version "5.59.2"
   resolved "https://registry.yarnpkg.com/@tanstack/eslint-plugin-query/-/eslint-plugin-query-5.59.2.tgz#c83dceb6588e21e13a6610ceeb5324e7b2662b47"

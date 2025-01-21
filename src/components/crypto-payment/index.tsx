@@ -13,7 +13,7 @@ import type { CryptoPaymentModalProps } from "types";
 import PoweredByPakt  from "components/powdered-by-pakt";
 import Modal from "components/common/modal";
 import { ConnectWallet } from "./connect-wallet";
-import { DepositToAddress } from "./deposit-to-address";
+import { DepositToAddress } from "./address-deposit";
 
 const MakeCryptoPaymentModal = ({
     isOpen,
