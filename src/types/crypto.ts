@@ -46,14 +46,17 @@ interface WalletConnectListType {
     setSelectedConnector: (connector: ConnectorProps) => void;
     accountStatus: string;
 }
+interface BasicModalProps {
+  isOpen: boolean;
+  closeModal: () => void;
+}
 
-interface CryptoPaymentModalProps {
+interface CryptoPaymentModalProps extends BasicModalProps {
     amount: number;
     depositAddress: string;
     coin: string;
     chainId: number;
     contractAddress?: string;
-    closeModal: () => void;
     tokenDecimal: number;
 }
 
@@ -63,7 +66,6 @@ interface CryptoPayWithWalletProps {
     contractAddress?: string;
     tokenDecimal: number;
     chainId: number;
-    closeModel: () => void;
 }
 
 type I0xType = `0x${string}`;
@@ -85,10 +87,16 @@ interface WalletDepositProps {
     isDisabled: boolean;
     showReconfirmButton: boolean;
     disableButtonOnClick: boolean;
-    setDisableButtonOnClick: (v: boolean) => void;
-    setShowReconfirmButton: (value_: boolean) => void;
-    closeModel: () => void;
+    // setDisableButtonOnClick: (v: boolean) => void;
+    // setShowReconfirmButton: (value_: boolean) => void;
+    // closeModel: () => void;
     connect: ConnectMutate<Config, unknown>;
+}
+
+interface DepositToAddressProps {
+  amount: number;
+  coin: string;
+  depositAddress: string;
 }
 
 export {
@@ -99,4 +107,6 @@ export {
     type I0xType,
     type WalletDepositProps,
     type ContractErrorType,
+    type BasicModalProps,
+    type DepositToAddressProps,
 };

@@ -21,7 +21,6 @@ import { DepositUSDC } from "./deposit-token";
 export const ConnectWallet = ({
     amount,
     depositAddress,
-    closeModel,
     contractAddress,
     chainId,
     tokenDecimal,
@@ -75,14 +74,14 @@ export const ConnectWallet = ({
     Logger.info("Selected Connector ===>>>", { selectedConnector });
 
     return (
-        <div className="flex flex-col gap-8">
-            <p className="text-center text-sm text-body">
+        <div className="pam-flex pam-flex-col pam-gap-8">
+            <p className="pam-text-center pam-text-sm pam-text-body">
                 By making payment you acknowledge that you have read and
                 understand the{" "}
                 <a
                     href="https://docs.google.com/document/d/1HLzHT3NHG6dm6497IZcnMlgUj0wnhaPwgiW8U0MfewM/edit?tab=t.0"
                     target="_blank"
-                    className="cursor-pointer text-[#3772FF]"
+                    className="pam-cursor-pointer pam-text-[#3772FF]"
                     rel="noreferrer"
                     // onClick={() => {
                     // 	setShowDisclaimer(true);
@@ -94,7 +93,7 @@ export const ConnectWallet = ({
                 <a
                     href="https://docs.google.com/document/d/1WoNGi2Wx841eDJxf2lHX-KpvDw06DkYJdpTXMuP0Fa0/edit?tab=t.0"
                     target="_blank"
-                    className="cursor-pointer text-[#3772FF]"
+                    className="pam-cursor-pointer pam-text-[#3772FF]"
                     rel="noreferrer"
                     // onClick={() => {
                     // 	setShowDisclaimer(true);
@@ -129,10 +128,10 @@ export const ConnectWallet = ({
                     isDisabled={!selectedConnector || isLoading}
                     showReconfirmButton={showReconfirmButton}
                     isLoading={isLoading}
-                    setShowReconfirmButton={setShowReconfirmButton}
-                    closeModel={closeModel}
+                    // setShowReconfirmButton={setShowReconfirmButton}
+                    // closeModel={closeModel}
                     disableButtonOnClick={disableButtonOnClick}
-                    setDisableButtonOnClick={setDisableButtonOnClick}
+                    // setDisableButtonOnClick={setDisableButtonOnClick}
                     connect={connect}
                 />
             ) : (
@@ -140,7 +139,6 @@ export const ConnectWallet = ({
                     isLoading={isLoading || !selectedConnector}
                     amount={amount}
                     depositAddress={depositAddress}
-                    closeModel={closeModel}
                     chainId={chainId}
                     activeConnector={activeConnector}
                     selectedConnector={selectedConnector}

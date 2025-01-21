@@ -23,7 +23,6 @@ interface WalletDepositProps {
     selectedConnector: ConnectorProps | undefined;
     activeConnector: unknown;
     setDisableButtonOnClick: (v: boolean) => void;
-    closeModel: () => void;
     connect: ConnectMutate<Config, unknown>;
 }
 
@@ -34,67 +33,70 @@ export const DepositAvax = ({
     amount,
     activeConnector,
     selectedConnector,
-    closeModel,
     setDisableButtonOnClick,
     connect,
 }: WalletDepositProps): ReactElement => {
     const [connectError, setConnectError] = useState<string | null>(null);
 
     const SendTxPayload = {
-        chainId,
+        // chainId: String(chainId),
         to: depositAddress as I0xType,
-        value: parseEther(amount.toString()),
+        value: parseEther("0.001"),
     };
 
-    const {
-        // data: txConfig,
-        error: isError,
-        isLoading: IsPreparing,
-    } = useEstimateGas({
-        ...SendTxPayload,
-    });
+    console.log(SendTxPayload);
 
-    const {
-        sendTransaction,
-        isPending: txSending,
-        error: txError,
-    } = useSendTransaction();
+    // const {
+    //     // data: txConfig,
+    //     error: isError,
+    //     isLoading: IsPreparing,
+    // } = useEstimateGas({
+    //     ...SendTxPayload,
+    // });
 
-    const isLoadingAll = txSending || isLoading;
+    // const {
+    //     sendTransaction,
+    //     isPending: txSending,
+    //     error: txError,
+    // } = useSendTransaction();
 
-    const MakePayment = async (): Promise<void> => {
-        setDisableButtonOnClick(true);
-        try {
-            if (!activeConnector) {
-                connect(
-                    { connector: selectedConnector as IAny },
-                    {
-                        onError: (err) => {
-                            setConnectError(err?.name);
-                        },
-                    }
-                );
-            }
+    const isLoadingAll = isLoading;
+    // || IsPreparing || !!isError;
 
-            sendTransaction(
-                { ...SendTxPayload },
-                {
-                    onSuccess() {},
-                    onError(error: any) {
-                        Logger.info("ggg", error);
-                        toast.error(error.message);
-                    },
-                }
-            );
-        } catch (error: unknown) {
-            Logger.info("MakePayment-Error", { error });
-            if (error instanceof Error) {
-                toast.error(error.message);
-            } else {
-                toast.error("An unknown error occurred.");
-            }
-        }
-    };
+    // const MakePayment = async (): Promise<void> => {
+    //     setDisableButtonOnClick(true);
+    //     try {
+    //         if (!activeConnector) {
+    //             connect(
+    //                 { connector: selectedConnector as IAny },
+    //                 {
+    //                     onError: (err) => {
+    //                         setConnectError(err?.name);
+    //                     },
+    //                 }
+    //             );
+    //         }
+
+    //         sendTransaction(
+    //             { ...SendTxPayload },
+    //             {
+    //                 onSuccess() {},
+    //                 onError(error: any) {
+    //                     Logger.info("ggg", error);
+    //                     toast.error(error.message);
+    //                 },
+    //             }
+    //         );
+    //     } catch (error: unknown) {
+    //         Logger.info("MakePayment-Error", { error });
+    //         if (error instanceof Error) {
+    //             toast.error(error.message);
+    //         } else {
+    //             toast.error("An unknown error occurred.");
+    //         }
+    //     }
+    // };
+
     // Clear Error when selector changes in state/value
     useEffect(() => {
         if (selectedConnector) {
@@ -105,26 +107,24 @@ export const DepositAvax = ({
     return (
         <div>
             {/* @ts-ignore */}
-            {selectedConnector &&
-                ((isError && isError?.name != "ConnectorChainMismatchError") ||
-                    txError) && (
-                    <div className="mb-4 flex flex-col items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-2 text-sm text-red-500">
-                        <span>
-                            {(isError?.name || txError?.name) ==
-                            "EstimateGasExecutionError"
-                                ? "InsufficientFundsError: The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account."
-                                : connectError ||
-                                  (isError?.message ??
-                                      txError?.message ??
-                                      "An error occurred while making payment.")}
-                        </span>
-                    </div>
-                )}
+            {/* {selectedConnector && ((isError && isError?.name != "ConnectorChainMismatchError") || txError) && (
+              <div className="mb-4 flex flex-col items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-2 text-sm text-red-500">
+                  <span>
+                      {(isError?.name || txError?.name) ==
+                      "EstimateGasExecutionError"
+                          ? "InsufficientFundsError: The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account."
+                          : connectError ||
+                            (isError?.message ??
+                                txError?.message ??
+                                "An error occurred while making payment.")}
+                  </span>
+              </div>
+            )} */}
 
             <Button
-                disabled={isLoadingAll || IsPreparing || !!isError}
+                disabled={isLoadingAll}
                 onClick={() => {
-                    MakePayment();
+                    // MakePayment();
                 }}
                 fullWidth
                 variant="primary"
