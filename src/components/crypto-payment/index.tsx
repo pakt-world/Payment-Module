@@ -15,7 +15,7 @@ import Modal from "components/common/modal";
 import { ConnectWallet } from "./connect-wallet";
 import { DepositToAddress } from "./address-deposit";
 
-const MakeCryptoPaymentModal = ({
+const CryptoPaymentModal = ({
     isOpen,
     closeModal,
     amount,
@@ -98,4 +98,4 @@ const MakeCryptoPaymentModal = ({
     );
 };
 
-export default MakeCryptoPaymentModal;
+export default CryptoPaymentModal;

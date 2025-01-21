@@ -7,7 +7,6 @@ import React, { ReactNode } from 'react';
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { OnRampElementProps, OnRampProps, StripeContextProps } from './type';
-import { IAny } from 'types';
 
 // ReactContext to simplify access of StripeOnramp object
 const CryptoElementsContext = React.createContext<OnRampProps>({ onramp: null });
