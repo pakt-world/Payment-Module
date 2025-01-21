@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 import { type FC } from "react";
 import { Loader2 } from "lucide-react";
-import { ConnectorProps, WalletConnectListType } from "types";
+import { ConnectorProps, WalletConnectListType } from "../types";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */

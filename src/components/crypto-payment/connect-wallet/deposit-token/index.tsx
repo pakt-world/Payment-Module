@@ -13,7 +13,8 @@ import { erc20Abi } from "viem";
 
 // import { useConfirmJobPayment, useInviteTalentToJob } from "@/lib/api/job";
 import { Button, toast, Spinner } from "components/common";
-import { IAny, ContractErrorType, WalletDepositProps } from "types";
+import { ContractErrorType, WalletDepositProps } from "../../types";
+import { IAny } from "types";
 import Logger from "lib/logger";
 import { useEffect, useState } from "react";
 

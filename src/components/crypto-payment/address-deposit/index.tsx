@@ -9,9 +9,8 @@ import { useCopyToClipboard } from "usehooks-ts";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { Button, Spinner } from "../common";
-import { DepositToAddressProps } from "types";
-
+import { Button, Spinner } from "../../common";
+import { DepositToAddressProps } from "../types";
 
 export const DepositToAddress = ({
     amount,
