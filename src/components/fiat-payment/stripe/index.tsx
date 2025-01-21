@@ -4,7 +4,7 @@
 
 import {loadStripeOnramp} from '@stripe/crypto';
 import '@stripe/stripe-js';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -17,8 +17,9 @@ import Modal from 'components/common/modal';
 // const LOADING_STATE = "loading";
 // const ERROR_STATE = "error";
 
-const StripePaymentModal = ({ isOpen, closeModal, publicKey, amount, chain, coin, depositAddress, secretKey }:StripeModalProps) => {
-  const [clientSecret, setClientSecret] = useState<string>(secretKey);
+const StripePaymentModal = ({ isOpen, closeModal, publicKey, amount, chain, coin, depositAddress, secretKey }:StripeModalProps): ReactElement => {
+  console.log("open StripePaymentModal");
+  // const [clientSecret, setClientSecret] = useState<string>(secretKey);
   const stripeOnrampPromise = loadStripeOnramp(publicKey);
   
   return(
@@ -27,9 +28,11 @@ const StripePaymentModal = ({ isOpen, closeModal, publicKey, amount, chain, coin
       closeModal={closeModal}
       disableClickOutside
     >
-      <CryptoElements stripeOnramp={stripeOnrampPromise}>
-        <OnrampElement clientSecret={clientSecret} />
-      </CryptoElements>
+      <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-4 sm:pam-max-w-[400px]">
+        <CryptoElements stripeOnramp={stripeOnrampPromise}>
+          <OnrampElement clientSecret={secretKey} />
+        </CryptoElements>
+      </div>
     </Modal>
   )
 }

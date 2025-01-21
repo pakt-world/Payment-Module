@@ -15,6 +15,7 @@ import { ConfigProvider } from "context/config-context";
 import MakeCryptoPaymentModal from "components/crypto-payment";
 import "../styles/index.scss";
 import { Button } from "components/common";
+import { StripePaymentModal } from "components/fiat-payment";
 
 const App = () => {
     const [openCryptoModal, setOpenCryptoModal] = useState(false);
@@ -81,6 +82,16 @@ const App = () => {
               depositAddress="0x90B780d7546ab754e35e0d2E80d76557A012D4fE"
               tokenDecimal={6}
               contractAddress="0x5425890298aed601595a70AB815c96711a31Bc65"
+            />
+            <StripePaymentModal
+              isOpen={openFiatModal}
+              closeModal={()=>setOpenFiatModal(false)}
+              amount={0.1}
+              chain="avalanche"
+              coin="USDC"
+              depositAddress="0x90B780d7546ab754e35e0d2E80d76557A012D4fE"
+              publicKey="pk_test_qblFNYngBkEdjEZ16jxxoWSM"
+              secretKey="cos_1Lb6vsAY1pjOSNXVWF3nUtkV_secret_8fuPvTzBaxj3XRh14C6tqvdl600rpW7hG4G"
             />
         </ConfigProvider>
     );

@@ -12,7 +12,8 @@ import { useAccount, useConnect, useSwitchChain } from "wagmi";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import Logger from "lib/logger";
-import type { ConnectorProps, CryptoPayWithWalletProps, IAny } from "types";
+import type { IAny } from 'types';
+import type { ConnectorProps, CryptoPayWithWalletProps } from "../types";
 import { WalletConnectorList } from "./wallet-connector-list";
 import { DepositAvax } from "./deposit-coin";
 import { DepositUSDC } from "./deposit-token";

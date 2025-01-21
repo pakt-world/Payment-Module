@@ -12,7 +12,8 @@ import { type ConnectMutate } from "wagmi/query";
 /* -------------------------------------------------------------------------- */
 import { Button, Spinner, toast } from "components/common";
 // import { useConfirmJobPayment, useInviteTalentToJob } from "@/lib/api/job";
-import type { I0xType, ConnectorProps, IAny } from "types";
+import type { I0xType, ConnectorProps } from "../../types";
+import type { IAny } from "types";
 import Logger from "lib/logger";
 
 interface WalletDepositProps {

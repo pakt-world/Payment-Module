@@ -3,4 +3,8 @@
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-export * from "./stripe";
+import StripePaymentModal from "./stripe";
+
+export {
+  StripePaymentModal
+}
