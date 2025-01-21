@@ -29,7 +29,18 @@ const ext = {
     PNG,
 };
 
-export function cn(...inputs: ClassValue[]): string {
+const classNamePrefix = "pam-";
+const classNamePrefixApply = "pams";
+
+/**
+ * pcn
+ * parse classNames to include prefix for tailwind
+ */
+function pcn(className: string):string {
+  return className.split(" ").map(s=>(`${classNamePrefix}${s}`)).join(" ");
+}
+
+function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
 }
 
@@ -44,7 +55,7 @@ interface IGetRequestSignatureParam {
     clientId: string;
 }
 
-export const getRequestSignature = ({
+const getRequestSignature = ({
     url,
     publicKey,
     clientId,
@@ -61,7 +72,7 @@ export const getRequestSignature = ({
     return { signature, timeStamp: String(timestamp) };
 };
 
-export const extractTextContent = (htmlContent: string): string => {
+const extractTextContent = (htmlContent: string): string => {
     // Create a DOM parser
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
@@ -80,7 +91,7 @@ export const extractTextContent = (htmlContent: string): string => {
     return text.trim();
 };
 
-export const formatNumber = (number: number): string => {
+const formatNumber = (number: number): string => {
     if (number >= 1e12) {
         return `${(number / 1e12).toFixed(2)}t`;
     }
@@ -96,7 +107,7 @@ export const formatNumber = (number: number): string => {
     return number.toFixed(2).toString();
 };
 
-export const formatDateHandler = (date?: string, format?: string): string => {
+const formatDateHandler = (date?: string, format?: string): string => {
     // Get timezone from localStorage, then format with dayjs
     const timezone = JSON.parse(
         localStorage.getItem("u53r_71m3z0n3") as string
@@ -113,7 +124,7 @@ export const formatDateHandler = (date?: string, format?: string): string => {
     return d as string;
 };
 
-export function formatTimestampForDisplay(
+function formatTimestampForDisplay(
     utcTimestamp: string | number | Date
 ): string {
     const localTimestamp = new Date(utcTimestamp);
@@ -149,7 +160,7 @@ interface PreviewResult {
     type: string;
 }
 
-export function getPreviewByType2(type: string): PreviewResult {
+function getPreviewByType2(type: string): PreviewResult {
     let preview;
     const typP = type.split("/")[1];
 
@@ -161,7 +172,7 @@ export function getPreviewByType2(type: string): PreviewResult {
 }
 
 // from https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
-export function formatBytes(bytes: number, decimals = 2): string {
+function formatBytes(bytes: number, decimals = 2): string {
     if (!+bytes) return "0 Bytes";
 
     const k = 1024;
@@ -183,7 +194,7 @@ export function formatBytes(bytes: number, decimals = 2): string {
     return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
 }
 
-export const groupMessagesByDate = (msgs: MessageProps[]): TMessage[] => {
+const groupMessagesByDate = (msgs: MessageProps[]): TMessage[] => {
     const defaultCategory: DateMessage = {
         category: "date",
         content: "Chat Start",
@@ -229,17 +240,34 @@ export const groupMessagesByDate = (msgs: MessageProps[]): TMessage[] => {
     return messages;
 };
 
-export const isDateMessage = (message: TMessage): message is DateMessage => {
+const isDateMessage = (message: TMessage): message is DateMessage => {
     return (message as DateMessage).category === "date";
 };
 
-export const applyTheme = (theme: ITheme) => {
+const applyTheme = (theme: ITheme) => {
     const root = document.documentElement;
 
     Object.keys(theme).forEach((key) => {
         const value = theme[key as keyof typeof theme] || ""; // Provide a fallback value
-        root.style.setProperty(`--irs-${key}`, value);
+        root.style.setProperty(`--${classNamePrefixApply}-${key}`, value);
     });
 };
 
-export const isProductionEnvironment = false;
+
+const isProductionEnvironment = false;
+
+export {
+  cn,
+  isProductionEnvironment,
+  applyTheme,
+  isDateMessage,
+  groupMessagesByDate,
+  formatBytes,
+  getPreviewByType2,
+  formatTimestampForDisplay,
+  formatDateHandler,
+  formatNumber,
+  getRequestSignature,
+  extractTextContent,
+  pcn,
+}

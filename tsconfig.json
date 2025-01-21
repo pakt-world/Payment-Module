@@ -15,6 +15,6 @@
             "@/*": ["src/*"]
         }
     },
-    "include": ["src/**/*", "rename-types.ts", "global.d.ts", ".eslintrc.js", "rollup.config.mjs", "examples/app/test.tsx", "examples/app"],
+    "include": ["src/**/*", "rename-types.ts", "global.d.ts", ".eslintrc.js", "rollup.config.mjs", "tailwind.config.ts", "examples/app/test.tsx", "examples/app"],
     "exclude": ["node_modules", "dist"]
 }

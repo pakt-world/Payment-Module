@@ -178,6 +178,7 @@ interface ITheme {
     info?: string;
     secondary?: string;
     "blue-lightest"?: string;
+    "blue-darkest"?: string;
     line?: string;
     title?: string;
     body?: string;

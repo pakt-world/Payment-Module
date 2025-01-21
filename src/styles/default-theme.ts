@@ -3,8 +3,9 @@ import { ITheme } from "utils/types";
 const defaultTheme: ITheme = {
     primary: "#007C5B",
     info: "#17A2B8",
-    secondary: "#7DDE86",
+    secondary: "#ecfce5",
     "blue-lightest": "#C9F0FF",
+    "blue-darkest": "#0065D0",
     line: "#E8E8E8",
     title: "#1F2739",
     body: "#6C757D",

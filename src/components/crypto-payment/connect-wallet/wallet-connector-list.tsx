@@ -1,17 +1,24 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-
 import { type FC } from "react";
 import { Loader2 } from "lucide-react";
 import { ConnectorProps, WalletConnectListType } from "types";
 
+/* -------------------------------------------------------------------------- */
+/*                             Internal Dependency                            */
+/* -------------------------------------------------------------------------- */
+import MetaMaskLogo from "../../../assets/icons/metamask.svg";
+import CoreWalletLogo from "../../../assets/icons/core-wallet.svg";
+import WalletConnectLogo from "../../../assets/icons/wallet-connect.svg";
+import CoinBaseWalletLogo from "../../../assets/icons/coinbase-wallet.svg";
+
 const WALLET_LOGO: Record<string, string> = {
-    MetaMask: "/icons/metamask.svg",
-    "Core Wallet": "/icons/core-wallet.svg",
-    "Core": "/icons/core-wallet.svg",
-    WalletConnect: "/icons/wallet-connect.svg",
-    "Coinbase Wallet": "/icons/coinbase-wallet.svg",
+    MetaMask: MetaMaskLogo,
+    "Core Wallet": CoreWalletLogo,
+    "Core": CoreWalletLogo,
+    WalletConnect: WalletConnectLogo,
+    "Coinbase Wallet": CoinBaseWalletLogo,
 };
 
 export const WalletConnectorList: FC<WalletConnectListType> = ({
@@ -23,7 +30,7 @@ export const WalletConnectorList: FC<WalletConnectListType> = ({
     accountStatus,
 }) => {
     return (
-        <div className="flex flex-col gap-6">
+        <div className="pam-flex pam-flex-col pam-gap-6">
             {connectors.map((connector: ConnectorProps) => {
                 const isActive = activeConnector?.id === connector.id;
                 const logo = WALLET_LOGO[connector.name];
@@ -36,17 +43,17 @@ export const WalletConnectorList: FC<WalletConnectListType> = ({
                         onClick={() => {
                             setSelectedConnector(connector);
                         }}
-                        className={`flex items-center justify-between rounded-2xl border border-[#DFDFE6] p-1 px-4 py-3 text-left hover:border-blue-darkest hover:!border-opacity-30 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        className={`pam-flex pam-items-center pam-justify-between pam-rounded-2xl pam-border pam-border-[#DFDFE6] pam-p-1 pam-px-4 pam-py-3 pam-text-left hover:pam-border-blue-darkest hover:!pam-border-opacity-30 disabled:pam-cursor-not-allowed disabled:pam-opacity-50 ${
                             isActive
-                                ? "border-blue-darkest !border-opacity-60 bg-blue-lightest bg-opacity-50 text-blue-darkest"
-                                : "border-[#DFDFE6]"
+                                ? "pam-border-blue-darkest !pam-border-opacity-60 pam-bg-blue-lightest pam-bg-opacity-50 pam-text-blue-darkest"
+                                : "pam-border-[#DFDFE6]"
                         }`}
                     >
-                        <span className="flex w-full items-center gap-2">
+                        <span className="pam-flex pam-w-full pam-items-center pam-gap-2">
                             <span>{connector.name}</span>
                             {isLoading &&
                                 selectedConnector?.id === connector?.id && (
-                                    <span className="animate-spin">
+                                    <span className="pam-animate-spin">
                                         <Loader2 size={16} />
                                     </span>
                                 )}

@@ -10,47 +10,41 @@ import { useCopyToClipboard } from "usehooks-ts";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { Button, Spinner } from "../common";
+import { DepositToAddressProps } from "types";
 
-interface DepositToAddressProps {
-    amount: number;
-    coin: string;
-    depositAddress: string;
-    closeModel: () => void;
-}
 
 export const DepositToAddress = ({
     amount,
     depositAddress,
-    closeModel,
     coin,
 }: DepositToAddressProps): React.JSX.Element => {
     const [value, copy] = useCopyToClipboard();
     const isLoading = false;
 
     return (
-        <div className="flex w-full flex-col gap-4 max-sm:!h-full max-sm:pb-[68px]">
-            <p className="text-center text-sm text-body">
+        <div className="pam-flex pam-w-full pam-flex-col pam-gap-4 pam-max-sm:!pam-h-full pam-max-sm:pam-pb-[68px]">
+            <p className="pam-text-center pam-text-sm pam-text-body">
                 Copy the wallet address or scan QR code to make payment. Click I
                 have made transfer to continue.
             </p>
-            <p className="text-center text-sm font-medium text-[#DC3545]">
+            <p className="pam-text-center pam-text-sm pam-font-medium pam-text-[#DC3545]">
                 ALERT: Make sure to add your sending wallet fee.
             </p>
 
-            <div className="flex items-center justify-between gap-2 rounded-2xl border border-primary bg-secondary px-4 py-6 text-primary max-sm:h-[43px]">
-                <span className="text-lg">Total Amount:</span>
-                <span className="text-lg font-bold">
+            <div className="pam-flex pam-items-center pam-justify-between pam-gap-2 pam-rounded-2xl pam-border pam-border-primary pam-bg-secondary pam-px-4 pam-py-6 pam-text-primary pam-max-sm:pam-h-[43px]">
+                <span className="pam-text-lg">Total Amount:</span>
+                <span className="pam-text-lg pam-font-bold">
                     {amount} {coin}
                 </span>
             </div>
 
-            <div className="flex w-full items-center justify-between gap-2 rounded-2xl border border-line bg-[#fcfcfc] px-4 py-4">
-                <span className="line-clamp-1 break-words text-sm text-body">
+            <div className="pam-flex pam-w-full pam-items-center pam-justify-between pam-gap-2 pam-rounded-2xl pam-border pam-border-line pam-bg-[#fcfcfc] pam-px-4 pam-py-4">
+                <span className="pam-line-clamp-1 pam-break-words pam-text-sm pam-text-body">
                     {depositAddress}
                 </span>
 
                 <button
-                    className="flex shrink-0 items-center gap-1 rounded-lg border border-blue-darkest !border-opacity-80 bg-blue-lightest px-3 py-2 text-xs text-blue-darkest !text-opacity-80"
+                    className="pam-flex pam-shrink-0 pam-items-center pam-gap-1 pam-rounded-lg pam-border pam-border-blue-darkest !pam-border-opacity-80 pam-bg-blue-lightest pam-px-3 pam-py-2 pam-text-xs pam-text-blue-darkest !pam-text-opacity-80"
                     onClick={async () => copy(depositAddress)}
                     type="button"
                 >
@@ -61,15 +55,15 @@ export const DepositToAddress = ({
                     )}
                     <span>
                         {value !== null ? (
-                            <span className="animate-pulse">Copied</span>
+                            <span className="pam-animate-pulse">Copied</span>
                         ) : (
-                            <span className="animate-pulse">Copy</span>
+                            <span className="pam-animate-pulse">Copy</span>
                         )}
                     </span>
                 </button>
             </div>
 
-            <div className="flex items-center justify-center gap-2 rounded-2xl border border-line bg-[#fcfcfc] px-4 py-4 shadow">
+            <div className="pam-flex pam-items-center pam-justify-center pam-gap-2 pam-rounded-2xl pam-border pam-border-line pam-bg-[#fcfcfc] pam-px-4 pam-py-4 pam-shadow">
                 <QRCode value={depositAddress} size={150} />
             </div>
 

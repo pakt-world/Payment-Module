@@ -1,90 +1,175 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-
-import { Slot } from "@radix-ui/react-slot";
+import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
+/* -------------------------------------------------------------------------- */
+/*                             Internal Dependency                            */
+/* -------------------------------------------------------------------------- */
 import { cn } from "utils";
-import { ButtonHTMLAttributes, forwardRef } from "react";
 
-const buttonVariants = cva(
-    "h-auto inline-flex items-center justify-center whitespace-nowrap rounded-[10px] text-sm font-bold ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:!cursor-not-allowed disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 disabled:bg-opacity-20 disabled:bg-slate-50 disabled:text-slate-50 transition transform hover:scale-[1.03] active:scale-[0.97]",
+const button = cva(
+    "pam-focus:outline-none pam-py-3 pam-whitespace-nowrap pam-duration-200 pam-capitalize pam-focus-visible:ring-1 pam-focus-visible:ring-[#19A966] pam-relative pam-z-0 pam-rounded-[10px] pam-text-center pam-w-fit pam-px-6 pam-font-semibold pam-focus-visible:border-transparent",
     {
         variants: {
             variant: {
-                default:
-                    "bg-ink-darkest text-white hover:bg-opacity-60 dark:bg-ink-darkest dark:text-white dark:hover:bg-opacity-60",
-                destructive: "bg-red-100 text-red-500",
-                destructive2:
-                    "bg-red-100 text-red-500 disabled:bg-opacity-none disabled:opacity-[unset] disabled:text-opacity-50 disabled:text-red-500",
-                outline:
-                    "border border-white text-white hover:text-white dark:border-white dark:hover:text-white dark:hover:bg-opacity-60",
-                outlinePrimary:
-                    "border border-primary text-primary bg- hover:text-primary dark:border-primary dark:hover:text-primary dark:hover:bg-opacity-60 disabled:text-primary",
-                outlineWhite:
-                    "border border-white text-white hover:text-[#f1f1f1] dark:border-white dark:hover:text-[#f1f1f1] dark:hover:bg-opacity-60",
-                secondary:
-                    "bg-secondary text-primary hover:bg-secondary/80 disabled:bg-opacity-20 disabled:bg-secondary disabled:text-primary",
-                secondaryOutline:
-                    "border border-primary text-primary hover:text-primary/80 bg-secondary",
-                ghost: "hover:bg-transparent bg-transparent hover:text-slate-900",
-                link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
-                white: "bg-white text-slate-900 hover:bg-opacity-60 dark:bg-white dark:text-slate-900 dark:hover:bg-opacity-60",
                 primary:
-                    "bg-primary-gradient-light text-white hover:bg-opacity-60 dark:hover:bg-opacity-60",
-                ordinary:
-                    "bg-transparent text-white hover:bg-transparent whitespace-normal",
-                lightBlue:
-                    "bg-[#f4f4fd] text-[#3055b3] border border-[#3055b3] hover:bg-opacity-60 dark:hover:bg-opacity-60",
+                    "pam-border-white pam-border-opacity-10 pam-bg-btn-primary pam-text-white",
+                secondary:
+                    "pam-border-primary pam-border pam-text-primary pam-bg-primary-brighter pam-hover:bg-green-100 pam-duration-200 pam-font-normal",
+                outline:
+                    "pam-border-primary pam-border pam-text-primary pam-border-opacity-100 pam-bg-transparent pam-hover:border-opacity-50 pam-font-normal pam-duration-200",
+                transparent:
+                    "pam-border-transparent pam-text-primary pam-bg-transparent pam-hover:bg-[#008D6C1A] pam-duration-200",
+                danger: "pam-bg-red-200 pam-text-red-600 pam-hover:bg-red-100 pam-border pam-border-transparent",
             },
             size: {
-                default: "h-10 px-5 py-3",
-                xs: "h-6 px-2.5 py-1.5",
-                sm: "h-9 rounded-[10px] px-4 py-2",
-                md: "h-10 rounded-[10px] px-5 py-3 xl:min-w-[120px]",
-                lg: "h-12 rounded-[10px] px-8 py-2.5 xl:min-w-[120px]",
-                "xl": "h-[51px] px-8 py-3 text-lg rounded-[12px] xl:min-w-[150px]",
-                icon: "size-10",
-                noSize: "!h-fit !w-full",
+                xs: "pam-px-2 pam-py-[8px] pam-text-xs",
+                sm: "pam-px-2 pam-py-2 pam-text-sm",
+                md: "pam-px-3 pam-py-3 pam-text-base",
+                lg: "pam-px-4 pam-py-4 pam-text-lg",
+                xl: "pam-px-5 pam-py-5 pam-text-xl",
+            },
+            fullWidth: {
+                true: "pam-w-full",
+            },
+            disabled: {
+                true: "pam-cursor-not-allowed !pam-bg-none !pam-bg-[#E3E5E5] !pam-text-[#979C9E]",
             },
         },
         defaultVariants: {
-            variant: "default",
-            size: "default",
+            size: "md",
+            variant: "primary",
+        },
+        compoundVariants: [
+            {
+                variant: "outline",
+                disabled: true,
+                className: "pam-border-gray-300",
+            },
+            {
+                variant: "transparent",
+                disabled: true,
+                className: "pam-border-none pam-hover:bg-transparent",
+            },
+        ],
+    }
+);
+
+const gradientHover = cva(
+    "pam-absolute pam-inset-0 pam-rounded-lg pam-border pam-border-transparent pam-opacity-0 pam-duration-200 pam-hover:opacity-100 pam-pointer-events-none",
+    {
+        variants: {
+            variant: {
+                primary: "pam-bg-primary",
+                secondary: "pam-bg-transparent",
+                outline: "pam-bg-transparent",
+                transparent: "pam-bg-transparent",
+                danger: "pam-bg-transparent",
+            },
+            disabled: {
+                true: "pam-bg-none pam-bg-transparent",
+            },
+        },
+        defaultVariants: {
+            variant: "primary",
         },
     }
 );
 
 export interface ButtonProps
-    extends ButtonHTMLAttributes<HTMLButtonElement>,
-        VariantProps<typeof buttonVariants> {
-    asChild?: boolean;
-    fullWidth?: boolean;
+    extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+        VariantProps<typeof button> {
+    disabled?: boolean;
 }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+    (
+        { variant, className, disabled, fullWidth, size, children, ...props },
+        ref
+    ) => {
+        return (
+            // eslint-disable-next-line react/button-has-type
+            <button
+                className={cn(
+                    button({ disabled, size, fullWidth, variant }),
+                    className
+                )}
+                disabled={disabled}
+                ref={ref}
+                {...props}
+            >
+                {children}
+                <div className={gradientHover({ variant, disabled })} />
+            </button>
+        );
+    }
+);
+
+export interface LinkButtonProps extends VariantProps<typeof button> {
+    disabled?: boolean;
+    className?: string;
+    children: React.ReactNode;
+    LinkComponent?: React.ElementType;
+}
+
+export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(
     (
         {
-            className,
             variant,
+            className,
+            disabled,
+            fullWidth,
             size,
-            asChild = false,
-            fullWidth = false,
+            children,
+            LinkComponent = "a",
             ...props
         },
         ref
     ) => {
-        const Comp = asChild ? Slot : "button";
         return (
-            <Comp
-                className={`${cn(buttonVariants({ variant, size, className }))} ${fullWidth && "w-full"}`}
-                ref={ref}
+            <LinkComponent
                 {...props}
-            />
+                ref={ref}
+                className={cn(
+                    button({ variant, disabled, size, fullWidth }),
+                    className
+                )}
+            >
+                {children}
+                <div className={gradientHover({ variant, disabled })} />
+            </LinkComponent>
         );
     }
 );
-Button.displayName = "Button";
 
-export { Button, buttonVariants };
+export interface AnchorButtonProps
+    extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+        VariantProps<typeof button> {
+    disabled?: boolean;
+}
+
+export const AnchorButton = React.forwardRef<
+    HTMLAnchorElement,
+    AnchorButtonProps
+>(
+    (
+        { variant, className, disabled, fullWidth, size, children, ...props },
+        ref
+    ) => {
+        return (
+            <a
+                className={cn(
+                    button({ variant, disabled, size, fullWidth }),
+                    className
+                )}
+                ref={ref}
+                {...props}
+            >
+                {children}
+                <div className={gradientHover({ variant, disabled })} />
+            </a>
+        );
+    }
+);

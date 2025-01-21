@@ -4,8 +4,13 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 import tailwindcssRadix from "tailwindcss-radix";
 import tailwindcssAnimate from "tailwindcss-animate";
 
+const Prefix = "pam-";
+const PrefixExt = "pams-";
+
+const RenderPrefixVariable = (value:string) => `var(--${PrefixExt}${value})`;
+
 const config: Config = {
-    prefix: "ir-",
+    prefix: Prefix,
     content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
     theme: {
         screens: {
@@ -15,51 +20,75 @@ const config: Config = {
             xl: { min: "1280px" },
             "2xl": { min: "1536px" },
             "2xl.max": { min: "1600px" },
+            "2xl-5": "1600px",
+            "1xl": "1440px",
             "max-sm": { max: "639px" },
+            "3xl": "1600px",
         },
         extend: {
             colors: {
-                primary: "var(--irs-primary)",
-                info: "var(--irs-info)",
-                secondary: "var(--irs-secondary)",
-                "blue-lightest": "var(--irs-blue-lightest)",
-                line: "var(--irs-line)",
-                title: "var(--irs-title)",
-                body: "var(--irs-body)",
-                warning: "var(--irs-warning)",
-                success: "var(--irs-success)",
-                danger: "var(--irs-danger)",
-                magnolia: "var(--irs-magnolia)",
-                "primary-brighter": "var(--irs-primary-brighter)",
-                "refer-border": "var(--irs-refer-border)",
-                "exhibit-tab-list": "var(--irs-exhibit-tab-list)",
+              primary: RenderPrefixVariable("primary"),
+              info: RenderPrefixVariable("info"),
+              secondary: RenderPrefixVariable("secondary"),
+              "blue-lightest": RenderPrefixVariable("blue-lightest"),
+              "blue-darkest": RenderPrefixVariable("blue-darkest"),
+              line: RenderPrefixVariable("line"),
+              title: RenderPrefixVariable("title"),
+              body: RenderPrefixVariable("body"),
+              warning: RenderPrefixVariable("warning"),
+              success: RenderPrefixVariable("success"),
+              danger: RenderPrefixVariable("danger"),
+              magnolia: RenderPrefixVariable("magnolia"),
+              "primary-brighter": RenderPrefixVariable("primary-brighter"),
+              "refer-border": RenderPrefixVariable("refer-border"),
+              "exhibit-tab-list": RenderPrefixVariable("exhibit-tab-list"),
             },
             backgroundImage: {
-                "btn-primary": "var(--irs-btn-primary)",
-                "primary-gradient": "var(--irs-primary-gradient)",
-                none: "none",
+              "btn-primary": RenderPrefixVariable("btn-primary"),
+              "primary-gradient": RenderPrefixVariable("primary-gradient"),
+              none: "none",
             },
             fontFamily: {
-                sans: ["var(--irs-circular-std-font)", ...fontFamily.sans],
+              sans: [RenderPrefixVariable("circular-std-font"), ...fontFamily.sans],
             },
             borderRadius: {
-                "modal": "var(--irs-modal-radius)",
+              "modal": RenderPrefixVariable("modal-radius"),
             },
             keyframes: {
-                "accordion-down": {
-                    from: { height: "0" },
-                    to: { height: "var(--irs-radix-accordion-content-height)" },
+              "accordion-down": {
+                  from: { height: "0" },
+                  to: { height: RenderPrefixVariable("radix-accordion-content-height") },
+              },
+              "accordion-up": {
+                  from: { height: RenderPrefixVariable("radix-accordion-content-height"), },
+                  to: { height: "0" },
+              },
+              overlayShow: {
+                from: { opacity: "0" },
+                to: { opacity: "1" },
+              },
+              contentShow: {
+                from: {
+                  opacity: "0",
+                  transform: "translate(-50%, -48%) scale(0.96)",
                 },
-                "accordion-up": {
-                    from: {
-                        height: "var(--irs-radix-accordion-content-height)",
-                    },
-                    to: { height: "0" },
+                to: {
+                  opacity: "1",
+                  transform: "translate(-50%, -50%) scale(1)",
                 },
+              },
             },
             animation: {
-                "accordion-down": "accordion-down 0.2s ease-out",
-                "accordion-up": "accordion-up 0.2s ease-out",
+              "accordion-down": "accordion-down 0.2s ease-out",
+              "accordion-up": "accordion-up 0.2s ease-out",
+              overlayShow: "overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+              contentShow: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+            },
+            transitionDuration: {
+              DEFAULT: "150ms",
+            },
+            screens: {
+              "xs": "375px",
             },
         },
     },

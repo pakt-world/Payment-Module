@@ -28,9 +28,6 @@ export const DepositUSDC = ({
     showReconfirmButton,
     isLoading,
     disableButtonOnClick,
-    setDisableButtonOnClick,
-    setShowReconfirmButton,
-    closeModel,
     connect,
 }: WalletDepositProps): JSX.Element => {
     const [connectError, setConnectError] = useState<string | null>(null);
