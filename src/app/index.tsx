@@ -21,7 +21,8 @@ const App = () => {
     const [openCryptoModal, setOpenCryptoModal] = useState(false);
     const [openFiatModal, setOpenFiatModal] = useState(false);
 
-    const [token, setToken] = useState(() =>localStorage.getItem("token") || "");
+    const [token, setToken] = useState("");
+    const [collectionId, setCollectionId] = useState("");
 
     const transports = {
       [avalanche.id]: http(),
@@ -36,6 +37,18 @@ const App = () => {
       multiInjectedProviderDiscovery: true,
       transports,
     });
+
+    const toggleModal = () => {
+      if (!token){
+        alert("please enter token");
+        return false;
+      }
+      if (!collectionId){
+        alert("please enter collectionId");
+        return false
+      }
+      return true;
+    }
 
     return (
         <ConfigProvider
@@ -55,17 +68,35 @@ const App = () => {
                 <div className="pam-flex pam-flex-col pam-border pam-rounded-2xl pam-w-[600px] pam-p-8 pam-mx-auto pam-my-auto pam-gap-4">
                   <p className="pam-text-black pam-text-2xl pam-text-center">Trigger Crypto Payment and Fiat Payments</p>
                   <div className="pam-flex pam-flex-row pam-items-center pam-justify-center pam-gap-2 pam-4">
+                    <label>Enter Auth Token</label>
+                    <input className="pam-w-full pam-p-2 pam-border pam-border-2 pam-border-grey" name="token" onChange={(e)=>setToken(e.target.value)} />
+                  </div>
+                  <div className="pam-flex pam-flex-row pam-items-center pam-justify-center pam-gap-2 pam-4">
+                    <label>Enter Collection ID</label>
+                    <input className="pam-w-full pam-p-2 pam-border pam-border-2 pam-border-grey" name="collection" onChange={(e)=>setCollectionId(e.target.value)} />
+                  </div>
+                  <div className="pam-flex pam-flex-row pam-items-center pam-justify-center pam-gap-2 pam-4">
                       <Button
                           className="pam-block pam-p-4 pam-bg-btn-primary"
                           type="button"
-                          onClick={() => setOpenCryptoModal(true)}
+                          onClick={
+                            () =>{
+                              const ready = toggleModal();
+                              if (ready) setOpenCryptoModal(true);
+                            }
+                          }
                       >
                           Pay with Crypto
                       </Button>
                       <Button 
                           className="pam-block pam-p-4 pam-bg-btn-primary"
                           type="button"
-                          onClick={() =>setOpenFiatModal(true)}
+                          onClick={
+                            () =>{
+                              const ready = toggleModal();
+                              if (ready) setOpenFiatModal(true)
+                            }
+                          }
                       >
                         Pay with Fiat
                       </Button>
@@ -76,6 +107,7 @@ const App = () => {
             <MakeCryptoPaymentModal 
               isOpen={openCryptoModal}
               closeModal={()=>setOpenCryptoModal(false)}
+              collectionId={collectionId}
               amount={0.1}
               chainId={43113}
               coin="USDC"
@@ -86,12 +118,13 @@ const App = () => {
             <StripePaymentModal
               isOpen={openFiatModal}
               closeModal={()=>setOpenFiatModal(false)}
+              collectionId={collectionId}
               amount={0.1}
               chain="avalanche"
               coin="USDC"
               depositAddress="0x90B780d7546ab754e35e0d2E80d76557A012D4fE"
-              publicKey="pk_test_qblFNYngBkEdjEZ16jxxoWSM"
-              secretKey="cos_1Lb6vsAY1pjOSNXVWF3nUtkV_secret_8fuPvTzBaxj3XRh14C6tqvdl600rpW7hG4G"
+              publicKey="pk_test_51Qi3BVCs2RllKa6DyEOk2iYwabhBeGdPa7jT6UC0VLkabSefxi7nLElGdZyao4pTnaMXwTNPvlNVBvnQUMucekwl00w5EIyAou"
+              secretKey="cos_1QjzidCs2RllKa6DEwHRs8qk_secret_RoKMBXLpIk2g3mPPQGtkkAN9500X4hnXmCQ"
             />
         </ConfigProvider>
     );
