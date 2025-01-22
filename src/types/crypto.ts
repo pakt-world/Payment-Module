@@ -5,6 +5,7 @@
 interface BasicModalProps {
   isOpen: boolean;
   closeModal: () => void;
+  collectionId: string;
 }
 
 type I0xAddressType = `0x${string}`;
