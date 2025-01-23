@@ -1,17 +1,16 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-
-import React, { createContext, useContext, ReactNode, useEffect } from "react";
+import React, { createContext, useContext, ReactNode, useEffect, useState } from "react";
 import { type AxiosInstance } from "axios";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, type Config } from "wagmi";
+import { WagmiProvider, type Config, type WagmiProviderProps } from "wagmi";
+import { structuralSharing } from '@wagmi/core/query';
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-
 import { setAxiosInstance } from "lib/axios-instance";
 import { setGlobalErrorHandler } from "lib/error-handler";
 import { applyTheme } from "utils";
@@ -24,6 +23,7 @@ interface ConfigContextType {
     axiosInstance?: AxiosInstance; // Optional Axios instance
     baseURL?: string; // Base URL for API requests
     queryClient?: QueryClient; // Optional React Query client
+    wagmiProvider?: WagmiProviderProps // Optional React Wagmi Provider
     publicKey?: string; // Optional publicKey
     clientId?: string; // Optional clientId
     token?: string; // Optional Bearer token
@@ -51,6 +51,19 @@ interface WrappedQueryComponentProps {
 const WrappedQueryComponent = ({ children }: WrappedQueryComponentProps) => {
     const { queryClient, wagmiConfig } = useConfig(); // Get the queryClient from config
 
+    const [defaultQueryClient] = useState(
+      () =>
+        new QueryClient({
+          defaultOptions: {
+            queries: {
+              retry: 1,
+              retryDelay: 10000,
+              structuralSharing,
+            },
+          },
+        })
+    );
+
     // Conditionally create a fallback QueryClient only if queryClient is not provided
     return queryClient ? (
         // If QueryClient exists in config, render children directly
@@ -58,21 +71,26 @@ const WrappedQueryComponent = ({ children }: WrappedQueryComponentProps) => {
     ) : (
         // If no QueryClient in config, create a new QueryClient and provide it
         <QueryClientProvider
-            client={
-                new QueryClient({
-                    defaultOptions: {
-                        queries: {
-                            retry: 3,
-                        },
-                    },
-                })
-            }
+            client={defaultQueryClient}
         >
-		      <WagmiProvider config={wagmiConfig}>
-            {children}
-          </WagmiProvider>
+              {children}
         </QueryClientProvider>
     );
+};
+
+const WrappedWagmiProvider  = ({ children }: WrappedQueryComponentProps) => {
+  const { wagmiProvider, wagmiConfig } = useConfig(); // Get the queryClient from config
+
+  // Conditionally create a fallback QueryClient only if queryClient is not provided
+  return wagmiProvider ? (
+      // If QueryClient exists in config, render children directly
+      children
+  ) : (
+      // If no QueryClient in config, create a new QueryClient and provide it
+      <WagmiProvider config={wagmiConfig}>
+            {children}
+        </WagmiProvider>
+  );
 };
 
 interface ConfigProviderProps {
@@ -96,13 +114,14 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
 
     return (
         <ConfigContext.Provider value={config}>
+            <WrappedWagmiProvider>
+              <WrappedQueryComponent>{children}</WrappedQueryComponent>
+            </WrappedWagmiProvider>
             <Toaster
                 position="top-right"
                 gutter={8}
-                containerClassName="!ir-z-[999999]"
+                containerClassName="!pam-z-[999999]"
             />
-
-            <WrappedQueryComponent>{children}</WrappedQueryComponent>
         </ConfigContext.Provider>
     );
 };

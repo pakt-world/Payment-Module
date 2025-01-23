@@ -6,7 +6,7 @@ import { Config } from "wagmi";
 import { StrictOmit, ExactPartial } from "@wagmi/core/dist/types/types/utils";
 import { type ConnectMutate } from "wagmi/query";
 
-import { BasicModalProps } from "types";
+import { BasicModalProps, IAny, onFinishResponseProps } from "types";
 
 interface ConnectorProps {
     connect: () => Promise<{
@@ -56,6 +56,7 @@ interface CryptoPaymentModalProps extends BasicModalProps {
     chainId: number;
     contractAddress?: string;
     tokenDecimal: number;
+    onSuccessResponse:(data: onFinishResponseProps) => void;
 }
 
 interface CryptoPayWithWalletProps {
@@ -64,6 +65,7 @@ interface CryptoPayWithWalletProps {
     contractAddress?: string;
     tokenDecimal: number;
     chainId: number;
+    onSuccessResponse:(data: onFinishResponseProps) => void;
 }
 
 type I0xType = `0x${string}`;
@@ -83,12 +85,10 @@ interface WalletDepositProps {
     selectedConnector: ConnectorProps | undefined;
     activeConnector: unknown;
     isDisabled: boolean;
-    showReconfirmButton: boolean;
-    disableButtonOnClick: boolean;
-    // setDisableButtonOnClick: (v: boolean) => void;
-    // setShowReconfirmButton: (value_: boolean) => void;
-    // closeModel: () => void;
     connect: ConnectMutate<Config, unknown>;
+    showReconfirmButton?: boolean;
+    disableButtonOnClick?: boolean;
+    onSuccessResponse:(data: onFinishResponseProps) => void;
 }
 
 interface DepositToAddressProps {

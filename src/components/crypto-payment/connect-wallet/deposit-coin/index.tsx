@@ -22,6 +22,7 @@ interface WalletDepositProps {
     depositAddress: string;
     amount: number;
     selectedConnector: ConnectorProps | undefined;
+    isDisabled: boolean;
     activeConnector: unknown;
     setDisableButtonOnClick: (v: boolean) => void;
     connect: ConnectMutate<Config, unknown>;
@@ -36,6 +37,7 @@ export const DepositAvax = ({
     selectedConnector,
     setDisableButtonOnClick,
     connect,
+    isDisabled
 }: WalletDepositProps): ReactElement => {
     const [connectError, setConnectError] = useState<string | null>(null);
 
@@ -45,7 +47,7 @@ export const DepositAvax = ({
         value: parseEther("0.001"),
     };
 
-    console.log(SendTxPayload);
+    Logger.info("DepositAvax--->", { SendTxPayload, isLoading, isDisabled });
 
     // const {
     //     // data: txConfig,
@@ -123,7 +125,7 @@ export const DepositAvax = ({
             )} */}
 
             <Button
-                disabled={isLoadingAll}
+                disabled={isDisabled || isLoadingAll}
                 onClick={() => {
                     // MakePayment();
                 }}
@@ -132,7 +134,7 @@ export const DepositAvax = ({
                 size="md"
             >
                 <div className="flex items-center justify-center gap-2">
-                    <span> Make Payment</span>{" "}
+                    <span> Make Payment</span>
                     <span>{isLoadingAll && <Spinner />}</span>
                 </div>
             </Button>

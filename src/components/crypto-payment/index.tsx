@@ -2,7 +2,6 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { ReactElement } from "react";
-import { useMediaQuery } from "usehooks-ts";
 import { X } from "lucide-react";
 import * as Tabs from "@radix-ui/react-tabs";
 
@@ -10,10 +9,10 @@ import * as Tabs from "@radix-ui/react-tabs";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import type { CryptoPaymentModalProps } from "./types";
-import PoweredByPakt  from "components/powdered-by-pakt";
 import Modal from "components/common/modal";
 import { ConnectWallet } from "./connect-wallet";
 import { DepositToAddress } from "./address-deposit";
+import PaktWrapper from "components/pakt-wrapper";
 
 const CryptoPaymentModal = ({
     isOpen,
@@ -24,15 +23,15 @@ const CryptoPaymentModal = ({
     contractAddress,
     chainId,
     tokenDecimal,
+    onSuccessResponse,
 }: CryptoPaymentModalProps): ReactElement => {
-    const isMobile = useMediaQuery("(max-width: 640px)");
     return (
       <Modal
         isOpen={isOpen}
         closeModal={closeModal}
         disableClickOutside
       >
-        <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-4 sm:pam-max-w-[400px]">
+        <PaktWrapper showPakt>
           <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-6 pam-bg-white pam-p-6 pam-rounded-2xl pam-border">
               <div className="pam-flex pam-w-full pam-items-center pam-justify-between">
                   <h2 className="pam-text-lg pam-font-bold pam-text-title sm:pam-text-2xl">
@@ -76,6 +75,7 @@ const CryptoPaymentModal = ({
                               contractAddress={contractAddress}
                               tokenDecimal={tokenDecimal}
                               chainId={chainId}
+                              onSuccessResponse={onSuccessResponse}
                           />
                       </Tabs.Content>
                       <Tabs.Content value="deposit-to-address">
@@ -88,12 +88,7 @@ const CryptoPaymentModal = ({
                   </Tabs.Root>
               </div>
           </div>
-          {!isMobile && (
-              <div className="pam-flex pam-w-full pam-items-center pam-justify-end">
-                  <PoweredByPakt className="!pam-text-white" />
-              </div>
-          )}
-        </div>
+        </PaktWrapper>
       </Modal>
     );
 };
