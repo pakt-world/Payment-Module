@@ -3,22 +3,19 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-
+import { useEffect, useState } from "react";
 import { useSimulateContract, useWriteContract } from "wagmi";
-import { erc20Abi } from "viem";
+import { erc20Abi, parseEther } from "viem";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-
-// import { useConfirmJobPayment, useInviteTalentToJob } from "@/lib/api/job";
+import { I0xAddressType, IAny } from "types";
 import { Button, toast, Spinner } from "components/common";
 import { ContractErrorType, WalletDepositProps } from "../../types";
-import { IAny } from "types";
 import Logger from "lib/logger";
-import { useEffect, useState } from "react";
 
-export const DepositUSDC = ({
+const DepositToken = ({
     chainId,
     contractAddress,
     depositAddress,
@@ -30,15 +27,16 @@ export const DepositUSDC = ({
     isLoading,
     disableButtonOnClick,
     connect,
+    onSuccessResponse
 }: WalletDepositProps): JSX.Element => {
     const [connectError, setConnectError] = useState<string | null>(null);
-
-    const { data: ContractConfig, error: contractError } = useSimulateContract({
+    
+    const { data:ContractConfig, isError:contractIsError, error:contractError, isLoading:contrIsLoading, isLoadingError } = useSimulateContract({
         abi: erc20Abi,
         chainId,
         functionName: "transfer",
-        address: `0x${contractAddress?.substring(2)}`,
-        args: [`0x${depositAddress.substring(2)}`, amountToPay],
+        address: `${contractAddress as I0xAddressType}`,
+        args: [`${depositAddress as I0xAddressType}`, amountToPay],
         query: {
             enabled: !!activeConnector,
         },
@@ -48,13 +46,15 @@ export const DepositUSDC = ({
 
     const {
         writeContract,
+        isError: writeIsError,
         error: writeError,
         isPending: writeLoading,
     } = useWriteContract({
         mutation: {
-            onSuccess() {
-                // confirmValuePayment();
-                Logger.info(`contract-interaction-success-->`);
+            onSuccess(data) {
+                Logger.info(`contract-interaction-success-->`, { txId:data });
+                // call on-finish-response-with-txId
+                onSuccessResponse({ error:false, txId:data });
             },
             onError(error: any) {
                 toast.error(error.message);
@@ -62,7 +62,12 @@ export const DepositUSDC = ({
         },
     });
 
-    const isLoadingAll = isLoading || writeLoading || disableButtonOnClick;
+    const isLoadingAll = isLoading || contrIsLoading || writeLoading;
+    const isDisabledAll = isDisabled || disableButtonOnClick  || writeIsError|| contractIsError;
+
+    if(contractIsError){
+      Logger.error("contract-error", { ContractConfig, contractError, contractIsError, isLoadingError, writeLoading, writeIsError, writeError });
+    }
 
     const MakePayment = async (): Promise<void> => {
         try {
@@ -77,14 +82,12 @@ export const DepositUSDC = ({
                 );
             }
             if (!ContractConfig) {
-                // throw new Error("Contract configuration is missing.");
                 Logger.info(
                     "Contract configuration is missing., Connect wallet!"
                 );
-                return;
+                throw new Error("Contract configuration is missing.");
             }
-
-            writeContract(ContractConfig.request);
+            return writeContract(ContractConfig.request);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);
@@ -102,10 +105,9 @@ export const DepositUSDC = ({
     }, [selectedConnector]);
 
     return (
-        <div className="flex flex-col gap-2">
-            {selectedConnector &&
-                (writeError || contractError || connectError) && (
-                    <div className="flex flex-col items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-2 text-sm text-red-500">
+        <div className="pam-flex pam-flex-col pam-gap-2">
+            {selectedConnector && (writeError || contractError || connectError) && (
+                    <div className="pam-flex pam-flex-col pam-items-center pam-gap-2 pam-rounded-lg pam-border pam-border-red-200 pam-bg-red-50 pam-p-2 pam-text-sm pam-text-red-500">
                         <span>
                             {contrErr?.shortMessage ||
                                 // @ts-ignore
@@ -119,7 +121,7 @@ export const DepositUSDC = ({
             {showReconfirmButton && (
                 <Button
                     fullWidth
-                    disabled={isDisabled || !!contrErr}
+                    disabled={isLoadingAll ||isDisabledAll}
                     onClick={() => {}}
                     variant="primary"
                     size="md"
@@ -130,21 +132,20 @@ export const DepositUSDC = ({
 
             <Button
                 fullWidth
-                disabled={isLoadingAll || isDisabled || !!contractError}
+                disabled={isLoadingAll || isDisabledAll}
                 onClick={() => {
                     MakePayment();
                 }}
                 variant="primary"
                 size="md"
             >
-                <div className="flex items-center justify-center gap-2">
-                    <span>
-                        {" "}
-                        {isLoadingAll ? "Confirming Payment" : "Open Wallet"}
-                    </span>{" "}
-                    <span>{isLoadingAll && <Spinner />}</span>
+                <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
+                  <span>{writeLoading ? "Confirming Payment" : isLoadingAll ? "Loading...": "Open Wallet"}</span> 
+                  <span> {isLoadingAll && <Spinner />}</span>
                 </div>
             </Button>
         </div>
     );
 };
+
+export default DepositToken;

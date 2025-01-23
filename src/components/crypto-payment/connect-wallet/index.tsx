@@ -6,7 +6,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { parseUnits } from "viem";
-import { useAccount, useConnect, useSwitchChain } from "wagmi";
+import { useAccount, useConnect, useSwitchChain, WagmiProvider } from "wagmi";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -16,7 +16,7 @@ import type { IAny } from 'types';
 import type { ConnectorProps, CryptoPayWithWalletProps } from "../types";
 import { WalletConnectorList } from "./wallet-connector-list";
 import { DepositAvax } from "./deposit-coin";
-import { DepositUSDC } from "./deposit-token";
+import DepositToken from "./deposit-token";
 // import { DisclaimerDialog } from "@/components/dialogs/make-deposit/disclaimer";
 
 export const ConnectWallet = ({
@@ -25,6 +25,7 @@ export const ConnectWallet = ({
     contractAddress,
     chainId,
     tokenDecimal,
+    onSuccessResponse,
 }: CryptoPayWithWalletProps): JSX.Element => {
     const {
         chain,
@@ -46,7 +47,7 @@ export const ConnectWallet = ({
         [amount, tokenDecimal]
     );
 
-    const isToken = !contractAddress;
+    const isToken = !!contractAddress;
     const isWrongChain = chain?.id !== chainId;
 
     const ReadyConnectors = connectors
@@ -72,7 +73,7 @@ export const ConnectWallet = ({
     }, [disableButtonOnClick]);
 
     Logger.info("Account Status ===>>>", { status });
-    Logger.info("Selected Connector ===>>>", { selectedConnector });
+    Logger.info("Selected Connector ===>>>", { selectedConnector, isToken, contractAddress });
 
     return (
         <div className="pam-flex pam-flex-col pam-gap-8">
@@ -119,7 +120,7 @@ export const ConnectWallet = ({
             />
 
             {isToken ? (
-                <DepositUSDC
+                <DepositToken
                     chainId={chainId}
                     amountToPay={amountToPay}
                     contractAddress={contractAddress ?? ""}
@@ -129,15 +130,13 @@ export const ConnectWallet = ({
                     isDisabled={!selectedConnector || isLoading}
                     showReconfirmButton={showReconfirmButton}
                     isLoading={isLoading}
-                    // setShowReconfirmButton={setShowReconfirmButton}
-                    // closeModel={closeModel}
                     disableButtonOnClick={disableButtonOnClick}
-                    // setDisableButtonOnClick={setDisableButtonOnClick}
                     connect={connect}
+                    onSuccessResponse={onSuccessResponse}
                 />
             ) : (
                 <DepositAvax
-                    isLoading={isLoading || !selectedConnector}
+                    isLoading={isLoading}
                     amount={amount}
                     depositAddress={depositAddress}
                     chainId={chainId}
@@ -145,6 +144,7 @@ export const ConnectWallet = ({
                     selectedConnector={selectedConnector}
                     setDisableButtonOnClick={setDisableButtonOnClick}
                     connect={connect}
+                    isDisabled={!selectedConnector || isLoading}
                 />
             )}
         </div>

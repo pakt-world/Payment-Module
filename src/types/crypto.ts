@@ -10,7 +10,13 @@ interface BasicModalProps {
 
 type I0xAddressType = `0x${string}`;
 
+interface onFinishResponseProps {
+  status: string;
+  txId: string;
+}
+
 export {
   BasicModalProps,
   I0xAddressType,
+  onFinishResponseProps,
 }
