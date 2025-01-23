@@ -53,8 +53,7 @@ const DepositToken = ({
         mutation: {
             onSuccess(data) {
                 Logger.info(`contract-interaction-success-->`, { txId:data });
-                // call on-finish-response-with-txId
-                onSuccessResponse({ error:false, txId:data });
+                onSuccessResponse({ status:"completed", txId:data });
             },
             onError(error: any) {
                 toast.error(error.message);
