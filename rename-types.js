@@ -6,7 +6,7 @@ var path = require("path");
 var bundles = {
     es: "dist/bundle-es",
     cjs: "dist/bundle-cjs",
-    browser: "dist/issue-resolution",
+    browser: "dist/payment-module",
 };
 // Define the path to the original and new file
 var folders = [

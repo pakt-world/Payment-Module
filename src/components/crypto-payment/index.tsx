@@ -12,7 +12,7 @@ import type { CryptoPaymentModalProps } from "./types";
 import Modal from "components/common/modal";
 import { ConnectWallet } from "./connect-wallet";
 import { DepositToAddress } from "./address-deposit";
-import PaktWrapper from "components/pakt-wrapper";
+import PaktWrapper from "components/modal-wrapper";
 
 const CryptoPaymentModal = ({
     isOpen,
@@ -83,6 +83,7 @@ const CryptoPaymentModal = ({
                               coin={coin}
                               amount={amount}
                               depositAddress={depositAddress}
+                              onSuccessResponse={onSuccessResponse}
                           />
                       </Tabs.Content>
                   </Tabs.Root>

@@ -49,7 +49,7 @@ interface WrappedQueryComponentProps {
 }
 
 const WrappedQueryComponent = ({ children }: WrappedQueryComponentProps) => {
-    const { queryClient, wagmiConfig } = useConfig(); // Get the queryClient from config
+    const { queryClient } = useConfig(); // Get the queryClient from config
 
     const [defaultQueryClient] = useState(
       () =>
@@ -97,12 +97,13 @@ interface ConfigProviderProps {
     config: ConfigContextType;
     children: ReactNode;
 }
+
 const ConfigProvider: React.FC<ConfigProviderProps> = ({
     config,
     children,
 }) => {
     useEffect(() => {
-        localStorage.setItem("u53r_71m3z0n3", JSON.stringify(config.timezone));
+        localStorage.setItem("u53r_71m3z0n3_iop", JSON.stringify(config.timezone));
         setAxiosInstance(config); // Set the Axios instance globally
 
         if (config?.errorHandler) {
@@ -114,9 +115,11 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
 
     return (
         <ConfigContext.Provider value={config}>
-            <WrappedWagmiProvider>
-              <WrappedQueryComponent>{children}</WrappedQueryComponent>
-            </WrappedWagmiProvider>
+          <WrappedQueryComponent>
+             <WrappedWagmiProvider>
+                {children}
+              </WrappedWagmiProvider>
+            </WrappedQueryComponent>
             <Toaster
                 position="top-right"
                 gutter={8}
@@ -127,3 +130,5 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
 };
 
 export { useConfig, ConfigProvider, ConfigContextType };
+
+export default ConfigProvider;

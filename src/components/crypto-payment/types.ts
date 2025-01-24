@@ -95,6 +95,7 @@ interface DepositToAddressProps {
   amount: number;
   coin: string;
   depositAddress: string;
+  onSuccessResponse:(data: onFinishResponseProps) => void;
 }
 
 export {

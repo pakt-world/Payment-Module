@@ -16,6 +16,7 @@ export const DepositToAddress = ({
     amount,
     depositAddress,
     coin,
+    onSuccessResponse,
 }: DepositToAddressProps): React.JSX.Element => {
     const [value, copy] = useCopyToClipboard();
     const isLoading = false;
@@ -63,35 +64,14 @@ export const DepositToAddress = ({
             </div>
 
             <div className="pam-flex pam-items-center pam-justify-center pam-gap-2 pam-rounded-2xl pam-border pam-border-line pam-bg-[#fcfcfc] pam-px-4 pam-py-4 pam-shadow">
-                <QRCode value={depositAddress} size={150} />
+                <QRCode 
+                  value={depositAddress}
+                  size={150}
+                />
             </div>
 
             <Button
-                onClick={() => {
-                    // confirmPayment.mutate(
-                    // 	{ jobId },
-                    // 	{
-                    // 		onSuccess: () => {
-                    // 			if (talentId !== "") {
-                    // 				inviteTalent.mutate(
-                    // 					{
-                    // 						jobId,
-                    // 						talentId,
-                    // 					},
-                    // 					{
-                    // 						onSuccess: () => {
-                    // 							router.push(`/dashboard`);
-                    // 						},
-                    // 					}
-                    // 				);
-                    // 			}
-                    // 			closeModel();
-                    // 			router.push(`/dashboard`);
-                    // 		},
-                    // 		onError: () => {},
-                    // 	}
-                    // );
-                }}
+                onClick={()=>onSuccessResponse({ status:"success", txId: "deposit"})}
                 fullWidth
                 variant="primary"
                 size="md"

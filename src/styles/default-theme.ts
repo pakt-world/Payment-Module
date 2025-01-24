@@ -1,4 +1,4 @@
-import { ITheme } from "utils/types";
+import { ITheme } from "types";
 
 const defaultTheme: ITheme = {
     primary: "#007C5B",
