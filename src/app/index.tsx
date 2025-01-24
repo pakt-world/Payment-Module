@@ -1,10 +1,9 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-
 import { useState } from "react";
 import { http, createConfig } from "wagmi";
-import { avalanche, avalancheFuji, base, baseGoerli } from "@wagmi/core/chains";
+import { avalanche, avalancheFuji } from "@wagmi/core/chains";
 import { walletConnect } from "wagmi/connectors";
 
 /* -------------------------------------------------------------------------- */

@@ -9,7 +9,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 /* -------------------------------------------------------------------------- */
 
 import { ConfigContextType } from "context/config-context";
-import { getRequestSignature } from "utils";
+import { getRequestSignature } from "../utils";
 
 // A variable to store the Axios instance globally
 let axiosInstance: AxiosInstance = axios.create(); // Default to a basic Axios instance

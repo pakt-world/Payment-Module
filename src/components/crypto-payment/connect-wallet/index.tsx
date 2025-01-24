@@ -6,7 +6,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { parseUnits } from "viem";
-import { useAccount, useConnect, useSwitchChain, WagmiProvider } from "wagmi";
+import { useAccount, useConnect, useSwitchChain } from "wagmi";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */

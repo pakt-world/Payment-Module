@@ -13,7 +13,7 @@ import { ReactElement, useCallback, useMemo, useState } from 'react';
 import { CryptoElements, OnrampElement, FINISHED_PAYMENT } from './context';
 import { StripeModalProps } from './type';
 import Modal from 'components/common/modal';
-import PaktWrapper from 'components/pakt-wrapper';
+import PaktWrapper from 'components/modal-wrapper';
 import Logger from 'lib/logger';
 import { IAny } from 'types';
 import { usePostStripeInitiate } from 'lib/api/payment';

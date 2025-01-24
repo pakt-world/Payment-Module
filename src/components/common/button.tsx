@@ -7,7 +7,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { cn } from "utils";
+import { cn } from "../../utils";
 
 const button = cva(
     "pam-focus:outline-none pam-py-3 pam-whitespace-nowrap pam-duration-200 pam-capitalize pam-focus-visible:ring-1 pam-focus-visible:ring-[#19A966] pam-relative pam-z-0 pam-rounded-[10px] pam-text-center pam-w-fit pam-px-6 pam-font-semibold pam-focus-visible:border-transparent",
