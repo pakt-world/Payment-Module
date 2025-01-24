@@ -18,9 +18,9 @@
         "prepublishOnly": "yarn build",
         "ts-types": " tsc --emitDeclarationOnly",
         "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
-        "build:major": "yarn version --major && git push origin main && yarn publish --non-interactive",
-        "build:minor": "yarn version --minor && git push origin main && yarn publish --non-interactive",
-        "build:patch": "yarn version --patch && git push origin main && yarn publish --non-interactive",
+        "build:major": "yarn version --major && git push origin development && yarn publish --non-interactive",
+        "build:minor": "yarn version --minor && git push origin development && yarn publish --non-interactive",
+        "build:patch": "yarn version --patch && git push origin development && yarn publish --non-interactive",
         "postbuild": "node rename-types.js"
     },
     "homepage": "https://github.com/pakt-world/payment-module#readme",
