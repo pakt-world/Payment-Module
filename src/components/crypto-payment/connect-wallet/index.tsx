@@ -145,6 +145,7 @@ export const ConnectWallet = ({
                     setDisableButtonOnClick={setDisableButtonOnClick}
                     connect={connect}
                     isDisabled={!selectedConnector || isLoading}
+                    onSuccessResponse={onSuccessResponse}
                 />
             )}
         </div>
