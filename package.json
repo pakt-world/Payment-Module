@@ -1,7 +1,7 @@
 {
     "name": "@pakt-world/payment-module",
     "license": "MIT",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "repository": "git://github.com/pakt-world/payment-module.git",
     "description": "",
     "author": "Pakt",
@@ -123,6 +123,7 @@
         "react-hot-toast": "^2.4.1",
         "react-loading-skeleton": "^3.5.0",
         "react-qr-code": "^2.0.15",
+        "react-qrcode-logo": "^3.0.0",
         "react-quilljs": "^2.0.4",
         "usehooks-ts": "^2.9.4",
         "viem": "^2.21.44",
