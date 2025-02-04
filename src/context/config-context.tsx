@@ -46,10 +46,17 @@ const useConfig = () => {
 
 interface WrappedQueryComponentProps {
     children: ReactNode;
+    queryClient?: QueryClient | undefined;
 }
 
-const WrappedQueryComponent = ({ children }: WrappedQueryComponentProps) => {
-    const { queryClient } = useConfig(); // Get the queryClient from config
+interface WrappedWagmiComponentProps {
+  children: ReactNode;
+  wagmiConfig: Config;
+  wagmiProvider?: WagmiProviderProps | undefined;
+}
+
+const WrappedQueryComponent = ({ children, queryClient }: WrappedQueryComponentProps) => {
+    // const { queryClient } = useConfig(); // Get the queryClient from config
 
     const [defaultQueryClient] = useState(
       () =>
@@ -78,8 +85,8 @@ const WrappedQueryComponent = ({ children }: WrappedQueryComponentProps) => {
     );
 };
 
-const WrappedWagmiProvider  = ({ children }: WrappedQueryComponentProps) => {
-  const { wagmiProvider, wagmiConfig } = useConfig(); // Get the queryClient from config
+const WrappedWagmiProvider  = ({ children, wagmiProvider, wagmiConfig  }: WrappedWagmiComponentProps) => {
+  // const { wagmiProvider, wagmiConfig } = useConfig(); // Get the queryClient from config
 
   // Conditionally create a fallback QueryClient only if queryClient is not provided
   return wagmiProvider ? (
@@ -115,8 +122,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
 
     return (
         <ConfigContext.Provider value={config}>
-          <WrappedQueryComponent>
-             <WrappedWagmiProvider>
+          <WrappedQueryComponent queryClient={config.queryClient}>
+             <WrappedWagmiProvider wagmiProvider={config.wagmiProvider} wagmiConfig={config.wagmiConfig}>
                 {children}
               </WrappedWagmiProvider>
             </WrappedQueryComponent>

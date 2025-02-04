@@ -44,12 +44,9 @@ export const DepositAvax = ({
     const [connectError, setConnectError] = useState<string | null>(null);
 
     const SendTxPayload = {
-        // chainId: String(chainId),
         to: depositAddress as I0xType,
-        value: parseEther("0.001"),
+        value: parseEther(String(amount)),
     };
-
-    Logger.info("DepositAvax--->", { SendTxPayload, isLoading, isDisabled });
 
     const {
         data: txConfig,
