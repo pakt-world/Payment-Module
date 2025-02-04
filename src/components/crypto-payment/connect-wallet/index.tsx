@@ -11,13 +11,15 @@ import { useAccount, useConnect, useSwitchChain } from "wagmi";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
+
 import Logger from "lib/logger";
 import type { IAny } from 'types';
 import type { ConnectorProps, CryptoPayWithWalletProps } from "../types";
 import { WalletConnectorList } from "./wallet-connector-list";
 import { DepositAvax } from "./deposit-coin";
 import DepositToken from "./deposit-token";
-// import { DisclaimerDialog } from "@/components/dialogs/make-deposit/disclaimer";
+import { DisclaimerDialog } from "../disclaimer-dialog";
+
 
 export const ConnectWallet = ({
     amount,
@@ -40,7 +42,7 @@ export const ConnectWallet = ({
     >(activeConnector || undefined);
     const [showReconfirmButton, setShowReconfirmButton] = useState(false);
     const [disableButtonOnClick, setDisableButtonOnClick] = useState(false);
-    // const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [showDisclaimer, setShowDisclaimer] = useState(false);
 
     const amountToPay = useMemo(
         () => parseUnits(amount.toString(), tokenDecimal),
@@ -79,73 +81,71 @@ export const ConnectWallet = ({
         <div className="pam-flex pam-flex-col pam-gap-8">
             <p className="pam-text-center pam-text-sm pam-text-body">
                 By making payment you acknowledge that you have read and
-                understand the{" "}
-                <a
-                    href="https://docs.google.com/document/d/1HLzHT3NHG6dm6497IZcnMlgUj0wnhaPwgiW8U0MfewM/edit?tab=t.0"
-                    target="_blank"
+                understand the
+                <button
                     className="pam-cursor-pointer pam-text-[#3772FF]"
                     rel="noreferrer"
-                    // onClick={() => {
-                    // 	setShowDisclaimer(true);
-                    // }}
+                    onClick={() => {
+                    	setShowDisclaimer(true);
+                    }}
                 >
                     terms of services
-                </a>{" "}
-                and{" "}
-                <a
-                    href="https://docs.google.com/document/d/1WoNGi2Wx841eDJxf2lHX-KpvDw06DkYJdpTXMuP0Fa0/edit?tab=t.0"
-                    target="_blank"
+                </button>
+                and
+                <button
                     className="pam-cursor-pointer pam-text-[#3772FF]"
                     rel="noreferrer"
-                    // onClick={() => {
-                    // 	setShowDisclaimer(true);
-                    // }}
+                    onClick={() => {
+                    	setShowDisclaimer(true);
+                    }}
                 >
                     privacy policy
-                </a>
+                </button>
             </p>
-            {/* <DisclaimerDialog
-				isOpen={showDisclaimer}
-				closeModal={() => {
-					setShowDisclaimer(false);
-				}}
-			/> */}
+            
+            <DisclaimerDialog
+              isOpen={showDisclaimer}
+              closeModal={() => {
+                setShowDisclaimer(false);
+              }}
+            />
+
             <WalletConnectorList
-                activeConnector={selectedConnector}
-                selectedConnector={selectedConnector}
-                setSelectedConnector={setSelectedConnector}
-                isLoading={isLoading}
-                connectors={ReadyConnectors}
-                accountStatus={status}
+              activeConnector={selectedConnector}
+              selectedConnector={selectedConnector}
+              setSelectedConnector={setSelectedConnector}
+              isLoading={isLoading}
+              connectors={ReadyConnectors}
+              accountStatus={status}
             />
 
             {isToken ? (
                 <DepositToken
-                    chainId={chainId}
-                    amountToPay={amountToPay}
-                    contractAddress={contractAddress ?? ""}
-                    depositAddress={depositAddress}
-                    activeConnector={activeConnector}
-                    selectedConnector={selectedConnector}
-                    isDisabled={!selectedConnector || isLoading}
-                    showReconfirmButton={showReconfirmButton}
-                    isLoading={isLoading}
-                    disableButtonOnClick={disableButtonOnClick}
-                    connect={connect}
-                    onSuccessResponse={onSuccessResponse}
+                  chainId={chainId}
+                  amountToPay={amountToPay}
+                  contractAddress={contractAddress ?? ""}
+                  depositAddress={depositAddress}
+                  activeConnector={activeConnector}
+                  selectedConnector={selectedConnector}
+                  isDisabled={!selectedConnector || isLoading}
+                  showReconfirmButton={showReconfirmButton}
+                  isLoading={isLoading}
+                  disableButtonOnClick={disableButtonOnClick}
+                  connect={connect}
+                  onSuccessResponse={onSuccessResponse}
                 />
             ) : (
                 <DepositAvax
-                    isLoading={isLoading}
-                    amount={amount}
-                    depositAddress={depositAddress}
-                    chainId={chainId}
-                    activeConnector={activeConnector}
-                    selectedConnector={selectedConnector}
-                    setDisableButtonOnClick={setDisableButtonOnClick}
-                    connect={connect}
-                    isDisabled={!selectedConnector || isLoading}
-                    onSuccessResponse={onSuccessResponse}
+                  isLoading={isLoading}
+                  amount={amount}
+                  depositAddress={depositAddress}
+                  chainId={chainId}
+                  activeConnector={activeConnector}
+                  selectedConnector={selectedConnector}
+                  setDisableButtonOnClick={setDisableButtonOnClick}
+                  connect={connect}
+                  isDisabled={!selectedConnector || isLoading}
+                  onSuccessResponse={onSuccessResponse}
                 />
             )}
         </div>

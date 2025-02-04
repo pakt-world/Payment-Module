@@ -35,9 +35,8 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, publicKey, theme
       Logger.info(`OnrampSession is now complete ${session.status}`, { responseP });
       onFinishResponse(responseP);
       closeModal();
-      return;
     }
-  }, []);
+  }, [closeModal]);
 
   useMemo(()=>{
   if (isOpen){

@@ -41,12 +41,13 @@ const App = () => {
     
     const [payData, setPayData] = useState<MakePaymentResponse>({
       address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
-      amountToPay: 10,
+      amountToPay: 0.323,
       chainId: "43113",
-      coin: "USDC",
+      coin: "AVAX",
       collectionAmount: 10,
       collectionAmountCoin: 10,
-      contractAddress: "0x5425890298aed601595a70AB815c96711a31Bc65",
+      contractAddress: "",
+      // contractAddress: "0x5425890298aed601595a70AB815c96711a31Bc65",
       expectedFee: 10,
       feePercentage: 10,
       rate: 12345,
