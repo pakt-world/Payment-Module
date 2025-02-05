@@ -24,6 +24,7 @@ const CryptoPaymentModal = ({
     chainId,
     tokenDecimal,
     onSuccessResponse,
+    isLoading
 }: CryptoPaymentModalProps): ReactElement => {
     return (
       <Modal
@@ -57,12 +58,14 @@ const CryptoPaymentModal = ({
                           <Tabs.Trigger
                               className="pam-rounded-lg pam-p-2 pam-px-2 pam-duration-200 hover:bg-white radix-state-active:pam-bg-white"
                               value="connect-wallet"
+                              disabled={isLoading}
                           >
                               Connect Wallet
                           </Tabs.Trigger>
                           <Tabs.Trigger
                               className="pam-rounded-lg pam-p-2 pam-px-2 pam-duration-200 pam-hover:bg-white radix-state-active:pam-bg-white"
                               value="deposit-to-address"
+                              disabled={isLoading}
                           >
                               Deposit To Address
                           </Tabs.Trigger>
@@ -76,6 +79,7 @@ const CryptoPaymentModal = ({
                               tokenDecimal={tokenDecimal}
                               chainId={chainId}
                               onSuccessResponse={onSuccessResponse}
+                              isLoading={isLoading}
                           />
                       </Tabs.Content>
                       <Tabs.Content value="deposit-to-address">
@@ -84,6 +88,7 @@ const CryptoPaymentModal = ({
                               amount={amount}
                               depositAddress={depositAddress}
                               onSuccessResponse={onSuccessResponse}
+                              isLoading={isLoading}
                           />
                       </Tabs.Content>
                   </Tabs.Root>

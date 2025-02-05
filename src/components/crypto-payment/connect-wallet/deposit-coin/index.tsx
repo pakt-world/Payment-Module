@@ -64,18 +64,22 @@ export const DepositAvax = ({
 
     const isLoadingAll = isLoading || txSending || IsPreparing || !!isError;
 
+    
+    const ConnectWallet = () => 
+      connect(
+          { connector: selectedConnector as IAny },
+          {
+              onError: (err) => {
+                setConnectError(err?.name);
+              },
+          }
+      );
+
     const MakePayment = async (): Promise<void> => {
         setDisableButtonOnClick(true);
         try {
             if (!activeConnector) {
-                connect(
-                    { connector: selectedConnector as IAny },
-                    {
-                        onError: (err) => {
-                            setConnectError(err?.name);
-                        },
-                    }
-                );
+              return ConnectWallet();
             }
 
             sendTransaction(
@@ -112,7 +116,7 @@ export const DepositAvax = ({
         <div>
             {/* @ts-ignore */}
             {selectedConnector && ((isError && isError?.name != "ConnectorChainMismatchError") || txError) && (
-              <div className="mb-4 flex flex-col items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-2 text-sm text-red-500">
+              <div className="pam-mb-4 pam-flex pam-flex-col pam-items-center pam-gap-2 pam-rounded-lg pam-border pam-border-red-200 pam-bg-red-50 p-2 pam-text-sm pam-text-red-500">
                   <span>
                       {(isError?.name || txError?.name) ==
                       "EstimateGasExecutionError"
@@ -128,14 +132,14 @@ export const DepositAvax = ({
             <Button
                 disabled={isDisabled || isLoadingAll}
                 onClick={() => {
-                    MakePayment();
+                  !activeConnector ? ConnectWallet() : MakePayment();
                 }}
                 fullWidth
                 variant="primary"
                 size="md"
             >
-                <div className="flex items-center justify-center gap-2">
-                    <span> Make Payment</span>
+                <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
+                    <span> { !activeConnector ? "Connect Wallet" : "Make Payment"}</span>
                     <span>{isLoadingAll && <Spinner />}</span>
                 </div>
             </Button>
