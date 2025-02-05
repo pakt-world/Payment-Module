@@ -17,10 +17,10 @@ export const DepositToAddress = ({
     depositAddress,
     coin,
     onSuccessResponse,
+    isLoading
 }: DepositToAddressProps): React.JSX.Element => {
     const [value, copy] = useCopyToClipboard();
-    const isLoading = false;
-
+  console.log("islopppo", isLoading);
     return (
         <div className="pam-flex pam-w-full pam-flex-col pam-gap-4 pam-max-sm:!pam-h-full pam-max-sm:pam-pb-[68px]">
             <p className="pam-text-center pam-text-sm pam-text-body">
@@ -34,7 +34,7 @@ export const DepositToAddress = ({
             <div className="pam-flex pam-items-center pam-justify-between pam-gap-2 pam-rounded-2xl pam-border pam-border-primary pam-bg-secondary pam-px-4 pam-py-6 pam-text-primary pam-max-sm:pam-h-[43px]">
                 <span className="pam-text-lg">Total Amount:</span>
                 <span className="pam-text-lg pam-font-bold">
-                    {amount} {coin}
+                    {amount} {coin.toUpperCase()}
                 </span>
             </div>
 
@@ -72,6 +72,7 @@ export const DepositToAddress = ({
 
             <Button
                 onClick={()=>onSuccessResponse({ status:"success", txId: "deposit"})}
+                disabled={isLoading}
                 fullWidth
                 variant="primary"
                 size="md"

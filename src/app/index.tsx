@@ -43,11 +43,11 @@ const App = () => {
       address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
       amountToPay: 0.323,
       chainId: "43113",
-      coin: "AVAX",
+      coin: "USDC",
       collectionAmount: 10,
       collectionAmountCoin: 10,
-      contractAddress: "",
-      // contractAddress: "0x5425890298aed601595a70AB815c96711a31Bc65",
+      // contractAddress: "",
+      contractAddress: "0x5425890298aed601595a70AB815c96711a31Bc65",
       expectedFee: 10,
       feePercentage: 10,
       rate: 12345,
@@ -57,6 +57,7 @@ const App = () => {
     
     const [token, setToken] = useState("");
     const [collectionId, setCollectionId] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const transports = {
       [avalanche.id]: http(),
@@ -79,7 +80,12 @@ const App = () => {
     }
 
     const onSuccessResponse = (data: onFinishResponseProps) => {
+      setIsLoading(true);
       Logger.debug(`on-finish-response---->`, { data });
+      setTimeout(()=>{
+        setIsLoading(false)
+        setOpenCryptoModal(false);
+      }, 20000);
     };
 
     const toggleModal = () => {
@@ -176,6 +182,7 @@ const App = () => {
               tokenDecimal={6}
               contractAddress={payData.contractAddress}
               onSuccessResponse={onSuccessResponse}
+              isLoading={isLoading}
             />
             <StripePaymentModal
               isOpen={openFiatModal}
@@ -184,6 +191,7 @@ const App = () => {
               chain="avalanche"
               publicKey={pKey}
               onFinishResponse={onSuccessResponse}
+              isLoading={isLoading}
             />
         </ConfigProvider>
     );

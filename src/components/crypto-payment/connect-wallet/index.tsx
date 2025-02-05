@@ -28,6 +28,7 @@ export const ConnectWallet = ({
     chainId,
     tokenDecimal,
     onSuccessResponse,
+    isLoading
 }: CryptoPayWithWalletProps): JSX.Element => {
     const {
         chain,
@@ -35,7 +36,7 @@ export const ConnectWallet = ({
         connector: activeConnector,
         status,
     } = useAccount();
-    const { connect, connectors, isPending:isLoading } = useConnect();
+    const { connect, connectors, isPending:isConnecting } = useConnect();
     const { switchChain } = useSwitchChain();
     const [selectedConnector, setSelectedConnector] = useState<
         ConnectorProps | undefined
@@ -74,8 +75,8 @@ export const ConnectWallet = ({
         return () => clearTimeout(timeoutId);
     }, [disableButtonOnClick]);
 
-    Logger.info("Account Status ===>>>", { status });
-    Logger.info("Selected Connector ===>>>", { selectedConnector, isToken, contractAddress });
+    Logger.info("Account Status ===>>>", { status, isLoading, isConnecting, disableButtonOnClick });
+    Logger.info("Selected Connector ===>>>", { selectedConnector, isToken, contractAddress, amount, tokenDecimal });
 
     return (
         <div className="pam-flex pam-flex-col pam-gap-8">
@@ -114,7 +115,7 @@ export const ConnectWallet = ({
               activeConnector={selectedConnector}
               selectedConnector={selectedConnector}
               setSelectedConnector={setSelectedConnector}
-              isLoading={isLoading}
+              isLoading={!!isLoading || isConnecting}
               connectors={ReadyConnectors}
               accountStatus={status}
             />
@@ -127,16 +128,16 @@ export const ConnectWallet = ({
                   depositAddress={depositAddress}
                   activeConnector={activeConnector}
                   selectedConnector={selectedConnector}
-                  isDisabled={!selectedConnector || isLoading}
+                  isDisabled={!selectedConnector || isConnecting || !!isLoading}
                   showReconfirmButton={showReconfirmButton}
-                  isLoading={isLoading}
+                  isLoading={isConnecting || !!isLoading}
                   disableButtonOnClick={disableButtonOnClick}
                   connect={connect}
                   onSuccessResponse={onSuccessResponse}
                 />
             ) : (
                 <DepositAvax
-                  isLoading={isLoading}
+                  isLoading={!!isLoading || isConnecting}
                   amount={amount}
                   depositAddress={depositAddress}
                   chainId={chainId}
@@ -144,7 +145,7 @@ export const ConnectWallet = ({
                   selectedConnector={selectedConnector}
                   setDisableButtonOnClick={setDisableButtonOnClick}
                   connect={connect}
-                  isDisabled={!selectedConnector || isLoading}
+                  isDisabled={!selectedConnector || isConnecting || !!isLoading}
                   onSuccessResponse={onSuccessResponse}
                 />
             )}

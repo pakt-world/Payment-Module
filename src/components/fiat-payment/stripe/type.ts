@@ -9,6 +9,7 @@ interface StripeModalProps extends BasicModalProps {
   chain: CHAIN_TYPES;
   theme?: "dark" | "light";
   onFinishResponse: (data:onFinishResponseProps)=> void;
+  isLoading?:boolean;
 }
 
 interface StripeContextProps {

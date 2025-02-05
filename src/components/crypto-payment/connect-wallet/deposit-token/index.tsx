@@ -68,6 +68,16 @@ const DepositToken = ({
       Logger.error("contract-error", { ContractConfig, contractError, contractIsError, isLoadingError, writeLoading, writeIsError, writeError });
     }
 
+    const ConnectWallet = () => 
+      connect(
+          { connector: selectedConnector as IAny },
+          {
+              onError: (err) => {
+                setConnectError(err?.name);
+              },
+          }
+      );
+
     const MakePayment = async (): Promise<void> => {
         try {
             if (!activeConnector) {
@@ -133,13 +143,13 @@ const DepositToken = ({
                 fullWidth
                 disabled={isLoadingAll || isDisabledAll}
                 onClick={() => {
-                    MakePayment();
+                  !activeConnector ? ConnectWallet() :MakePayment();
                 }}
                 variant="primary"
                 size="md"
             >
                 <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
-                  <span>{writeLoading ? "Confirming Payment" : isLoadingAll ? "Loading...": "Open Wallet"}</span> 
+                  <span>{!activeConnector ? "Connect Wallet": writeLoading ? "Confirming Payment" : isLoadingAll ? "Loading...": "Open Wallet"}</span> 
                   <span> {isLoadingAll && <Spinner />}</span>
                 </div>
             </Button>
