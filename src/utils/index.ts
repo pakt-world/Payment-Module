@@ -46,9 +46,18 @@ const applyTheme = (theme: ITheme) => {
   });
 };
 
+const sleep = (milliseconds: number) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+};
+
 export {
   cn,
   isProductionEnvironment,
   getRequestSignature,
-  applyTheme
+  applyTheme,
+  sleep,
 }

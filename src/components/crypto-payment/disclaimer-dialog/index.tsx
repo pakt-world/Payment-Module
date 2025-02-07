@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-
+import React from "react";
 import { X } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
@@ -13,7 +13,7 @@ import { X } from "lucide-react";
 import Modal from "components/common/modal";
 
 
-export const DisclaimerDialog = ({ isOpen, closeModal }: { isOpen: boolean; closeModal: () => void }): JSX.Element => {
+const DisclaimerDialog = ({ isOpen, closeModal }: { isOpen: boolean; closeModal: () => void }): JSX.Element => {
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -67,3 +67,5 @@ export const DisclaimerDialog = ({ isOpen, closeModal }: { isOpen: boolean; clos
 		</Modal>
 	);
 };
+
+export default React.memo(DisclaimerDialog);

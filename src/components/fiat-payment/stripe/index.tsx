@@ -4,7 +4,7 @@
 
 import {loadStripeOnramp} from '@stripe/crypto';
 import '@stripe/stripe-js';
-import { ReactElement, useCallback, useMemo, useState } from 'react';
+import { ReactElement, useCallback, memo, useMemo, useState } from 'react';
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -21,7 +21,7 @@ import { Spinner } from 'components/common';
 
 const StripePaymentModal = ({ collectionId, isOpen, closeModal, publicKey, theme, onFinishResponse }:StripeModalProps): ReactElement => {
   Logger.info("open StripePaymentModal");
-  const [loading,setLoading] = useState<boolean>(true);
+  // const [loading,setLoading] = useState<boolean>(true);
   const [clientSecret, setClientSecret] = useState("");
 
   const stripeMutate = usePostStripeInitiate();
@@ -44,7 +44,6 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, publicKey, theme
       collectionId
     },{
       onSuccess:(data)=>{
-        setLoading(false);
         setClientSecret(data.client_secret);
       }
     })
@@ -60,15 +59,12 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, publicKey, theme
       <PaktWrapper showPakt={true}>
         <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-4 sm:pam-max-w-[400px] sm:pam-min-h-[600px] pam-border-white">
             <CryptoElements stripeOnramp={stripeOnrampPromise}>
-              {loading ? 
-                <Spinner size={30} className="pam-text-white" />
-              :
                 <OnrampElement 
                   clientSecret={clientSecret}
                   appearance={{ theme: theme || "dark" }}
                   onChange={onChange}
+                  isLoading={stripeMutate.isPending}
                 />
-              }
             </CryptoElements>
         </div>
       </PaktWrapper>
@@ -76,4 +72,4 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, publicKey, theme
   )
 }
 
-export default StripePaymentModal;
+export default memo(StripePaymentModal);

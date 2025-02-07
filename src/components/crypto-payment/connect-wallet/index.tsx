@@ -4,7 +4,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { parseUnits } from "viem";
 import { useAccount, useConnect, useSwitchChain } from "wagmi";
 
@@ -12,16 +12,14 @@ import { useAccount, useConnect, useSwitchChain } from "wagmi";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import Logger from "lib/logger";
 import type { IAny } from 'types';
 import type { ConnectorProps, CryptoPayWithWalletProps } from "../types";
-import { WalletConnectorList } from "./wallet-connector-list";
-import { DepositAvax } from "./deposit-coin";
+import WalletConnectorList from "./wallet-connector-list";
+import DepositCoin from "./deposit-coin";
 import DepositToken from "./deposit-token";
-import { DisclaimerDialog } from "../disclaimer-dialog";
+import DisclaimerDialog from "../disclaimer-dialog";
 
-
-export const ConnectWallet = ({
+const ConnectWallet = ({
     amount,
     depositAddress,
     contractAddress,
@@ -36,7 +34,7 @@ export const ConnectWallet = ({
         connector: activeConnector,
         status,
     } = useAccount();
-    const { connect, connectors, isPending:isConnecting } = useConnect();
+    const { connect, connectors, isPending:isConnecting, status:connectingStatus} = useConnect();
     const { switchChain } = useSwitchChain();
     const [selectedConnector, setSelectedConnector] = useState<
         ConnectorProps | undefined
@@ -75,8 +73,8 @@ export const ConnectWallet = ({
         return () => clearTimeout(timeoutId);
     }, [disableButtonOnClick]);
 
-    Logger.info("Account Status ===>>>", { status, isLoading, isConnecting, disableButtonOnClick });
-    Logger.info("Selected Connector ===>>>", { selectedConnector, isToken, contractAddress, amount, tokenDecimal });
+    // Logger.info("Account Status ===>>>", { status, isLoading, isConnecting, disableButtonOnClick, connectingStatus });
+    // Logger.info("Selected Connector ===>>>", { selectedConnector, isToken, activeConnector, contractAddress, amount, tokenDecimal });
 
     return (
         <div className="pam-flex pam-flex-col pam-gap-8">
@@ -112,43 +110,45 @@ export const ConnectWallet = ({
             />
 
             <WalletConnectorList
-              activeConnector={selectedConnector}
+              activeConnector={activeConnector}
               selectedConnector={selectedConnector}
               setSelectedConnector={setSelectedConnector}
-              isLoading={!!isLoading || isConnecting}
+              isLoading={!!isLoading || isConnecting || disableButtonOnClick}
               connectors={ReadyConnectors}
               accountStatus={status}
             />
 
             {isToken ? (
-                <DepositToken
-                  chainId={chainId}
-                  amountToPay={amountToPay}
-                  contractAddress={contractAddress ?? ""}
-                  depositAddress={depositAddress}
-                  activeConnector={activeConnector}
-                  selectedConnector={selectedConnector}
-                  isDisabled={!selectedConnector || isConnecting || !!isLoading}
-                  showReconfirmButton={showReconfirmButton}
-                  isLoading={isConnecting || !!isLoading}
-                  disableButtonOnClick={disableButtonOnClick}
-                  connect={connect}
-                  onSuccessResponse={onSuccessResponse}
-                />
+              <DepositToken
+                chainId={chainId}
+                amountToPay={amountToPay}
+                contractAddress={contractAddress ?? ""}
+                depositAddress={depositAddress}
+                activeConnector={activeConnector}
+                selectedConnector={selectedConnector || activeConnector}
+                isDisabled={!selectedConnector || isConnecting || !!isLoading}
+                showReconfirmButton={showReconfirmButton}
+                isLoading={isConnecting || !!isLoading}
+                disableButtonOnClick={disableButtonOnClick}
+                connect={connect}
+                onSuccessResponse={onSuccessResponse}
+              />
             ) : (
-                <DepositAvax
-                  isLoading={!!isLoading || isConnecting}
-                  amount={amount}
-                  depositAddress={depositAddress}
-                  chainId={chainId}
-                  activeConnector={activeConnector}
-                  selectedConnector={selectedConnector}
-                  setDisableButtonOnClick={setDisableButtonOnClick}
-                  connect={connect}
-                  isDisabled={!selectedConnector || isConnecting || !!isLoading}
-                  onSuccessResponse={onSuccessResponse}
-                />
+              <DepositCoin
+                isLoading={!!isLoading || isConnecting}
+                amount={amount}
+                depositAddress={depositAddress}
+                chainId={chainId}
+                activeConnector={activeConnector}
+                selectedConnector={selectedConnector}
+                setDisableButtonOnClick={setDisableButtonOnClick}
+                connect={connect}
+                isDisabled={!selectedConnector || isConnecting || !!isLoading}
+                onSuccessResponse={onSuccessResponse}
+              />
             )}
         </div>
     );
 };
+
+export default React.memo(ConnectWallet);
