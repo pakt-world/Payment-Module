@@ -10,8 +10,8 @@ import * as Tabs from "@radix-ui/react-tabs";
 /* -------------------------------------------------------------------------- */
 import type { CryptoPaymentModalProps } from "./types";
 import Modal from "components/common/modal";
-import { ConnectWallet } from "./connect-wallet";
-import { DepositToAddress } from "./address-deposit";
+import ConnectWallet from "./connect-wallet";
+import DepositToAddress from "./address-deposit";
 import PaktWrapper from "components/modal-wrapper";
 
 const CryptoPaymentModal = ({

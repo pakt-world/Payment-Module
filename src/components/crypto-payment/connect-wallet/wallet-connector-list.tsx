@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { type FC } from "react";
+import React, { type FC } from "react";
 import { Loader2 } from "lucide-react";
 import { ConnectorProps, WalletConnectListType } from "../types";
 
@@ -22,7 +22,7 @@ const WALLET_LOGO: Record<string, string> = {
     "Coinbase Wallet": CoinBaseWalletLogo,
 };
 
-export const WalletConnectorList: FC<WalletConnectListType> = ({
+const WalletConnectorList: FC<WalletConnectListType> = ({
     connectors,
     activeConnector,
     isLoading,
@@ -30,18 +30,16 @@ export const WalletConnectorList: FC<WalletConnectListType> = ({
     selectedConnector,
     accountStatus,
 }) => {
-  Logger.info("wallet-connected-->", { accountStatus, connectors, isLoading, activeConnector, selectedConnector });
     return (
         <div className="pam-flex pam-flex-col pam-gap-6">
             {connectors.map((connector: ConnectorProps) => {
-                const isActive = activeConnector?.id === connector.id;
+                const isActive = selectedConnector?.id === connector.id || activeConnector?.id === connector.id;
                 const logo = WALLET_LOGO[connector.name];
-
                 return (
                     <button
                         key={connector.name}
                         type="button"
-                        disabled={accountStatus === "connected" && !isActive}
+                        disabled={["connected", "connecting"].includes(accountStatus) && !isActive}
                         onClick={() => {
                             setSelectedConnector(connector);
                         }}
@@ -72,3 +70,5 @@ export const WalletConnectorList: FC<WalletConnectListType> = ({
         </div>
     );
 };
+
+export default React.memo(WalletConnectorList);

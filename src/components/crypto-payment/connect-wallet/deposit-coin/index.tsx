@@ -11,7 +11,6 @@ import { type ConnectMutate } from "wagmi/query";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { Button, Spinner, toast } from "components/common";
-// import { useConfirmJobPayment, useInviteTalentToJob } from "@/lib/api/job";
 import type { I0xType, ConnectorProps } from "../../types";
 import type { IAny, onFinishResponseProps } from "types";
 import Logger from "lib/logger";
@@ -29,7 +28,7 @@ interface WalletDepositProps {
     connect: ConnectMutate<Config, unknown>;
 }
 
-export const DepositAvax = ({
+const DepositCoin = ({
     isLoading,
     chainId,
     depositAddress,
@@ -50,11 +49,19 @@ export const DepositAvax = ({
 
     const {
         data: txConfig,
-        error: isError,
+        error: ErrorMsg,
+        isError,
         isLoading: IsPreparing,
     } = useEstimateGas({
         ...SendTxPayload,
+        query:{
+          retry: false
+        }
     });
+
+    if(isError){
+      Logger.error("payment-error", { isError, ErrorMsg, IsPreparing });
+    }
 
     const {
         sendTransaction,
@@ -64,6 +71,20 @@ export const DepositAvax = ({
 
     const isLoadingAll = isLoading || txSending || IsPreparing || !!isError;
 
+    const TriggerPayment = () => 
+      sendTransaction(
+          { ...SendTxPayload },
+          {
+            onSuccess(data) {
+              Logger.info(`send-tx-success-->`, { txId:data });
+              onSuccessResponse({ status:"completed", txId:data });
+            },
+            onError(error: any) {
+                Logger.info("ggg", error);
+                toast.error(error.message);
+            },
+          }
+      );
     
     const ConnectWallet = () => 
       connect(
@@ -72,6 +93,7 @@ export const DepositAvax = ({
               onError: (err) => {
                 setConnectError(err?.name);
               },
+              onSuccess:() => TriggerPayment(),
           }
       );
 
@@ -81,20 +103,7 @@ export const DepositAvax = ({
             if (!activeConnector) {
               return ConnectWallet();
             }
-
-            sendTransaction(
-                { ...SendTxPayload },
-                {
-                    onSuccess(data) {
-                      Logger.info(`send-tx-success-->`, { txId:data });
-                      onSuccessResponse({ status:"completed", txId:data });
-                    },
-                    onError(error: any) {
-                        Logger.info("ggg", error);
-                        toast.error(error.message);
-                    },
-                }
-            );
+            return TriggerPayment();
         } catch (error: unknown) {
             Logger.info("MakePayment-Error", { error });
             if (error instanceof Error) {
@@ -116,13 +125,13 @@ export const DepositAvax = ({
         <div>
             {/* @ts-ignore */}
             {selectedConnector && ((isError && isError?.name != "ConnectorChainMismatchError") || txError) && (
-              <div className="pam-mb-4 pam-flex pam-flex-col pam-items-center pam-gap-2 pam-rounded-lg pam-border pam-border-red-200 pam-bg-red-50 p-2 pam-text-sm pam-text-red-500">
+              <div className="pam-mb-4 pam-flex pam-flex-col pam-items-center pam-gap-2 pam-rounded-lg pam-border pam-border-red-200 pam-bg-red-50 pam-p-2 pam-text-sm pam-text-red-500">
                   <span>
-                      {(isError?.name || txError?.name) ==
+                      {(ErrorMsg?.name || txError?.name) ==
                       "EstimateGasExecutionError"
                           ? "InsufficientFundsError: The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account."
                           : connectError ||
-                            (isError?.message ??
+                            (ErrorMsg?.message ??
                                 txError?.message ??
                                 "An error occurred while making payment.")}
                   </span>
@@ -146,3 +155,5 @@ export const DepositAvax = ({
         </div>
     );
 };
+
+export default React.memo(DepositCoin);

@@ -23,6 +23,7 @@ interface OnRampProps {
 interface OnRampElementProps extends Record<string, IAny> {
   clientSecret: string;
   appearance?: OnrampAppearanceOptions;
+  isLoading?: boolean;
 }
 
 export {

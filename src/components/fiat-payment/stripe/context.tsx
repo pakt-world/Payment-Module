@@ -76,6 +76,7 @@ const OnrampElement = ({
   clientSecret,
   appearance,
   onChange,
+  isLoading,
   ...props
 }: OnRampElementProps) => {
   const stripeOnramp = useStripeOnramp();
@@ -112,7 +113,7 @@ const OnrampElement = ({
 
   return (
   <>
-    {!isReady && <Spinner size={30} className="pam-text-white" />}
+    {(!isReady || isLoading)&& <Spinner size={30} className="pam-text-white" />}
     <div {...props} ref={onrampElementRef}></div>
   </>
   );

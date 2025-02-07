@@ -2,6 +2,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
+import React from "react";
 import { Copy, CopyCheck } from "lucide-react";
 import QRCode from "react-qr-code";
 import { useCopyToClipboard } from "usehooks-ts";
@@ -12,7 +13,7 @@ import { useCopyToClipboard } from "usehooks-ts";
 import { Button, Spinner } from "../../common";
 import { DepositToAddressProps } from "../types";
 
-export const DepositToAddress = ({
+const DepositToAddress = ({
     amount,
     depositAddress,
     coin,
@@ -82,3 +83,5 @@ export const DepositToAddress = ({
         </div>
     );
 };
+
+export default React.memo(DepositToAddress);

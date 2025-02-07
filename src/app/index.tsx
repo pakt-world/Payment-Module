@@ -73,7 +73,7 @@ const App = () => {
 
     const fetchCollectionData = async () => {
       const axios = getAxiosInstance();
-      const respData = await axios.post("/payment",{coin: "USDC", collection: collectionId});
+      const respData = await axios.post("/payment",{coin: "AVAX", collection: collectionId});
       const payD = respData.data?.data as MakePaymentResponse;
       setPayData({ ...payD });
       return respData;
