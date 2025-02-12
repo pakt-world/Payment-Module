@@ -1,7 +1,7 @@
 {
     "name": "@pakt-world/payment-module",
     "license": "MIT",
-    "version": "0.0.11",
+    "version": "0.0.10",
     "repository": "git://github.com/pakt-world/payment-module.git",
     "description": "",
     "author": "Pakt",
