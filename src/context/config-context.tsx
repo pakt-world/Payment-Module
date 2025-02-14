@@ -32,6 +32,10 @@ interface ConfigContextType {
     theme?: ITheme; // colors to theme the package
     [key: string]: any; // You can extend with any other configs
     wagmiConfig: Config
+    stripeConfig: {
+      publicKey: string;
+      theme?: "light" | "dark";
+    };
 }
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);

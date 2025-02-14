@@ -92,8 +92,9 @@ const DepositCoin = ({
           {
               onError: (err) => {
                 setConnectError(err?.name);
+                Logger.error("connect-error-", {err})
               },
-              onSuccess:() => TriggerPayment(),
+              onSuccess: () => TriggerPayment(),
           }
       );
 

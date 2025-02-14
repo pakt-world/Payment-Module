@@ -2,9 +2,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { useState } from "react";
-import { http, createConfig } from "wagmi";
-import { avalanche, avalancheFuji } from "@wagmi/core/chains";
-import { walletConnect } from "wagmi/connectors";
+import { wagmi, connectors, chains } from "../";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -17,6 +15,10 @@ import { StripePaymentModal } from "components/fiat-payment";
 import Logger from "lib/logger";
 import { onFinishResponseProps } from "types";
 import { getAxiosInstance } from "lib/axios-instance";
+
+const { walletConnect } = connectors;
+const { avalanche, avalancheFuji  } = chains;
+const { http, createConfig } = wagmi;
 
 interface MakePaymentResponse {
   address: string;
@@ -37,7 +39,7 @@ const App = () => {
     const [openCryptoModal, setOpenCryptoModal] = useState(false);
     const [openFiatModal, setOpenFiatModal] = useState(false);
     const [pKey, setPKey] = useState("");
-    const projectId = "631b917d78860e7f374ea8b0d47559b0";
+    const projectId = "810bdecb2f7f8d4bd3c732d2862df787";
     
     const [payData, setPayData] = useState<MakePaymentResponse>({
       address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
@@ -65,15 +67,20 @@ const App = () => {
     };
 
     const wagmiConfig = createConfig({
-      chains: [avalancheFuji, avalanche],
-      connectors: [walletConnect({ projectId })],
+      chains: [avalancheFuji],
+      connectors: [walletConnect({ 
+        projectId,
+        customStoragePrefix:"pakt-"
+      })],
       multiInjectedProviderDiscovery: true,
       transports,
+      ssr:false,
+      syncConnectedChain: true
     });
 
     const fetchCollectionData = async () => {
       const axios = getAxiosInstance();
-      const respData = await axios.post("/payment",{coin: "AVAX", collection: collectionId});
+      const respData = await axios.post("/payment",{coin: "USDC", collection: collectionId});
       const payD = respData.data?.data as MakePaymentResponse;
       setPayData({ ...payD });
       return respData;
@@ -107,13 +114,17 @@ const App = () => {
     return (
         <ConfigProvider
             config={{
-                baseURL: "http://localhost:9090/v1",
+                baseURL: "http://192.168.0.179:9090/v1",
                 publicKey:
                     "nzTjIkbjIeb19Pm76bAeIrF2sdZRByLjkL8VSJbRrwg6dtUdNZ5ZeOFds9",
                 clientId: "812773e0-6d93-4067-bb44-ad9eae2b0ba1",
                 token,
                 timezone: "America/New_York",
                 wagmiConfig: wagmiConfig,
+                stripeConfig: {
+                  publicKey: pKey,
+                  theme: "dark",
+                }
             }}
         >
             <div className="pam-circular-std-regular">
@@ -189,7 +200,6 @@ const App = () => {
               closeModal={()=>setOpenFiatModal(false)}
               collectionId={collectionId}
               chain="avalanche"
-              publicKey={pKey}
               onFinishResponse={onSuccessResponse}
               isLoading={isLoading}
             />

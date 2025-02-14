@@ -153,7 +153,7 @@ export default [
                           serve({
                               verbose: true,
                               historyApiFallback: false,
-                              host: "localhost",
+                              host: "0.0.0.0",
                               port: 4234,
                           }),
                           livereload("dist"),

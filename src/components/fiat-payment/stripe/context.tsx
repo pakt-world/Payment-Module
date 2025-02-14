@@ -1,7 +1,8 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-import React, { ReactNode } from 'react';
+import React, { useMemo } from 'react';
+import {loadStripeOnramp} from '@stripe/crypto';
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -20,10 +21,11 @@ const LISTER_ON_CHANGE = "onramp_session_updated";
 // ReactContext to simplify access of StripeOnramp object
 const CryptoElementsContext = React.createContext<OnRampProps>({ onramp: null });
 
-const CryptoElements = ({
-  stripeOnramp,
+const CryptoElementsComp = ({
+  publicKey,
   children,
 }:StripeContextProps) => {
+  const stripeOnramp = useMemo(()=>loadStripeOnramp(publicKey),[publicKey]);
   const [ctx, setContext] = React.useState<OnRampProps>(() => ({ onramp: null}));
 
   React.useEffect(() => {
@@ -83,10 +85,10 @@ const OnrampElement = ({
   const onrampElementRef = React.useRef<HTMLDivElement>(null);
   const [session, setSession] = React.useState<OnrampSession>();
   const [isReady, SetIsReady] = React.useState(false);
-
+  
   React.useEffect(() => {
     const containerRef = onrampElementRef.current;
-    if (containerRef) {
+    if (containerRef && !isReady) {
       containerRef.innerHTML = '';
 
       if (clientSecret && stripeOnramp) {
@@ -118,6 +120,9 @@ const OnrampElement = ({
   </>
   );
 };
+
+const CryptoElements = React.memo(CryptoElementsComp);
+// const OnrampElement = React.memo(OnrampElementComp);
 
 export {
   CryptoElements,

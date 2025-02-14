@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { ReactNode } from "react";
+import { memo, ReactNode } from "react";
 import { X } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -37,4 +37,4 @@ const PaktWrapper = ({ children, showPakt, closeModal }: { children: ReactNode, 
   )
 }
 
-export default PaktWrapper;
+export default memo(PaktWrapper);
