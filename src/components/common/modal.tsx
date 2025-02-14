@@ -4,7 +4,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import { type FC, Fragment } from "react";
+import { type FC, Fragment, memo } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { cn } from "utils";
 
@@ -26,6 +26,7 @@ const Modal: FC<ModalProps> = ({ children, isOpen, closeModal, className, disabl
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
+        open={isOpen}
 				as="div"
 				className="pam-relative !pam-z-[79]"
 				onClose={() => {
@@ -73,4 +74,4 @@ const Modal: FC<ModalProps> = ({ children, isOpen, closeModal, className, disabl
 	);
 };
 
-export default Modal;
+export default memo(Modal);

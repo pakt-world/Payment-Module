@@ -10,10 +10,10 @@ import { erc20Abi } from "viem";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { I0xAddressType, IAny } from "types";
-import { Button, toast, Spinner } from "components/common";
+import { I0xAddressType, IAny } from "../../../../types";
+import { Button, toast, Spinner } from "../../../../components/common";
 import { WalletDepositProps } from "../../types";
-import Logger from "lib/logger";
+import Logger from "../../../../lib/logger";
 
 const DepositToken = ({
     chainId,
@@ -37,27 +37,31 @@ const DepositToken = ({
         error: writeError,
         isPending: writeLoading,
     } = useWriteContract({
-        mutation: {
-            onSuccess(data) {
-                Logger.info(`contract-interaction-success-->`, { txId:data });
-                onSuccessResponse({ status:"completed", txId:data });
-            },
-            onError(error: any) {
-                toast.error(error.message);
-            }
+      mutation:{
+        onSuccess(data) {
+            Logger.info(`contract-interaction-success-->`, { txId:data });
+            console.info(`contract-interaction-success-->`, { txId:data });
+            onSuccessResponse({ status:"completed", txId:data });
         },
+        onError(error: any) {
+          Logger.error(`contract-interaction-error-->`, { error });
+          console.error(`contract-interaction-error-->`, JSON.stringify(error));
+            toast.error(error.message);
+        }
+      }
     });
 
     const isLoadingAll = isLoading || writeLoading;
     const isDisabledAll = isDisabled || disableButtonOnClick  || writeIsError;
 
     if(writeIsError){
-      Logger.error("contract-error", { writeLoading, writeIsError, writeError, isDisabledAll, isLoadingAll });
+      Logger.error("contract-error", {writeLoading, writeIsError, writeError, isDisabledAll, isLoadingAll});
     }
 
     const TriggerPayment = async () => {
+      Logger.info(`requesting-payments-->`);
       try {
-        return writeContract({
+        await writeContract({
           abi: erc20Abi,
           chainId,
           functionName: "transfer",
@@ -65,7 +69,7 @@ const DepositToken = ({
           args: [`${depositAddress as I0xAddressType}`, amountToPay],
         });
       } catch (error) {
-        console.log("error-->", { error});
+        Logger.error("error-->", {error});
         if (error instanceof Error) {
             toast.error(error.message);
         } else {
@@ -80,9 +84,11 @@ const DepositToken = ({
           {
               onError: (err) => {
                 setConnectError(err?.name);
+                Logger.error("connect-error-", {err})
                 return;
               },
-              onSuccess: ()=> TriggerPayment()
+              onSuccess: () => TriggerPayment(),
+              // onSettled: () => TriggerPayment()
           }
       );
 

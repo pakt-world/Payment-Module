@@ -64,4 +64,3 @@ dist/
 #rollup analysis
 stats.html
 yarn.lock
-package-lock.json

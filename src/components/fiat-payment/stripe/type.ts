@@ -4,16 +4,20 @@ import { BasicModalProps, IAny, onFinishResponseProps } from "types";
 
 type CHAIN_TYPES = "avalanche";
 
-interface StripeModalProps extends BasicModalProps {
+interface StripeConfig {
   publicKey: string;
-  chain: CHAIN_TYPES;
   theme?: "dark" | "light";
+}
+
+interface StripeModalProps extends BasicModalProps {
+  chain: CHAIN_TYPES;
   onFinishResponse: (data:onFinishResponseProps)=> void;
   isLoading?:boolean;
 }
 
 interface StripeContextProps {
-  stripeOnramp:Promise<StripeOnramp | null>;
+  // stripeOnramp:Promise<StripeOnramp | null>;
+  publicKey:string;
   children: ReactNode;
 }
 
@@ -31,4 +35,5 @@ export {
   type StripeModalProps,
   type OnRampProps,
   type OnRampElementProps,
+  type StripeConfig,
 }

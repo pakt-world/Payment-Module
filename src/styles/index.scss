@@ -2,76 +2,76 @@
 @import "./tailwind.scss";
 
 @font-face {
-    font-family: "CircularStd";
-    src: url("../assets/fonts/CircularStd-Book.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "CircularStd";
+  src: url("../assets/fonts/CircularStd-Book.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "CircularStd";
-    src: url("../assets/fonts/CircularStd-Medium.woff2") format("woff2");
-    font-weight: 500;
-    font-style: normal;
+  font-family: "CircularStd";
+  src: url("../assets/fonts/CircularStd-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "CircularStd";
-    src: url("../assets/fonts/CircularStd-Bold.woff2") format("woff2");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "CircularStd";
+  src: url("../assets/fonts/CircularStd-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
 }
 
 :root {
-    --circular-std-font: "CircularStd", sans-serif;
-    --rubik-font: "Rubik", sans-serif;
+  --circular-std-font: "CircularStd", sans-serif;
+  --rubik-font: "Rubik", sans-serif;
 }
 
 * {
-    font-family: var(--circular-std-font);
+  font-family: var(--circular-std-font);
 }
 
 .circular-std-light {
-    font-family: var(--circular-std-font);
-    font-weight: 300; /* Light */
-    font-style: normal;
+  font-family: var(--circular-std-font);
+  font-weight: 300; /* Light */
+  font-style: normal;
 }
 
 .circular-std-regular {
-    font-family: var(--circular-std-font);
-    font-weight: 400; /* Regular */
-    font-style: normal;
+  font-family: var(--circular-std-font);
+  font-weight: 400; /* Regular */
+  font-style: normal;
 }
 
 .circular-std-medium {
-    font-family: var(--circular-std-font);
-    font-weight: 500; /* Medium */
-    font-style: normal;
+  font-family: var(--circular-std-font);
+  font-weight: 500; /* Medium */
+  font-style: normal;
 }
 
 .circular-std-bold {
-    font-family: var(--circular-std-font);
-    font-weight: 700; /* Bold */
-    font-style: normal;
+  font-family: var(--circular-std-font);
+  font-weight: 700; /* Bold */
+  font-style: normal;
 }
 
 .rubik-light {
-    font-family: var(--rubik-font);
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
+  font-family: var(--rubik-font);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 .rubik-regular {
-    font-family: var(--rubik-font);
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
+  font-family: var(--rubik-font);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .rubik-bold {
-    font-family: var(--rubik-font);
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
+  font-family: var(--rubik-font);
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
 }
