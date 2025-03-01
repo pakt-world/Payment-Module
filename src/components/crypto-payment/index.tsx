@@ -33,7 +33,7 @@ const CryptoPaymentModal = ({
         disableClickOutside
       >
         <PaktWrapper showPakt>
-          <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-6 pam-bg-white pam-p-6 pam-rounded-2xl pam-border">
+          <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-6 pam-bg-modal-color pam-p-6 pam-rounded-2xl pam-border pam-border-primary">
               <div className="pam-flex pam-w-full pam-items-center pam-justify-between">
                   <h2 className="pam-text-lg pam-font-bold pam-text-title sm:pam-text-2xl">
                       Make Payment
@@ -54,16 +54,16 @@ const CryptoPaymentModal = ({
                       defaultValue="connect-wallet"
                       className="pam-relative pam-flex pam-w-full pam-flex-col pam-gap-6"
                   >
-                      <Tabs.List className="pam-grid pam-grid-cols-2 pam-gap-1 pam-rounded-lg pam-bg-[#F0F2F5] pam-p-0.5 pam-text-base pam-text-[#828A9B]">
+                      <Tabs.List className="pam-grid pam-grid-cols-2 pam-gap-1 pam-rounded-lg pam-bg-secondary pam-p-0.5 pam-text-base pam-text-primary">
                           <Tabs.Trigger
-                              className="pam-rounded-lg pam-p-2 pam-px-2 pam-duration-200 hover:bg-white radix-state-active:pam-bg-white"
+                              className="pam-rounded-lg pam-p-2 pam-px-2 pam-duration-200 pam-hover:bg-btn-primary pam-opacity-30 radix-state-active:pam-opacity-100 radix-state-active:pam-bg-btn-primary radix-state-active:pam-text-secondary"
                               value="connect-wallet"
                               disabled={isLoading}
                           >
                               Connect Wallet
                           </Tabs.Trigger>
                           <Tabs.Trigger
-                              className="pam-rounded-lg pam-p-2 pam-px-2 pam-duration-200 pam-hover:bg-white radix-state-active:pam-bg-white"
+                              className="pam-rounded-lg pam-p-2 pam-px-2 pam-duration-200 pam-hover:bg-btn-primary pam-opacity-30 radix-state-active:pam-opacity-100 radix-state-active:pam-bg-btn-primary radix-state-active:pam-text-secondary"
                               value="deposit-to-address"
                               disabled={isLoading}
                           >
