@@ -121,6 +121,18 @@ const App = () => {
                 token,
                 timezone: "America/New_York",
                 wagmiConfig: wagmiConfig,
+                theme:{
+                  "primary": "#3055B3",
+                  "primary-brighter": "#F4f4FD",
+                  "primary-gradient": "linear-gradient(#010101, #010101)",
+                  "btn-primary": "linear-gradient(#3055B3, #3055B3)",
+                  "secondary": "#98dcfd",
+                  "magnolia": "#f4f8ff",
+                  "exhibit-tab-list": "#f4f8ff",
+                  "modal-radius": "16px",
+                  "modal-color": "linear-gradient(#010101, #010101)",
+                  "modal-bd": "#3055B3"
+                },
                 stripeConfig: {
                   publicKey: pKey,
                   theme: "dark",

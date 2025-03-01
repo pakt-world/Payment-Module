@@ -35,6 +35,8 @@ interface ITheme extends Record<string, any> {
   "btn-primary"?: string;
   "primary-gradient"?: string;
   "modal-radius"?: string;
+  "modal-color"?:string;
+  "modal-bd"?:string;
 }
 
 

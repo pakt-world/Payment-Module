@@ -80,7 +80,7 @@ const ConnectWallet = ({
         <div className="pam-flex pam-flex-col pam-gap-8">
             <p className="pam-text-center pam-text-sm pam-text-body">
                 By making payment you acknowledge that you have read and
-                understand the
+                understand the 
                 <button
                     className="pam-cursor-pointer pam-text-[#3772FF]"
                     rel="noreferrer"
@@ -89,16 +89,6 @@ const ConnectWallet = ({
                     }}
                 >
                     terms of services
-                </button>
-                and
-                <button
-                    className="pam-cursor-pointer pam-text-[#3772FF]"
-                    rel="noreferrer"
-                    onClick={() => {
-                    	setShowDisclaimer(true);
-                    }}
-                >
-                    privacy policy
                 </button>
             </p>
             
