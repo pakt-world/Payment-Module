@@ -54,10 +54,18 @@ const sleep = (milliseconds: number) => {
   } while (currentDate - date < milliseconds);
 };
 
+function sentenceCase(str: string): string {
+	if (!str || typeof str !== "string") {
+		return ""; // Handle empty or invalid input
+	}
+	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export {
   cn,
   isProductionEnvironment,
   getRequestSignature,
   applyTheme,
   sleep,
+  sentenceCase,
 }

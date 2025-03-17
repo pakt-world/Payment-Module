@@ -15,6 +15,8 @@ import { StripePaymentModal } from "components/fiat-payment";
 import Logger from "lib/logger";
 import { onFinishResponseProps } from "types";
 import { getAxiosInstance } from "lib/axios-instance";
+import MayanSwapWidget from "components/mayan-swap/swap-new";
+import MayanSwapModal from "components/mayan-swap";
 
 const { walletConnect } = connectors;
 const { avalanche, avalancheFuji  } = chains;
@@ -38,6 +40,7 @@ interface MakePaymentResponse {
 const App = () => {
     const [openCryptoModal, setOpenCryptoModal] = useState(false);
     const [openFiatModal, setOpenFiatModal] = useState(false);
+    const [openSwapModal, setOpenSwapModal] = useState(false);
     const [pKey, setPKey] = useState("");
     const projectId = "810bdecb2f7f8d4bd3c732d2862df787";
     
@@ -88,7 +91,6 @@ const App = () => {
 
     const onSuccessResponse = (data: onFinishResponseProps) => {
       setIsLoading(true);
-      Logger.debug(`on-finish-response---->`, { data });
       setTimeout(()=>{
         setIsLoading(false)
         setOpenCryptoModal(false);
@@ -114,7 +116,8 @@ const App = () => {
     return (
         <ConfigProvider
             config={{
-                baseURL: "http://192.168.0.179:9090/v1",
+                // baseURL: "http://192.168.0.179:9090/v1",
+                baseURL: "http://localhost:9090/v1",
                 publicKey:
                     "nzTjIkbjIeb19Pm76bAeIrF2sdZRByLjkL8VSJbRrwg6dtUdNZ5ZeOFds9",
                 clientId: "812773e0-6d93-4067-bb44-ad9eae2b0ba1",
@@ -124,10 +127,18 @@ const App = () => {
                 stripeConfig: {
                   publicKey: pKey,
                   theme: "dark",
+                },
+                mayanConfig: {
+                  appName: "Testing-App",
+                  appIcon: "https://devpaktfund.chain.site/images/pakt-fund/pakt_fund.png",
+                  appUrl: "https://devpaktfund.chain.site",
+                  colors: {
+                    background: "#FCFCFD",
+                  },
                 }
             }}
         >
-            <div className="pam-circular-std-regular">
+            {/* <div className="pam-circular-std-regular">
               <div className="pam-flex pam-h-screen pam-justify-center pam-items-center">
                 <div className="pam-flex pam-flex-col pam-border pam-rounded-2xl pam-w-[600px] pam-p-8 pam-mx-auto pam-my-auto pam-gap-4">
                   <p className="pam-text-black pam-text-2xl pam-text-center">Trigger Crypto Payment and Fiat Payments</p>
@@ -178,11 +189,28 @@ const App = () => {
                       >
                         Pay with Fiat
                       </Button>
+                      <Button 
+                          className="pam-block pam-p-4 pam-bg-btn-primary"
+                          type="button"
+                          onClick={
+                            async () =>{
+                              const ready = toggleModal();
+                              if (ready){
+                                const sucDa = await fetchCollectionData();
+                                if (sucDa){
+                                  setOpenSwapModal(true)
+                                }
+                              }
+                            }
+                          }
+                      >
+                        Swap Pay
+                      </Button>
                   </div>
                 </div>
               </div>
-            </div>
-            <MakeCryptoPaymentModal 
+            </div> */}
+            {/* <MakeCryptoPaymentModal 
               isOpen={openCryptoModal}
               closeModal={()=>setOpenCryptoModal(false)}
               collectionId={collectionId}
@@ -202,6 +230,58 @@ const App = () => {
               chain="avalanche"
               onFinishResponse={onSuccessResponse}
               isLoading={isLoading}
+            /> */}
+            {/* <MayanSwapWidget 
+              isOpen={openSwapModal}
+              closeModal={()=>setOpenSwapModal(false)}
+              collectionId={collectionId}
+              chain="avalanche"
+              amount={1000}
+              coin={"usdc"}
+              onSuccessResponse={onSuccessResponse}
+              isLoading={isLoading}
+              sourceChains={["solana", "avalanche"]}
+              destinationChains={["avalanche"]}
+              rpcs={{
+                "avalanche":"https://api.avax-test.network/ext/bc/C/rpc",
+                "solana": 'https://example.rpc.com/solana',
+              }}
+              tokensTo={{
+                "avalanche": ["0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e"],
+              }}
+              tokensFrom={{
+                // "solana": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"],
+                // "ethereum": ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"],
+                // "bsc": ["0x7cd167B101D2808Cfd2C45d17b2E7EA9F46b74B6"],
+                // "polygon": ["0xFbcE0f9e92AD1003e893Ba647bC055D845aAa507"],
+                // "optimism": ["0x3E7570058930728e03B798673Ae2a43fdc209758"],
+              }}
+            /> */}
+            <MayanSwapModal 
+              isOpen={true}
+              closeModal={()=>setOpenSwapModal(false)}
+              collectionId={collectionId}
+              chain="avalanche"
+              amount={1000}
+              coin={"usdc"}
+              onSuccessResponse={onSuccessResponse}
+              isLoading={isLoading}
+              sourceChains={["solana", "avalanche"]}
+              destinationChains={["avalanche"]}
+              rpcs={{
+                "avalanche":"https://api.avax-test.network/ext/bc/C/rpc",
+                "solana": 'https://example.rpc.com/solana',
+              }}
+              tokensTo={{
+                "avalanche": ["0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e"],
+              }}
+              tokensFrom={{
+                // "solana": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"],
+                // "ethereum": ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"],
+                // "bsc": ["0x7cd167B101D2808Cfd2C45d17b2E7EA9F46b74B6"],
+                // "polygon": ["0xFbcE0f9e92AD1003e893Ba647bC055D845aAa507"],
+                // "optimism": ["0x3E7570058930728e03B798673Ae2a43fdc209758"],
+              }}
             />
         </ConfigProvider>
     );

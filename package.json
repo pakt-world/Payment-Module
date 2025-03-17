@@ -101,6 +101,7 @@
     "dependencies": {
         "@headlessui/react": "^1.7.18",
         "@hookform/resolvers": "^3.9.0",
+        "@mayanfinance/swap-sdk": "^10.4.0",
         "@radix-ui/react-checkbox": "^1.1.1",
         "@radix-ui/react-dialog": "^1.1.1",
         "@radix-ui/react-scroll-area": "^1.2.0",
