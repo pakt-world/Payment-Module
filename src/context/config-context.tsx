@@ -18,6 +18,8 @@ import { ITheme } from "types";
 import defaultTheme from "styles/default-theme";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../styles/index.scss";
+import { MayanConfigProps } from "components/mayan-swap/types";
+
 
 interface ConfigContextType {
     axiosInstance?: AxiosInstance; // Optional Axios instance
@@ -36,6 +38,7 @@ interface ConfigContextType {
       publicKey: string;
       theme?: "light" | "dark";
     };
+    mayanConfig: MayanConfigProps;
 }
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
