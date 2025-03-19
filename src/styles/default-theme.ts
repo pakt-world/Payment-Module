@@ -21,6 +21,7 @@ const defaultTheme: ITheme = {
     "primary-gradient":
         "linear-gradient(102.28deg, #008D6C 32.23%, #11FFC7 139.92%)",
     "modal-radius": "6px",
+    "tbody": "#999999"
 };
 
 export default defaultTheme;

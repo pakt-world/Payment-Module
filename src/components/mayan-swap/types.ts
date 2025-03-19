@@ -106,6 +106,27 @@ interface SwapDataResponse {
   coinOutPriceUsd: number;
 }
 
+enum VIEW_STEP {
+  ONE = "1",
+  TWO = "2"
+}
+
+interface ConnectorProps {
+    id: string;
+    name: string;
+    icon: string;
+    ready?: boolean;
+}
+
+interface WalletConnectListType {
+    selectedConnector: ConnectorProps | undefined;
+    isLoading: boolean;
+    connectors: ConnectorProps[] | undefined;
+    setSelectedConnector: (connector: ConnectorProps) => void;
+    accountStatus: string;
+}
+
+
 export {
   MayanSwapModalProps,
   MayanWidgetProps,
@@ -117,4 +138,7 @@ export {
   type Option,
   type APITokensResponse,
   type SwapDataResponse,
+  VIEW_STEP,
+  type WalletConnectListType,
+  type ConnectorProps
 }

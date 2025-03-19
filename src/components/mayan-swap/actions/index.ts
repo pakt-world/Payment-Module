@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useConfig } from "../../../context/config-context";
-import { APIChainsResponse, APITokensResponse, MayanConfigProps, MayanSwapModalProps, MayanWidgetProps, Option, OptionDataResponse, SetReadyProps, SwapDataResponse } from "../types";
+import { APIChainsResponse, APITokensResponse, ConnectorProps, MayanConfigProps, MayanSwapModalProps, MayanWidgetProps, Option, OptionDataResponse, SetReadyProps, SwapDataResponse, VIEW_STEP } from "../types";
 import { useGetMayanChains, useGetMayanCoins, useGetTokenPrice } from './api';
 import useMayanCalculateSwap from './swap';
 import usdcIcon from '../../../assets/images/usdc.png';
@@ -13,9 +13,12 @@ interface mayanSwapActions {
   networksPayload: OptionDataResponse<APIChainsResponse>;
   tokensPayload: OptionDataResponse<APITokensResponse>;
   swapPayload?: SwapDataResponse;
-  Connect: () => void;
   connecting:boolean;
   connected:boolean;
+  step: VIEW_STEP;
+  goToNext: () => void;
+  selectWallet: (wallet: ConnectorProps) => void;
+  wallets?: ConnectorProps[];
 }
 
 const useMayanSwapAction  = ({ isOpen, isLoading, amount }: MayanSwapModalProps ):mayanSwapActions => {  
@@ -27,11 +30,11 @@ const useMayanSwapAction  = ({ isOpen, isLoading, amount }: MayanSwapModalProps 
 
   const [selectedNetwork, setSelectedNetwork] = useState<APIChainsResponse| null>(null);
   const [selectedToken, setSelectedToken] = useState<APITokensResponse| null>(null);
+  const [step, setStep] = useState<VIEW_STEP>(VIEW_STEP.ONE);
   const { data:chainData, error:chainError, isFetching:chainIsFetching, isLoading:chainLoading } = useGetMayanChains();
   const { data:tokenData, error:tokenError, isFetching: tokenIsFetching, isLoading: tokenLoading, refetch: fetchTokens } = useGetMayanCoins(selectedNetwork?.nameId);
 
-  const { calculateRate, currentQuote, allQuotes, quoteLoading, quoteReady, coinOutPriceUsd } = useMayanCalculateSwap({ amount });
-  const solana = useSolana();
+  const { calculateRate, currentQuote, allQuotes, quoteLoading, quoteReady, coinOutPriceUsd, setWallet, wallets, isConnecting, connected } = useMayanCalculateSwap({ amount, selectedNetworkType: selectedNetwork?.mode || "EVM" });
 
   const SetNetwork = async (v:Option) => {
     const selectedN = (chainData || []).find(n=>n.nameId == v.value);
@@ -104,11 +107,9 @@ const useMayanSwapAction  = ({ isOpen, isLoading, amount }: MayanSwapModalProps 
     });
   },[calculateRate, currentQuote, allQuotes]);
 
-  const Connect = () => {
-    console.log("connecting---", selectedNetwork?.chainName);
-    if (!selectedNetwork) throw Error("No Network selected");
-    // if (selectedNetwork?.chainName.toLowerCase() === "solana") return solana.connect();
-    console.log("connected", solana.connected, solana.isConnecting);
+  const goToNext = () => {
+    if (step == VIEW_STEP.ONE) setStep(VIEW_STEP.TWO);
+    else return null;
   }
 
   return {
@@ -117,9 +118,12 @@ const useMayanSwapAction  = ({ isOpen, isLoading, amount }: MayanSwapModalProps 
     networksPayload,
     tokensPayload,
     swapPayload,
-    Connect,
-    connecting: solana.isConnecting,
-    connected: solana.connected,
+    connecting: isConnecting,
+    connected,
+    step,
+    goToNext,
+    wallets,
+    selectWallet: setWallet
   }
 }
 

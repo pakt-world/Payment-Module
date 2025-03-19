@@ -128,18 +128,18 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     }, [config]);
 
     return (
-        <ConfigContext.Provider value={config}>
-          <WrappedQueryComponent queryClient={config.queryClient}>
-             <WrappedWagmiProvider wagmiProvider={config.wagmiProvider} wagmiConfig={config.wagmiConfig}>
-                {children}
-              </WrappedWagmiProvider>
-            </WrappedQueryComponent>
-            <Toaster
-                position="top-right"
-                gutter={8}
-                containerClassName="!pam-z-[999999]"
-            />
-        </ConfigContext.Provider>
+      <ConfigContext.Provider value={config}>
+        <WrappedQueryComponent queryClient={config.queryClient}>
+            <WrappedWagmiProvider wagmiProvider={config.wagmiProvider} wagmiConfig={config.wagmiConfig}>
+              {children}
+            </WrappedWagmiProvider>
+          </WrappedQueryComponent>
+          <Toaster
+              position="top-right"
+              gutter={8}
+              containerClassName="!pam-z-[999999]"
+          />
+      </ConfigContext.Provider>
     );
 };
 

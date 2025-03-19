@@ -42,6 +42,7 @@ const config: Config = {
               "primary-brighter": RenderPrefixVariable("primary-brighter"),
               "refer-border": RenderPrefixVariable("refer-border"),
               "exhibit-tab-list": RenderPrefixVariable("exhibit-tab-list"),
+              "tbody": RenderPrefixVariable("tbody"),
             },
             backgroundImage: {
               "btn-primary": RenderPrefixVariable("btn-primary"),
@@ -49,7 +50,8 @@ const config: Config = {
               none: "none",
             },
             fontFamily: {
-              sans: [RenderPrefixVariable("circular-std-font"), ...fontFamily.sans],
+              sans: ["var(--circular-std-font)", ...fontFamily.sans],
+              inter: ["var(--inter-font)"],
             },
             borderRadius: {
               "modal": RenderPrefixVariable("modal-radius"),
