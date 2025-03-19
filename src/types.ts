@@ -2,6 +2,8 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
+import { APIChainsResponse, APITokensResponse, ConnectorProps, OptionDataResponse, SwapDataResponse, VIEW_STEP } from "components/mayan-swap/types";
+
 interface BasicModalProps {
   isOpen: boolean;
   closeModal: () => void;
@@ -49,6 +51,21 @@ interface IGetRequestSignatureParam {
   clientId: string;
 }
 
+interface SwapStepOneProp {
+  networksPayload: OptionDataResponse<APIChainsResponse>;
+  tokensPayload: OptionDataResponse<APITokensResponse>;
+  swapPayload?: SwapDataResponse;
+  connecting:boolean;
+  goToNext: () => void;
+}
+
+interface SwapStepTwoProp {
+  wallets: ConnectorProps[] | undefined;
+  selectedWallet?:ConnectorProps;
+  loading:boolean;
+  setSelectedConnector: (connector:ConnectorProps) => void;
+}
+
 
 export {
   IAny,
@@ -57,5 +74,7 @@ export {
   type onFinishResponseProps,
   type ITheme,
   type IGetRequestSignature,
-  type IGetRequestSignatureParam
+  type IGetRequestSignatureParam,
+  type SwapStepOneProp,
+  type SwapStepTwoProp,
 }

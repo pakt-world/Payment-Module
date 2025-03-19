@@ -1,15 +1,16 @@
 
 import { ArrowDown, Loader2 } from "lucide-react";
 import { Button, Spinner } from "../../components/common";
-import {  APIChainsResponse, APITokensResponse, MayanWidgetProps, Option, OptionDataResponse, SetReadyProps, SwapDataResponse } from "./types";
+import { Option, VIEW_STEP } from "./types";
 import { SelectDropdown } from "../../components/common/select";
 import MayanSwapHeader from "./header";
 import { sentenceCase } from "../../utils";
 import avalancheIcon from "../../assets/images/avalanche.png"
 import usdcIcon from "../../assets/images/usdc.png"
 import useMayanSwapAction from "./actions";
-import { onFinishResponseProps } from "../../types";
+import { onFinishResponseProps, SwapStepOneProp, SwapStepTwoProp } from "../../types";
 import { SolanaWalletProvider } from "context/solana-provider";
+import WalletConnectorList from "./wallet-list";
 
 interface SwapWidgetFlow {
   collectionId: string;
@@ -59,9 +60,126 @@ const WrapperSelect = ({ label, value, options, showBreakLine, onChange, disable
   )
 }
 
+const StepOne = ({ networksPayload, tokensPayload, swapPayload, connecting, goToNext }:SwapStepOneProp) => {
+  return (
+    <div className="pam-flex pam-flex-col pam-justify-center pam-gap-2">
+      <div className="pam-flex pam-flex-col pam-gap-2">
+        <WrapperSelect 
+          label="Network"
+          options={networksPayload?.optionMapped || []}
+          value={networksPayload.selectedOption || {} as Option}
+          onChange={networksPayload.selectOption}
+          showBreakLine={false}
+          loading={networksPayload.loading}
+        />
+        <WrapperSelect 
+          label="Token"
+          options={tokensPayload.optionMapped || []}
+          value={tokensPayload.selectedOption as Option}
+          onChange={tokensPayload.selectOption}
+          showBreakLine={true}
+          loading={tokensPayload.loading}
+        />
+      </div>
+
+      <div className="pam-flex pam-flex-col pam-min-h-[200px] pam-items-center pam-justify-center pam-gap-2">
+        {swapPayload &&
+          <>
+            {swapPayload.loading ? 
+              <Loader2 className="pam-animate-spin pam-text-primary" size={35}  />
+            :
+              <>
+                <div className="pam-p-1 pam-rounded-full pam-bg-[#F7F9FA] pam-border pam-border-[#CDCFD0] pam-w-fit pam-mb-2">
+                  <ArrowDown size={18} color="#000"/>
+                </div>
+
+                <div className="pam-flex pam-flex-col pam-w-full pam-items-center pam-justify-center">
+                  <div className="pam-flex pam-flex-col pam-border-[1.5px] pam-border-[#23C16B] pam-p-2 pam-bg-[#ECFCE5] pam-rounded-2xl pam-gap-2 pam-w-full">
+                    <div className="pam-flex pam-flex-row pam-gap-2 pam-justify-between pam-text-base pam-items-center pam-justify-center">
+                      <div className="pam-flex pam-flex-row pam-border-[1px] pam-border-[#E8E8E8] pam-bg-[#F9F9F9] pam-rounded-full pam-p-1 pam-gap-1 pam-items-center">
+                        <img width={24} height={24} src={usdcIcon} />
+                        <span>{swapPayload.currentQuote?.toToken.symbol}</span>
+                      </div>
+                      <div className="pam-flex pam-flex-row pam-gap-2 pam-items-center">
+                        <span className="pam-text-[12px]">ON</span>
+                        <div className="pam-flex pam-flex-row pam-border pam-border-[#E8E8E8] pam-bg-[#F9F9F9] pam-rounded-full pam-p-1 pam-gap-1 pam-items-center">
+                          <img width={24} height={24} src={avalancheIcon} />
+                          <span>Avalanche C-Chain</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pam-flex pam-flex-row pam-gap-4 pam-items-center pam-font-400">
+                      <span className="pam-text-black pam-text-[24px]">{swapPayload.currentQuote?.minAmountOut}</span><span className="pam-text-[#6C757D] pam-font-100 pam-text-[16px]"> = ${(Number(swapPayload.currentQuote?.minAmountOut || "0") * swapPayload.coinOutPriceUsd).toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pam-flex pam-flex-row pam-border-[1.5px] pam-border-[#AED2BC] pam-p-2 pam-bg-[#FCFCFD] pam-rounded-2xl pam-items-center pam-justify-between pam-gap-2 pam-w-full pam-font-400">
+                    <div className="pam-text-base pam-text-black">
+                      1 {swapPayload.currentQuote?.fromToken.symbol} = {swapPayload.currentQuote?.price.toFixed(6)} {swapPayload.currentQuote?.toToken.symbol}
+                    </div>
+                    <div className="pam-text-base pam-text-[#6C757D]">
+                      ETA: {swapPayload.currentQuote?.clientEta}
+                    </div>
+                </div>
+              </>
+            }
+          </>
+        }
+      </div>
+      
+      <div className="pam-mt-auto pam-w-full">
+        <Button
+            disabled={!swapPayload?.ready || swapPayload.loading || connecting}
+            onClick={goToNext}
+            fullWidth
+            variant="primary"
+            size="md"
+        >
+            <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
+                {(swapPayload?.ready && swapPayload?.loading) || connecting ? 
+                  <Spinner />: <span>Continue</span>
+                }
+            </div>
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+const StepTwo = ({ wallets, selectedWallet, loading, setSelectedConnector }:SwapStepTwoProp) => {
+  return(
+    <>
+      <p>Choose wallet to make payment from</p>
+      <WalletConnectorList 
+        accountStatus="pending"
+        selectedConnector={selectedWallet}
+        connectors={wallets}
+        isLoading={loading}
+        setSelectedConnector={setSelectedConnector}
+      />
+      <div className="pam-mt-auto pam-w-full">
+        <Button
+            disabled={loading}
+            onClick={()=>console.log("swap-here")}
+            fullWidth
+            variant="primary"
+            size="md"
+        >
+            <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
+                {loading ? 
+                  <Spinner />: <span>Connect Wallet</span>
+                }
+            </div>
+        </Button>
+      </div>
+    </>
+  )
+};
+
 const MayanSwapForm = ({ collectionId, isOpen, isLoading, amount, onSuccessResponse, closeModal }: SwapWidgetFlow) => {
   // widget action hook
-  const { loading, mayanConfig, networksPayload, tokensPayload, swapPayload, Connect, connecting } = useMayanSwapAction({
+  const { loading, wallets, selectWallet, networksPayload, tokensPayload, swapPayload, connecting, step, goToNext } = useMayanSwapAction({
     collectionId,
     isOpen,
     amount,
@@ -71,90 +189,24 @@ const MayanSwapForm = ({ collectionId, isOpen, isLoading, amount, onSuccessRespo
    });
 
   return (
-      <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-2 pam-p-6 pam-bg-[#FCFCFD] pam-rounded-2xl pam-border pam-min-h-[500px]">
-        <MayanSwapHeader closeModal={closeModal}/>
-        <div className="pam-flex pam-flex-col pam-justify-center pam-gap-2">
-          <div className="pam-flex pam-flex-col pam-gap-2">
-            <WrapperSelect 
-              label="Network"
-              options={networksPayload?.optionMapped || []}
-              value={networksPayload.selectedOption || {} as Option}
-              onChange={networksPayload.selectOption}
-              showBreakLine={false}
-              loading={networksPayload.loading}
-            />
-            <WrapperSelect 
-              label="Token"
-              options={tokensPayload.optionMapped || []}
-              value={tokensPayload.selectedOption as Option}
-              onChange={tokensPayload.selectOption}
-              showBreakLine={true}
-              loading={tokensPayload.loading}
-            />
-          </div>
-
-          <div className="pam-flex pam-flex-col pam-min-h-[200px] pam-items-center pam-justify-center pam-gap-2">
-            {swapPayload &&
-              <>
-                {swapPayload.loading ? 
-                  <Loader2 className="pam-animate-spin pam-text-primary" size={35}  />
-                :
-                  <>
-                    <div className="pam-p-1 pam-rounded-full pam-bg-[#F7F9FA] pam-border pam-border-[#CDCFD0] pam-w-fit pam-mb-2">
-                      <ArrowDown size={18} color="#000"/>
-                    </div>
-
-                    <div className="pam-flex pam-flex-col pam-w-full pam-items-center pam-justify-center">
-                      <div className="pam-flex pam-flex-col pam-border-[1.5px] pam-border-[#23C16B] pam-p-2 pam-bg-[#ECFCE5] pam-rounded-2xl pam-gap-2 pam-w-full">
-                        <div className="pam-flex pam-flex-row pam-gap-2 pam-justify-between pam-text-base pam-items-center pam-justify-center">
-                          <div className="pam-flex pam-flex-row pam-border-[1px] pam-border-[#E8E8E8] pam-bg-[#F9F9F9] pam-rounded-full pam-p-1 pam-gap-1 pam-items-center">
-                            <img width={24} height={24} src={swapPayload.currentQuote?.toToken.logoURI} />
-                            <span>{swapPayload.currentQuote?.toToken.symbol}</span>
-                          </div>
-                          <div className="pam-flex pam-flex-row pam-gap-2 pam-items-center">
-                            <span className="pam-text-[12px]">ON</span>
-                            <div className="pam-flex pam-flex-row pam-border pam-border-[#E8E8E8] pam-bg-[#F9F9F9] pam-rounded-full pam-p-1 pam-gap-1 pam-items-center">
-                              <img width={24} height={24} src={avalancheIcon} />
-                              <span>Avalanche C-Chain</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="pam-flex pam-flex-row pam-gap-4 pam-items-center pam-font-400">
-                          <span className="pam-text-black pam-text-[24px]">{swapPayload.currentQuote?.minAmountOut}</span><span className="pam-text-[#6C757D] pam-font-100 pam-text-[16px]"> = ${(Number(swapPayload.currentQuote?.minAmountOut || "0") * swapPayload.coinOutPriceUsd).toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pam-flex pam-flex-row pam-border-[1.5px] pam-border-[#AED2BC] pam-p-2 pam-bg-[#FCFCFD] pam-rounded-2xl pam-items-center pam-justify-between pam-gap-2 pam-w-full pam-font-400">
-                        <div className="pam-text-base pam-text-black">
-                          1 {swapPayload.currentQuote?.fromToken.symbol} = {swapPayload.currentQuote?.price.toFixed(6)} {swapPayload.currentQuote?.toToken.symbol}
-                        </div>
-                        <div className="pam-text-base pam-text-[#6C757D]">
-                          ETA: {swapPayload.currentQuote?.clientEta}
-                        </div>
-                    </div>
-                  </>
-                }
-              </>
-            }
-          </div>
-          
-          <div className="pam-mt-auto pam-w-full">
-            <Button
-                disabled={!swapPayload?.ready || swapPayload.loading || isLoading || connecting}
-                onClick={Connect}
-                fullWidth
-                variant="primary"
-                size="md"
-            >
-                <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
-                    {(swapPayload?.ready && swapPayload?.loading) || connecting ? 
-                      <Spinner />: <span>Connect Wallet</span>
-                    }
-                </div>
-            </Button>
-          </div>
-        </div>
+      <div className="pam-font-sans pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-2 pam-p-6 pam-bg-[#FCFCFD] pam-rounded-2xl pam-border pam-min-h-[500px] pam-w-[448px]">
+        <MayanSwapHeader closeModal={closeModal} step={step} goBack={()=>console.log("go-back")} />
+        {step == VIEW_STEP.ONE && 
+          <StepOne 
+            networksPayload={networksPayload}
+            tokensPayload={tokensPayload}
+            swapPayload={swapPayload}
+            connecting={connecting}
+            goToNext={goToNext}
+          />
+        }
+        {step == VIEW_STEP.TWO && 
+          <StepTwo 
+            loading={loading}
+            wallets={wallets}
+            setSelectedConnector={selectWallet}
+          />
+        }
       </div>
   );
 };

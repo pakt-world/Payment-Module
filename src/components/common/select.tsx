@@ -49,11 +49,18 @@ export const SelectDropdown = ({
 	const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
 	const [shouldOpenUp, setShouldOpenUp] = useState(false);
 	const selectRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
 	const toggleDropdown = () => {
 		if (!disabled) {
 			setIsOpen((prev) => !prev);
 		}
+	};
+
+	const openDropdown = () => {
+    inputRef.current?.focus();
+    // inputRef.current?.aft;
+		setIsOpen(true)
 	};
 
 	const closeDropdown = () => {
@@ -124,35 +131,34 @@ export const SelectDropdown = ({
 	}, [isOpen]);
 
 	return (
-		<div ref={selectRef} className={`pam-relative pam-w-full sm:pam-w-fit ${className}`} tabIndex={0} onKeyDown={handleKeyDown}>
-			<button
-				className={`pam-flex pam-rounded-lg pam-border pam-justify-between pam-border-line pam-text-sm ${triggerClassName}
-					${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${isOpen ? "pam-bg-gray-100" : "pam-bg-white/10"}`}
-				onClick={toggleDropdown}
-				disabled={disabled}
-				type="button"
+		<div ref={selectRef} className={`pam-relative pam-w-full pam-outline-none sm:pam-w-fit ${className}`} tabIndex={0} onKeyDown={handleKeyDown}>
+			<div
+				className={`pam-flex pam-rounded-lg pam-border pam-justify-between pam-border-line pam-text-sm pam-outline-none ${triggerClassName} ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${isOpen ? "pam-bg-gray-100" : "pam-bg-white/10"}`}
+				onClick={openDropdown}
+				// disabled={disabled}
+				// type="button"
 			>
-        <div className="pam-flex pam-px-3 pam-py-2 pam-h-full pam-items-center pam-w-5/6">
-           {(value?.label && RenderView) ? <RenderView value={value} /> : <div className="pam-text-sm pam-items-center">{value?.label || `| Choose ${placeholder}`}</div>}
-        </div>
+       {!isOpen ? <div className="pam-flex pam-px-3 pam-py-2 pam-h-full pam-items-center pam-w-5/6">
+           {(value?.label && RenderView) ? <RenderView value={value} /> : <div className="pam-text-sm pam-items-center">{value?.label || `Select ${placeholder}`}</div>}
+        </div>:
+        <input
+          ref={inputRef}
+          className="pam-w-full pam-px-4 pam-py-2 pam-justify-between pam-text-sm pam-bg-transparent pam-outline-none pam-border-transparent"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder={`Select ${placeholder}`}
+          onClick={openDropdown}
+        />}
         <div className={`pam-flex pam-h-full pam-items-center pam-justify-center pam-w-1/6 ${showBreakLine ? "pam-border-l pam-border-line":""}`}>
           {loading ? <Loader size={20} /> : <ChevronDown size={20} color="#000" />}
         </div>
-			</button>
+			</div>
 
 			{isOpen && (
 				<div
-					className={`pam-absolute pam-z-10 pam-mt-2 pam-h-fit pam-max-h-40 pam-w-full pam-overflow-y-auto pam-overflow-x-hidden pam-rounded-lg pam-border pam-shadow-lg pam-backdrop-blur-lg ${shouldOpenUp ? "pam-bottom-full mb-2" : "pam-top-full mt-2"} ${dropdownClassName}`}
+					className={`pam-absolute pam-z-10 pam-mt-2 pam-h-fit pam-max-h-40 pam-w-full pam-overflow-y-auto pam-overflow-x-hidden pam-rounded-lg pam-border pam-shadow-lg pam-backdrop-blur-lg ${shouldOpenUp ? "pam-bottom-full mb-2" : "pam-top-full"} ${dropdownClassName}`}
 					role="listbox"
 				>
-          <div className="pam-sticky pam-top-0 pam-z-20 pam-w-full pam-p-2 pam-shadow-lg pam-backdrop-blur-lg pam-bg-white">
-            <input
-              className="pam-w-full pam-px-4 pam-py-2 pam-rounded-lg pam-border pam-justify-between pam-border-line pam-text-sm "
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={`Search ${placeholder}...`}
-            />
-          </div>
           <ul>
             {filteredOptions.map((option: Option, index) => (
               <li

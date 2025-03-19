@@ -3,12 +3,14 @@ import { fetchQuote, swapFromEvm, swapFromSolana, Quote, ChainName, } from "@may
 import { useState } from "react";
 import { sleep } from "utils";
 import { useGetTokenPrice } from "./api";
+import useSwapWallet from "./solana";
 
 interface CalculateSwapProps{
+  selectedNetworkType: string;
   amount: number;
 }
 
-const useMayanCalculateSwap = ({ amount }:CalculateSwapProps)=> {
+const useMayanCalculateSwap = ({ amount, selectedNetworkType }:CalculateSwapProps)=> {
   // const [tokenPrice,setTokenPrice] = useState<number|null>(null);
   const [allQuotes, setQuotes] = useState<Quote[] | null>(null);
   const [currentQuote, setCurrentQuote] = useState<Quote | null>(null);
@@ -16,6 +18,7 @@ const useMayanCalculateSwap = ({ amount }:CalculateSwapProps)=> {
   const slippage = 3;
   const gasDrop = 0;
   const { data:coinOutPriceUsd, isFetching, isFetched } = useGetTokenPrice("usd-coin");
+  const { connected, isConnecting, selectedWallet, wallets, setWallet } = useSwapWallet(selectedNetworkType);
 
   const fetchInitialSwapState = async(fromToken: string, toToken: string, fromChain: string, toChain: string):Promise<number> => {
     const initSwap = await fetchQuote({
@@ -79,6 +82,11 @@ const useMayanCalculateSwap = ({ amount }:CalculateSwapProps)=> {
     quoteLoading: quoteLoading || isFetching,
     quoteReady: (!!currentQuote && isFetched),
     coinOutPriceUsd,
+    wallets,
+    selectedWallet,
+    isConnecting,
+    connected,
+    setWallet,
   }
 }
 
