@@ -1,12 +1,14 @@
+import { Quote } from "@mayanfinance/swap-sdk";
 import { BasicModalProps, IAny, onFinishResponseProps } from "types";
 
-interface MayanSwapModalProps extends MayanWidgetProps, BasicModalProps {
+interface MayanSwapModalProps extends BasicModalProps {
   amount: number;
-  coin: string;
-  chain: string;
+  // coin: string;
+  // chain: string;
   onSuccessResponse:(data: onFinishResponseProps) => void;
   isLoading?:boolean;
 }
+
 type MayanWidgetChainName =
   | "solana"
   | "ethereum"
@@ -97,19 +99,11 @@ interface OptionDataResponse<T> {
 }
 
 interface SwapDataResponse {
-    ready: boolean;
-    loading: boolean;
-    data?:{
-      rate: number;
-      amount: number;
-      tokenFrom: string;
-      tokenTo: string;
-      chainFrom: string;
-      chainTo: string;
-      amountFrom: number;
-      amountTo: number;
-      usdAmount: number;
-    }
+  ready: boolean;
+  loading: boolean;
+  currentQuote: Quote | null;
+  allQuotes: Quote[] | null;
+  coinOutPriceUsd: number;
 }
 
 export {

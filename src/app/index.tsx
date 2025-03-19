@@ -7,16 +7,11 @@ import { wagmi, connectors, chains } from "../";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { ConfigProvider } from "context/config-context";
-import MakeCryptoPaymentModal from "components/crypto-payment";
+import { ConfigProvider } from "../context/config-context";
 import "../styles/index.scss";
-import { Button } from "components/common";
-import { StripePaymentModal } from "components/fiat-payment";
-import Logger from "lib/logger";
-import { onFinishResponseProps } from "types";
-import { getAxiosInstance } from "lib/axios-instance";
-import MayanSwapWidget from "components/mayan-swap/swap-new";
-import MayanSwapModal from "components/mayan-swap";
+import { onFinishResponseProps } from "../types";
+import { getAxiosInstance } from "../lib/axios-instance";
+import MayanSwapModal from "../components/mayan-swap";
 
 const { walletConnect } = connectors;
 const { avalanche, avalancheFuji  } = chains;
@@ -261,27 +256,27 @@ const App = () => {
               isOpen={true}
               closeModal={()=>setOpenSwapModal(false)}
               collectionId={collectionId}
-              chain="avalanche"
               amount={1000}
-              coin={"usdc"}
               onSuccessResponse={onSuccessResponse}
               isLoading={isLoading}
-              sourceChains={["solana", "avalanche"]}
-              destinationChains={["avalanche"]}
-              rpcs={{
-                "avalanche":"https://api.avax-test.network/ext/bc/C/rpc",
-                "solana": 'https://example.rpc.com/solana',
-              }}
-              tokensTo={{
-                "avalanche": ["0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e"],
-              }}
-              tokensFrom={{
+              // chain="avalanche"
+              // coin={"usdc"}
+              // sourceChains={["solana", "avalanche"]}
+              // destinationChains={["avalanche"]}
+              // rpcs={{
+              //   "avalanche":"https://api.avax-test.network/ext/bc/C/rpc",
+              //   "solana": 'https://example.rpc.com/solana',
+              // }}
+              // tokensTo={{
+              //   "avalanche": ["0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e"],
+              // }}
+              // tokensFrom={{
                 // "solana": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"],
                 // "ethereum": ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"],
                 // "bsc": ["0x7cd167B101D2808Cfd2C45d17b2E7EA9F46b74B6"],
                 // "polygon": ["0xFbcE0f9e92AD1003e893Ba647bC055D845aAa507"],
                 // "optimism": ["0x3E7570058930728e03B798673Ae2a43fdc209758"],
-              }}
+              // }}
             />
         </ConfigProvider>
     );
