@@ -11,6 +11,7 @@ import tailwindcss from "tailwindcss";
 import pluginTypescript from "@rollup/plugin-typescript";
 import pluginCommonjs from "@rollup/plugin-commonjs";
 import pluginNodeResolve from "@rollup/plugin-node-resolve";
+import polyfillNode from "rollup-plugin-polyfill-node";
 import replace from "@rollup/plugin-replace";
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
@@ -113,8 +114,10 @@ const pluginsSetup = (bundle) => ({
             ),
             preventAssignment: true,
         }),
+        polyfillNode(),
         pluginNodeResolve({
             browser: bundle === bundles.browser ? true : false,
+            preferBuiltins: false,
             extensions: [".js", ".jsx", ".ts", ".tsx", ".mjs"],
         }),
         copy({

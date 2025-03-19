@@ -33,22 +33,14 @@ const getCoinList = async (chain?:string): Promise<APITokensResponse[]> => {
   return response.data[chain] || [];
 };
 
-// const postConfirmPayment = async (
-// params: ConfirmPaymentParams
-// ): Promise<ConfirmPaymentResponse> => {
-// const axios = getAxiosInstance();
-// await new Promise((resolve): void => {
-//   setTimeout(resolve, params.delay ?? 0);
-// });
-// const response = await axios.post(`/payment/confirm`, { 
-//   collection: params.collectionId 
-// });
-// return response.data?.data;
-// };
+const getTokenPrice = async (token:string):Promise<number> => {
+  if (!token) return 1;
+  const response = await axiosInstance.get(`/price?id=${token}`);
+  return response.data.price;
+}
 
 // Payment Hooks
-
-export const useGetMayanChains = (): UseQueryResult<APIChainsResponse[], APIError> => useQuery({
+const useGetMayanChains = (): UseQueryResult<APIChainsResponse[], APIError> => useQuery({
   queryFn: () => getChainList(),
   queryKey: ["get-mayan-chain"],
   refetchOnWindowFocus: true,
@@ -58,7 +50,7 @@ export const useGetMayanChains = (): UseQueryResult<APIChainsResponse[], APIErro
   refetchIntervalInBackground: true,
 });
 
-export const useGetMayanCoins = (chain?:string): UseQueryResult<APITokensResponse[], APIError> => useQuery({
+const useGetMayanCoins = (chain?:string): UseQueryResult<APITokensResponse[], APIError> => useQuery({
   queryFn: () => getCoinList(chain),
   queryKey: [`get-mayan-${chain}-coin`],
   refetchOnWindowFocus: true,
@@ -68,16 +60,19 @@ export const useGetMayanCoins = (chain?:string): UseQueryResult<APITokensRespons
   refetchIntervalInBackground: true,
 });
 
-// const usePostStripeInitiate = () => {
-// const appDataOptions: UseMutationOptions<
-//   StripePaymentResponse,
-//   APIError,
-//   StripePaymentParams
-// > = {
-//     mutationFn: postStripeInitiatePayment,
-//     onError: (err) => {
-//         triggerGlobalError(err.response?.data?.message as string);
-//     },
-// };
-// return useMutation(appDataOptions);
-// };
+const useGetTokenPrice = (token:string): UseQueryResult<number, APIError> => useQuery({
+  queryFn: () => getTokenPrice(token),
+  queryKey: [`get-mayan-${token}-price`],
+  refetchOnWindowFocus: true,
+  refetchOnMount: true,
+  refetchOnReconnect: true,
+  refetchInterval: 60000,
+  refetchIntervalInBackground: true,
+});
+
+
+export {
+  useGetMayanChains,
+  useGetMayanCoins,
+  useGetTokenPrice
+}

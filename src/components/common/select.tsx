@@ -145,7 +145,7 @@ export const SelectDropdown = ({
 					className={`pam-absolute pam-z-10 pam-mt-2 pam-h-fit pam-max-h-40 pam-w-full pam-overflow-y-auto pam-overflow-x-hidden pam-rounded-lg pam-border pam-shadow-lg pam-backdrop-blur-lg ${shouldOpenUp ? "pam-bottom-full mb-2" : "pam-top-full mt-2"} ${dropdownClassName}`}
 					role="listbox"
 				>
-          <div className="pam-sticky pam-top-0 pam-z-20 pam-w-full pam-p-2">
+          <div className="pam-sticky pam-top-0 pam-z-20 pam-w-full pam-p-2 pam-shadow-lg pam-backdrop-blur-lg pam-bg-white">
             <input
               className="pam-w-full pam-px-4 pam-py-2 pam-rounded-lg pam-border pam-justify-between pam-border-line pam-text-sm "
               value={searchTerm}
