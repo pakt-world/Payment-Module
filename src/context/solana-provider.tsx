@@ -1,5 +1,5 @@
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
-import { UnsafeBurnerWalletAdapter } from "@solana/wallet-adapter-wallets";
+import { WalletConnectWalletAdapter, UnsafeBurnerWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import {
   ConnectionProvider,
@@ -10,16 +10,19 @@ import { clusterApiUrl } from '@solana/web3.js';
 import { FC, useMemo } from 'react';
 
 type Props = {
+  config: {
+    endpoint: string
+  }
   readonly children: React.ReactNode;
 };
 
-export const SolanaWalletProvider: FC<Props> = ({ children }) => {
-
-  const network = WalletAdapterNetwork.Mainnet;
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+export const SolanaWalletProvider: FC<Props> = ({ config, children }) => {
+  const { endpoint } = config;
   
   const wallets = [
+    new PhantomWalletAdapter(),
     new UnsafeBurnerWalletAdapter(),
+    // new WalletConnectWalletAdapter({ }),
   ];
   
   return (

@@ -74,5 +74,6 @@ const useGetTokenPrice = (token:string): UseQueryResult<number, APIError> => use
 export {
   useGetMayanChains,
   useGetMayanCoins,
-  useGetTokenPrice
+  useGetTokenPrice,
+  getTokenPrice,
 }

@@ -58,6 +58,7 @@ interface CryptoPaymentModalProps extends BasicModalProps {
     tokenDecimal: number;
     onSuccessResponse:(data: onFinishResponseProps) => void;
     isLoading?:boolean;
+    openSwap?: ()=>void;
 }
 
 interface CryptoPayWithWalletProps {
@@ -68,6 +69,7 @@ interface CryptoPayWithWalletProps {
     chainId: number;
     onSuccessResponse:(data: onFinishResponseProps) => void;
     isLoading?:boolean;
+    openSwap?: ()=>void;
 }
 
 type I0xType = `0x${string}`;

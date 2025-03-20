@@ -75,7 +75,6 @@ export const SelectDropdown = ({
 
 	// === Filter options based on search term === //
 	const filteredOptions = useMemo(() => {
-    console.log("searching--->", searchTerm);
 		if (!searchTerm) return options;
 
 		const lowerSearchTerm = searchTerm.toLowerCase();
@@ -138,17 +137,19 @@ export const SelectDropdown = ({
 				// disabled={disabled}
 				// type="button"
 			>
-       {!isOpen ? <div className="pam-flex pam-px-3 pam-py-2 pam-h-full pam-items-center pam-w-5/6">
-           {(value?.label && RenderView) ? <RenderView value={value} /> : <div className="pam-text-sm pam-items-center">{value?.label || `Select ${placeholder}`}</div>}
-        </div>:
-        <input
-          ref={inputRef}
-          className="pam-w-full pam-px-4 pam-py-2 pam-justify-between pam-text-sm pam-bg-transparent pam-outline-none pam-border-transparent"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder={`Select ${placeholder}`}
-          onClick={openDropdown}
-        />}
+       {(!isOpen || loading) ?
+          <div className="pam-flex pam-px-3 pam-py-2 pam-h-full pam-items-center pam-w-5/6">
+            {(value?.label && RenderView) ? <RenderView value={value} /> : <div className="pam-text-sm pam-items-center">{value?.label || `Select ${placeholder}`}</div>}
+          </div>:
+          <input
+            ref={inputRef}
+            className="pam-w-full pam-px-4 pam-py-2 pam-justify-between pam-text-sm pam-bg-transparent pam-outline-none pam-border-transparent"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={`Select ${placeholder}`}
+            onClick={openDropdown}
+          />
+        }
         <div className={`pam-flex pam-h-full pam-items-center pam-justify-center pam-w-1/6 ${showBreakLine ? "pam-border-l pam-border-line":""}`}>
           {loading ? <Loader size={20} /> : <ChevronDown size={20} color="#000" />}
         </div>
@@ -156,7 +157,7 @@ export const SelectDropdown = ({
 
 			{isOpen && (
 				<div
-					className={`pam-absolute pam-z-10 pam-mt-2 pam-h-fit pam-max-h-40 pam-w-full pam-overflow-y-auto pam-overflow-x-hidden pam-rounded-lg pam-border pam-shadow-lg pam-backdrop-blur-lg ${shouldOpenUp ? "pam-bottom-full mb-2" : "pam-top-full"} ${dropdownClassName}`}
+					className={`pam-absolute pam-z-10 pam-mt-1 pam-h-fit pam-max-h-40 pam-w-full pam-overflow-y-auto pam-overflow-x-hidden pam-rounded-lg pam-border pam-shadow-lg pam-backdrop-blur-lg ${shouldOpenUp ? "pam-bottom-full mb-2" : "pam-top-full"} ${dropdownClassName}`}
 					role="listbox"
 				>
           <ul>

@@ -2,7 +2,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { useState } from "react";
-import { wagmi, connectors, chains } from "../";
+import { wagmi, connectors, chains, StripePaymentModal } from "../";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -11,10 +11,12 @@ import { ConfigProvider } from "../context/config-context";
 import "../styles/index.scss";
 import { onFinishResponseProps } from "../types";
 import { getAxiosInstance } from "../lib/axios-instance";
-import MayanSwapModal from "../components/mayan-swap";
+import MakeCryptoPaymentModal from 'components/crypto-payment';
+import { Button } from "components/common";
+import CryptoPaymentWidget from "components/crypto-payment/widget";
 
 const { walletConnect } = connectors;
-const { avalanche, avalancheFuji  } = chains;
+const { avalanche, avalancheFuji, mainnet, polygon, arbitrum, bsc } = chains;
 const { http, createConfig } = wagmi;
 
 interface MakePaymentResponse {
@@ -41,7 +43,7 @@ const App = () => {
     
     const [payData, setPayData] = useState<MakePaymentResponse>({
       address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
-      amountToPay: 0.323,
+      amountToPay: 1000,
       chainId: "43113",
       coin: "USDC",
       collectionAmount: 10,
@@ -62,10 +64,14 @@ const App = () => {
     const transports = {
       [avalanche.id]: http(),
       [avalancheFuji.id]: http(),
+      [mainnet.id]: http(),
+      [polygon.id]: http(),
+      [arbitrum.id]: http(),
+      [bsc.id]: http(),
     };
 
     const wagmiConfig = createConfig({
-      chains: [avalancheFuji],
+      chains: [avalancheFuji, mainnet, polygon, arbitrum, bsc],
       connectors: [walletConnect({ 
         projectId,
         customStoragePrefix:"pakt-"
@@ -125,6 +131,7 @@ const App = () => {
                 },
                 mayanConfig: {
                   appName: "Testing-App",
+                  endpoint:"https://solana-mainnet.g.alchemy.com/v2/vQrG83KON0pxK7MIO2aGMo4zSNwBBvMY",
                   appIcon: "https://devpaktfund.chain.site/images/pakt-fund/pakt_fund.png",
                   appUrl: "https://devpaktfund.chain.site",
                   colors: {
@@ -184,29 +191,12 @@ const App = () => {
                       >
                         Pay with Fiat
                       </Button>
-                      <Button 
-                          className="pam-block pam-p-4 pam-bg-btn-primary"
-                          type="button"
-                          onClick={
-                            async () =>{
-                              const ready = toggleModal();
-                              if (ready){
-                                const sucDa = await fetchCollectionData();
-                                if (sucDa){
-                                  setOpenSwapModal(true)
-                                }
-                              }
-                            }
-                          }
-                      >
-                        Swap Pay
-                      </Button>
                   </div>
                 </div>
               </div>
             </div> */}
-            {/* <MakeCryptoPaymentModal 
-              isOpen={openCryptoModal}
+            <MakeCryptoPaymentModal
+              isOpen={true}
               closeModal={()=>setOpenCryptoModal(false)}
               collectionId={collectionId}
               amount={payData.amountToPay}
@@ -218,7 +208,20 @@ const App = () => {
               onSuccessResponse={onSuccessResponse}
               isLoading={isLoading}
             />
-            <StripePaymentModal
+            {/* <CryptoPaymentWidget 
+              isOpen={openCryptoModal}
+              closeModal={()=>setOpenCryptoModal(false)}
+              collectionId={collectionId}
+              amount={payData.amountToPay}
+              chainId={Number(payData.chainId)}
+              coin={payData.coin}
+              depositAddress={payData.address}
+              tokenDecimal={6}
+              contractAddress={payData.contractAddress}
+              onSuccessResponse={onSuccessResponse}
+              isLoading={isLoading}
+            /> */}
+            {/* <StripePaymentModal
               isOpen={openFiatModal}
               closeModal={()=>setOpenFiatModal(false)}
               collectionId={collectionId}
@@ -226,58 +229,6 @@ const App = () => {
               onFinishResponse={onSuccessResponse}
               isLoading={isLoading}
             /> */}
-            {/* <MayanSwapWidget 
-              isOpen={openSwapModal}
-              closeModal={()=>setOpenSwapModal(false)}
-              collectionId={collectionId}
-              chain="avalanche"
-              amount={1000}
-              coin={"usdc"}
-              onSuccessResponse={onSuccessResponse}
-              isLoading={isLoading}
-              sourceChains={["solana", "avalanche"]}
-              destinationChains={["avalanche"]}
-              rpcs={{
-                "avalanche":"https://api.avax-test.network/ext/bc/C/rpc",
-                "solana": 'https://example.rpc.com/solana',
-              }}
-              tokensTo={{
-                "avalanche": ["0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e"],
-              }}
-              tokensFrom={{
-                // "solana": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"],
-                // "ethereum": ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"],
-                // "bsc": ["0x7cd167B101D2808Cfd2C45d17b2E7EA9F46b74B6"],
-                // "polygon": ["0xFbcE0f9e92AD1003e893Ba647bC055D845aAa507"],
-                // "optimism": ["0x3E7570058930728e03B798673Ae2a43fdc209758"],
-              }}
-            /> */}
-            <MayanSwapModal 
-              isOpen={true}
-              closeModal={()=>setOpenSwapModal(false)}
-              collectionId={collectionId}
-              amount={1000}
-              onSuccessResponse={onSuccessResponse}
-              isLoading={isLoading}
-              // chain="avalanche"
-              // coin={"usdc"}
-              // sourceChains={["solana", "avalanche"]}
-              // destinationChains={["avalanche"]}
-              // rpcs={{
-              //   "avalanche":"https://api.avax-test.network/ext/bc/C/rpc",
-              //   "solana": 'https://example.rpc.com/solana',
-              // }}
-              // tokensTo={{
-              //   "avalanche": ["0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e"],
-              // }}
-              // tokensFrom={{
-                // "solana": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"],
-                // "ethereum": ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"],
-                // "bsc": ["0x7cd167B101D2808Cfd2C45d17b2E7EA9F46b74B6"],
-                // "polygon": ["0xFbcE0f9e92AD1003e893Ba647bC055D845aAa507"],
-                // "optimism": ["0x3E7570058930728e03B798673Ae2a43fdc209758"],
-              // }}
-            />
         </ConfigProvider>
     );
 };
