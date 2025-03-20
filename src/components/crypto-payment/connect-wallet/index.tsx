@@ -18,6 +18,8 @@ import WalletConnectorList from "./wallet-connector-list";
 import DepositCoin from "./deposit-coin";
 import DepositToken from "./deposit-token";
 import DisclaimerDialog from "../disclaimer-dialog";
+import { Button } from "components/common";
+import MayanTriggerButton from "components/mayan-swap/components/trigger-btn";
 
 const ConnectWallet = ({
     amount,
@@ -26,7 +28,8 @@ const ConnectWallet = ({
     chainId,
     tokenDecimal,
     onSuccessResponse,
-    isLoading
+    isLoading,
+    openSwap,
 }: CryptoPayWithWalletProps): JSX.Element => {
     const {
         chain,
@@ -107,6 +110,8 @@ const ConnectWallet = ({
               connectors={ReadyConnectors}
               accountStatus={status}
             />
+
+           {openSwap &&<MayanTriggerButton onClick={openSwap} />}
 
             {isToken ? (
               <DepositToken

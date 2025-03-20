@@ -98,9 +98,6 @@
         "src/assets/fonts"
     ],
     "keywords": [],
-    "peerDependencies": {
-        "react": ">= 16.8.0"
-    },
     "dependencies": {
         "@headlessui/react": "^1.7.18",
         "@hookform/resolvers": "^3.9.0",
@@ -110,6 +107,7 @@
         "@radix-ui/react-scroll-area": "^1.2.0",
         "@radix-ui/react-tabs": "^1.1.1",
         "@radix-ui/react-visually-hidden": "^1.1.0",
+        "@solana/buffer-layout": "^4.0.1",
         "@solana/wallet-adapter-react-ui": "^0.9.36",
         "@solana/wallet-adapter-wallets": "^0.19.33",
         "@solana/web3.js": "1",
@@ -117,6 +115,7 @@
         "@tanstack/react-query-devtools": "^4.35.3",
         "@tanstack/react-virtual": "^3.10.6",
         "axios": "^1.7.7",
+        "buffer": "^6.0.3",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
         "crypto-js": "^4.2.0",

@@ -11,7 +11,7 @@ import tailwindcss from "tailwindcss";
 import pluginTypescript from "@rollup/plugin-typescript";
 import pluginCommonjs from "@rollup/plugin-commonjs";
 import pluginNodeResolve from "@rollup/plugin-node-resolve";
-import polyfillNode from "rollup-plugin-polyfill-node";
+// import polyfillNode from "rollup-plugin-polyfill-node";
 import replace from "@rollup/plugin-replace";
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
@@ -23,6 +23,8 @@ import analyze from "rollup-plugin-analyzer";
 import multiEntry from "@rollup/plugin-multi-entry";
 import copy from "rollup-plugin-copy";
 import image from "@rollup/plugin-image";
+import inject from '@rollup/plugin-inject';
+// import peerDepsExternal from "rollup-plugin-peer-deps-external";
 
 /* -------------------------------------------------------------------------- */
 /*                            Internal Dependencies                           */
@@ -67,6 +69,7 @@ const banner = `
 const pluginsSetup = (bundle) => ({
     external: ["react", "react-dom", "react-dom/client"],
     plugins: [
+        // peerDepsExternal(),
         multiEntry(),
         postcss({
             plugins: [postcssImport(), tailwindcss(), autoprefixer()],
@@ -114,7 +117,7 @@ const pluginsSetup = (bundle) => ({
             ),
             preventAssignment: true,
         }),
-        polyfillNode(),
+        // polyfillNode(),
         pluginNodeResolve({
             browser: bundle === bundles.browser ? true : false,
             preferBuiltins: false,
@@ -124,6 +127,9 @@ const pluginsSetup = (bundle) => ({
             targets: [
                 { src: "src/assets", dest: `${bundle}` }, // Copy font files to dist
             ],
+        }),
+        inject({
+            Buffer: ['buffer', 'Buffer'], // Polyfill Buffer globally
         }),
     ],
     onwarn(warning, warn) {

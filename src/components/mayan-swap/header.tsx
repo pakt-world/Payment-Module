@@ -3,20 +3,14 @@
 import { ChevronLeft, X } from 'lucide-react';
 
 import MayanIcon from "../../assets/images/mayan-icon.svg";
-import { VIEW_STEP } from './types';
-
-interface MayanHeaderProps {
-  goBack: () => void;
-  closeModal: ()=>void;
-  step: VIEW_STEP;
-}
+import { MayanHeaderProps } from './types';
 
 const MayanSwapHeader = ({ goBack, closeModal, step }:MayanHeaderProps) => {
   return (
     <div className="pam-flex pam-w-full pam-items-center pam-justify-between">
-      <button className="pam-w-1/3 pam-justify-start" onClick={goBack}>
+      {goBack ? <button className="pam-w-1/3 pam-justify-start" onClick={goBack}>
         <ChevronLeft />
-      </button>
+      </button>: <div></div>}
 
       <div className="pam-text-lg pam-font-bold pam-text-title sm:pam-text-2xl pam-w-fit">
           <img src={MayanIcon} width={124} height={32} />

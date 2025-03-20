@@ -1,10 +1,22 @@
 import { Quote } from "@mayanfinance/swap-sdk";
 import { BasicModalProps, IAny, onFinishResponseProps } from "types";
 
-interface MayanSwapModalProps extends BasicModalProps {
+interface MayanSwapModalProps {
   amount: number;
-  // coin: string;
-  // chain: string;
+  destinationAddress: string;
+  destinationChain: number;
+  destinationToken: string;
+  goBack?:() => void;
+  onSuccessResponse:(data: onFinishResponseProps) => void;
+  isLoading?:boolean;
+}
+
+interface MayanSwapActionProps {
+  amount: number;
+  destinationAddress: string;
+  destinationChain: number;
+  destinationToken: string;
+  goBack?:() => void;
   onSuccessResponse:(data: onFinishResponseProps) => void;
   isLoading?:boolean;
 }
@@ -35,6 +47,7 @@ interface MayanConfigProps {
   appName: string;
   appIcon: string;
   appUrl: string;
+  endpoint: string;
   colors?: {
     background: string
   }
@@ -104,6 +117,7 @@ interface SwapDataResponse {
   currentQuote: Quote | null;
   allQuotes: Quote[] | null;
   coinOutPriceUsd: number;
+  quoteError?: unknown;
 }
 
 enum VIEW_STEP {
@@ -119,11 +133,28 @@ interface ConnectorProps {
 }
 
 interface WalletConnectListType {
-    selectedConnector: ConnectorProps | undefined;
+    selectedConnector: ConnectorProps | undefined | null;
     isLoading: boolean;
-    connectors: ConnectorProps[] | undefined;
+    connectors: ConnectorProps[] | undefined | null;
     setSelectedConnector: (connector: ConnectorProps) => void;
-    accountStatus: string;
+    connected: boolean;
+}
+
+interface SwapWidgetFlow {
+  isLoading:boolean;
+  amount: number;
+  destinationAddress: string;
+  destinationChain: number;
+  destinationToken: string;
+  goBack?: ()=>void;
+  closeModal: () => void;
+  onSuccessResponse: (data:onFinishResponseProps) => void;
+}
+
+interface MayanHeaderProps {
+  step: VIEW_STEP;
+  closeModal: ()=>void;
+  goBack?: () => void;
 }
 
 
@@ -140,5 +171,8 @@ export {
   type SwapDataResponse,
   VIEW_STEP,
   type WalletConnectListType,
-  type ConnectorProps
+  type ConnectorProps,
+  type SwapWidgetFlow,
+  type MayanHeaderProps,
+  type MayanSwapActionProps,
 }

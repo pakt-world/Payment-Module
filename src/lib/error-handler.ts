@@ -18,4 +18,15 @@ const triggerGlobalError = (message: string) => {
     globalErrorHandler(errorMessage);
 };
 
-export { setGlobalErrorHandler, triggerGlobalError };
+// Usage inside async functions
+const safeAsync = async (fn:Function) => {
+  try {
+      return await fn();
+  } catch (error) {
+      console.log("error===>", error)
+      globalErrorHandler(String(error));
+      return null;
+  }
+};
+
+export { setGlobalErrorHandler, triggerGlobalError, safeAsync };

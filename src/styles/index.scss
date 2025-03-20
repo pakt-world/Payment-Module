@@ -1,36 +1,40 @@
+@use "./tailwind.scss";
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
-@import "./tailwind.scss";
+
+// @font-face {
+//   font-family: "CircularStd";
+//   src: url("../assets/fonts/CircularStd-Light.otf") format("otf");
+//   font-weight: 500;
+//   font-style: normal;
+// }
 
 @font-face {
   font-family: "CircularStd";
-  src: url("../assets/fonts/CircularStd-Book.woff2") format("woff2");
-  font-weight: 200;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "CircularStd";
-  src: url("../assets/fonts/CircularStd-Book.woff2") format("woff2");
+  src: url("../assets/fonts/CircularStd-Book.woff2") format("woff2"), url("../assets/fonts/CircularStd-Book.woff") format("woff"), url("../assets/fonts/CircularStd-Book.tff") format("ttf");
   font-weight: 500;
   font-style: normal;
 }
 
-@font-face {
-  font-family: "CircularStd";
-  src: url("../assets/fonts/CircularStd-Book.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: "CircularStd";
+//   src: url("../assets/fonts/CircularStd-Book.woff2") format("woff2");
+//   font-weight: 700;
+//   font-style: normal;
+// }
 
 :root {
   --circular-std-font: "CircularStd", sans-serif;
   --rubik-font: "Rubik", sans-serif;
 }
 
+h1, h2, p {
+  line-height: 150%;
+  letter-spacing: 0.75%;
+}
+
 * {
   font-family: var(--circular-std-font);
-  line-height: 150%;
-  letter-spacing: 0.75;
+  font-weight: 450;
 }
 
 .circular-std-light {

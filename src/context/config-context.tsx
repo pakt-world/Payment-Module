@@ -135,9 +135,9 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
             </WrappedWagmiProvider>
           </WrappedQueryComponent>
           <Toaster
-              position="top-right"
-              gutter={8}
-              containerClassName="!pam-z-[999999]"
+            position="top-right"
+            gutter={10}
+            containerClassName="!pam-z-[999999]"
           />
       </ConfigContext.Provider>
     );

@@ -51,7 +51,6 @@ const config: Config = {
             },
             fontFamily: {
               sans: ["var(--circular-std-font)", ...fontFamily.sans],
-              inter: ["var(--inter-font)"],
             },
             borderRadius: {
               "modal": RenderPrefixVariable("modal-radius"),

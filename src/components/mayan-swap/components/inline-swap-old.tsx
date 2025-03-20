@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useConfig } from 'context/config-context';
-import { MayanWidgetProps, SetReadyProps } from "./types";
+import { MayanWidgetProps, SetReadyProps } from "../types";
 
 declare global {
   interface Window {

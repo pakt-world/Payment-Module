@@ -2,12 +2,13 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
+import { Quote } from "@mayanfinance/swap-sdk";
 import { APIChainsResponse, APITokensResponse, ConnectorProps, OptionDataResponse, SwapDataResponse, VIEW_STEP } from "components/mayan-swap/types";
 
 interface BasicModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  collectionId: string;
+  collectionId?: string;
 }
 
 interface onFinishResponseProps {
@@ -60,10 +61,9 @@ interface SwapStepOneProp {
 }
 
 interface SwapStepTwoProp {
-  wallets: ConnectorProps[] | undefined;
-  selectedWallet?:ConnectorProps;
-  loading:boolean;
-  setSelectedConnector: (connector:ConnectorProps) => void;
+  selectedNetwork: { mode:string, chainId: number} | null | undefined;
+  destinationAddress: string;
+  quote: Quote | null | undefined;
 }
 
 
