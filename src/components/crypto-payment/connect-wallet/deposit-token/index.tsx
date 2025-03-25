@@ -4,7 +4,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import React, { useEffect, useState } from "react";
-import { useConnect, useDisconnect, useWriteContract } from "wagmi";
+import { useWriteContract } from "wagmi";
 import { erc20Abi } from "viem";
 
 /* -------------------------------------------------------------------------- */
