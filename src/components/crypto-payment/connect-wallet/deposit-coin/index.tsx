@@ -26,6 +26,7 @@ interface WalletDepositProps {
     setDisableButtonOnClick: (v: boolean) => void;
     onSuccessResponse:(data: onFinishResponseProps) => void;
     connect: ConnectMutate<Config, unknown>;
+    disconnect: ()=>void;
 }
 
 const DepositCoin = ({
@@ -37,6 +38,7 @@ const DepositCoin = ({
     selectedConnector,
     setDisableButtonOnClick,
     connect,
+    disconnect,
     onSuccessResponse,
     isDisabled
 }: WalletDepositProps): ReactElement => {
@@ -77,6 +79,7 @@ const DepositCoin = ({
           {
             onSuccess(data) {
               Logger.info(`send-tx-success-->`, { txId:data });
+              disconnect();
               onSuccessResponse({ status:"completed", txId:data });
             },
             onError(error: any) {

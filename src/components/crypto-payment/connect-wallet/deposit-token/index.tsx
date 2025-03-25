@@ -4,7 +4,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import React, { useEffect, useState } from "react";
-import { useWriteContract } from "wagmi";
+import { useConnect, useDisconnect, useWriteContract } from "wagmi";
 import { erc20Abi } from "viem";
 
 /* -------------------------------------------------------------------------- */
@@ -27,6 +27,7 @@ const DepositToken = ({
     isLoading,
     disableButtonOnClick,
     connect,
+    disconnect,
     onSuccessResponse
 }: WalletDepositProps): JSX.Element => {
     const [connectError, setConnectError] = useState<string | null>(null);
@@ -41,6 +42,7 @@ const DepositToken = ({
         onSuccess(data) {
             Logger.info(`contract-interaction-success-->`, { txId:data });
             console.info(`contract-interaction-success-->`, { txId:data });
+            disconnect();
             onSuccessResponse({ status:"completed", txId:data });
         },
         onError(error: any) {

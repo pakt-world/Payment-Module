@@ -21,7 +21,7 @@ const DepositToAddress = ({
     isLoading
 }: DepositToAddressProps): React.JSX.Element => {
     const [value, copy] = useCopyToClipboard();
-  console.log("islopppo", isLoading);
+    
     return (
         <div className="pam-flex pam-w-full pam-flex-col pam-gap-4 pam-max-sm:!pam-h-full pam-max-sm:pam-pb-[68px]">
             <p className="pam-text-center pam-text-sm pam-text-body">
