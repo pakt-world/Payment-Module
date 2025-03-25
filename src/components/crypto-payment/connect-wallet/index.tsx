@@ -6,7 +6,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { parseUnits } from "viem";
-import { useAccount, useConnect, useSwitchChain } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -35,6 +35,7 @@ const ConnectWallet = ({
         status,
     } = useAccount();
     const { connect, connectors, isPending:isConnecting, status:connectingStatus} = useConnect();
+    const { disconnect } = useDisconnect();
     const { switchChain } = useSwitchChain();
     const [selectedConnector, setSelectedConnector] = useState<
         ConnectorProps | undefined
@@ -122,6 +123,7 @@ const ConnectWallet = ({
                 disableButtonOnClick={disableButtonOnClick}
                 connect={connect}
                 onSuccessResponse={onSuccessResponse}
+                disconnect={disconnect}
               />
             ) : (
               <DepositCoin
@@ -135,6 +137,7 @@ const ConnectWallet = ({
                 connect={connect}
                 isDisabled={!selectedConnector || isConnecting || !!isLoading}
                 onSuccessResponse={onSuccessResponse}
+                disconnect={disconnect}
               />
             )}
         </div>

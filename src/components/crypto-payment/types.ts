@@ -90,6 +90,7 @@ interface WalletDepositProps {
     connect: ConnectMutate<Config, unknown>;
     showReconfirmButton?: boolean;
     disableButtonOnClick?: boolean;
+    disconnect: ()=>void;
     onSuccessResponse:(data: onFinishResponseProps) => void;
 }
 

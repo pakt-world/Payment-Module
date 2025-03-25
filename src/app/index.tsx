@@ -68,10 +68,12 @@ const App = () => {
 
     const wagmiConfig = createConfig({
       chains: [avalancheFuji],
-      connectors: [walletConnect({ 
-        projectId,
-        customStoragePrefix:"pakt-"
-      })],
+      connectors: [
+        walletConnect({ 
+          projectId,
+          customStoragePrefix:"pakt-"
+        }),
+      ],
       multiInjectedProviderDiscovery: true,
       transports,
       ssr:false,
@@ -114,7 +116,8 @@ const App = () => {
     return (
         <ConfigProvider
             config={{
-                baseURL: "http://192.168.0.179:9090/v1",
+                baseURL: "http://localhost:9090/v1",
+                // baseURL: "http://192.168.0.179:9090/v1",
                 publicKey:
                     "nzTjIkbjIeb19Pm76bAeIrF2sdZRByLjkL8VSJbRrwg6dtUdNZ5ZeOFds9",
                 clientId: "812773e0-6d93-4067-bb44-ad9eae2b0ba1",
