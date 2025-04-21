@@ -64,3 +64,4 @@ dist/
 #rollup analysis
 stats.html
 yarn.lock
+.npmrc
