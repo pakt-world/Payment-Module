@@ -1,10 +1,11 @@
 {
-    "name": "@pakt-world/payment-module",
+    "name": "@pakt/payment-module",
     "license": "MIT",
     "version": "0.1.4",
     "repository": "git://github.com/pakt-world/payment-module.git",
     "description": "",
     "author": "Pakt",
+    "private": false,
     "main": "dist/bundle-cjs/multi-entry.js",
     "module": "dist/bundle-es/multi-entry.js",
     "jsnext:main": "dist/bundle-es/multi-entry.js",
