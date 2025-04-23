@@ -11,18 +11,22 @@ import { ReactElement, useCallback, memo, useState, useEffect } from 'react';
 
 import { CryptoElements, OnrampElement, FINISHED_PAYMENT } from './context';
 import { StripeModalProps } from './type';
-import Modal from 'components/common/modal';
-import PaktWrapper from 'components/modal-wrapper';
-import Logger from 'lib/logger';
-import { IAny } from 'types';
-import { usePostStripeInitiate } from 'lib/api/payment';
-import { useConfig } from 'context/config-context';
+import Modal from '../../../components/common/modal';
+import PaktWrapper from '../../../components/modal-wrapper';
+import Logger from '../../../lib/logger';
+import { IAny } from '../../../types';
+import { usePostStripeInitiate } from '../../../lib/api/payment';
+import { useConfig } from '../../../context/config-context';
 
 const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse }:StripeModalProps): ReactElement => {
   Logger.info("open StripePaymentModal", { collectionId, isOpen, closeModal, onFinishResponse });
   const [clientSecret, setClientSecret] = useState("");
   const stripeMutate = usePostStripeInitiate();
   const { stripeConfig } = useConfig();
+
+  if (!stripeConfig) {
+    throw new Error("Stripe config is not found");
+  }
 
   const onChange = useCallback(({ session }: { session: IAny }) => {
     Logger.debug(`OnrampSession is now in ${session.status} state.`, { session });

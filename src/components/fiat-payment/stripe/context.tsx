@@ -10,7 +10,7 @@ import {loadStripeOnramp} from '@stripe/crypto';
 import { OnRampElementProps, OnRampProps, StripeContextProps } from './type';
 import { IAny } from 'types';
 import { OnrampSession, OnrampUIEventMap } from '@stripe/crypto';
-import { Spinner } from 'components/common';
+import { Spinner } from '../../../components/common';
 
 const FINISHED_PAYMENT = "fulfillment_complete";
 const UIReady =  "initialized";
