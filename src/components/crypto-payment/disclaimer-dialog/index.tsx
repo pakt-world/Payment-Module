@@ -10,7 +10,7 @@ import { X } from "lucide-react";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import Modal from "components/common/modal";
+import Modal from "../../../components/common/modal";
 
 
 const DisclaimerDialog = ({ isOpen, closeModal }: { isOpen: boolean; closeModal: () => void }): JSX.Element => {

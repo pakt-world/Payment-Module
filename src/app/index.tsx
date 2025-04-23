@@ -7,14 +7,14 @@ import { wagmi, connectors, chains } from "../";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { ConfigProvider } from "context/config-context";
-import MakeCryptoPaymentModal from "components/crypto-payment";
 import "../styles/index.scss";
-import { Button } from "components/common";
-import { StripePaymentModal } from "components/fiat-payment";
-import Logger from "lib/logger";
-import { onFinishResponseProps } from "types";
-import { getAxiosInstance } from "lib/axios-instance";
+import { ConfigProvider } from "../context/config-context";
+import MakeCryptoPaymentModal from "../components/crypto-payment";
+import { Button } from "../components/common";
+import { StripePaymentModal } from "../components/fiat-payment";
+import Logger from "../lib/logger";
+import { onFinishResponseProps } from "../types";
+import { getAxiosInstance } from "../lib/axios-instance";
 
 const { walletConnect } = connectors;
 const { avalanche, avalancheFuji  } = chains;

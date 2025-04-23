@@ -6,11 +6,11 @@
 
 import { type FC, Fragment, memo } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { cn } from "utils";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
+import { cn } from "../../utils";
 
 
 interface ModalProps {

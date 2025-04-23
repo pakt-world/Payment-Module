@@ -20,6 +20,6 @@
             "@/*": ["src/*"]
         }
     },
-    "include": ["src/**/*", "rename-types.ts", "global.d.ts", ".eslintrc.js", "rollup.config.mjs", "tailwind.config.ts"],
+    "include": ["src/**/*", "rename-types.ts", "global.d.ts", ".eslintrc.js", "vite.config.ts", "tailwind.config.ts", "test"],
     "exclude": ["node_modules", "dist"]
 }
