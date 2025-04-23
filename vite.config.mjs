@@ -56,7 +56,7 @@ export default defineConfig(({ command, mode }) => {
                 // Use the tsconfig file
                 tsconfigPath: './tsconfig.json',
                 // Exclude test and app files in production, similar to Rollup config
-                exclude: ['src/**/*.test.ts', 'src/**/*.spec.ts', 'src/test.tsx', 'src/app/index.tsx'],
+                exclude: ['node_modules/**','src/**/*.test.ts', 'src/**/*.spec.ts', 'src/test.tsx', 'src/app/index.tsx'],
                 // exclude: [
                 //     'node_modules/**',
                 //     'dist/**',
@@ -167,21 +167,17 @@ export default defineConfig(({ command, mode }) => {
         },
         // Development server configuration (replacing serve and livereload)
         server: {
-             host: '0.0.0.0',
-             port: 4234, // Match the old port
-             // open: '/src/app/index.html', // Optional: Open a specific file on start, adjust path as needed
-             // watch: {
-             //     // Optional: Fine-tune watched files
-             // },
+            host: '0.0.0.0',
+            port: 4234, // Match the old port
         },
         // Define global constants like process.env.NODE_ENV
         define: {
-          'process.env.NODE_ENV': JSON.stringify(mode),
+            'process.env.NODE_ENV': JSON.stringify(mode),
         },
         resolve: {
             alias: {
-              // Replicate tsconfig paths
-              '@': path.resolve(__dirname, './src'),
+                // Replicate tsconfig paths
+                '@': path.resolve(__dirname, './src'),
             },
         },
     };
