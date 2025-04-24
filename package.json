@@ -77,7 +77,7 @@
     },
     "files": [
         "dist",
-        "dist/style.css"
+        "dist/styles.css"
     ],
     "keywords": [],
     "peerDependencies": {
