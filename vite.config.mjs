@@ -36,7 +36,6 @@ const banner = `
    */
 `;
 
-
 export default defineConfig(({ command, mode }) => {
     const isProduction = mode === 'production';
 
