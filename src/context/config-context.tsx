@@ -11,28 +11,27 @@ import { structuralSharing } from '@wagmi/core/query';
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { setAxiosInstance } from "lib/axios-instance";
-import { setGlobalErrorHandler } from "lib/error-handler";
-import { applyTheme } from "utils";
-import { ITheme } from "types";
-import defaultTheme from "styles/default-theme";
+import { setAxiosInstance } from "../lib/axios-instance";
+import { setGlobalErrorHandler } from "../lib/error-handler";
+import { applyTheme } from "../utils";
+import { ITheme } from "../types";
+import defaultTheme from "../styles/default-theme";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../styles/index.scss";
 
 interface ConfigContextType {
+    wagmiConfig: Config
     axiosInstance?: AxiosInstance; // Optional Axios instance
     baseURL?: string; // Base URL for API requests
     queryClient?: QueryClient; // Optional React Query client
     wagmiProvider?: WagmiProviderProps // Optional React Wagmi Provider
-    publicKey?: string; // Optional publicKey
-    clientId?: string; // Optional clientId
-    token?: string; // Optional Bearer token
     timezone: string; //  Timezone
+    token: string;
+    publicKey: string;
+    clientId: string;
     errorHandler?: (errorMessage: string) => void; //  Callback to handle Error
     theme?: ITheme; // colors to theme the package
-    [key: string]: any; // You can extend with any other configs
-    wagmiConfig: Config
-    stripeConfig: {
+    stripeConfig?: {
       publicKey: string;
       theme?: "light" | "dark";
     };
@@ -61,7 +60,6 @@ interface WrappedWagmiComponentProps {
 
 const WrappedQueryComponent = ({ children, queryClient }: WrappedQueryComponentProps) => {
     // const { queryClient } = useConfig(); // Get the queryClient from config
-
     const [defaultQueryClient] = useState(
       () =>
         new QueryClient({
@@ -127,9 +125,9 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     return (
         <ConfigContext.Provider value={config}>
           <WrappedQueryComponent queryClient={config.queryClient}>
-             <WrappedWagmiProvider wagmiProvider={config.wagmiProvider} wagmiConfig={config.wagmiConfig}>
+            <WrappedWagmiProvider wagmiProvider={config.wagmiProvider} wagmiConfig={config.wagmiConfig}>
                 {children}
-              </WrappedWagmiProvider>
+            </WrappedWagmiProvider>
             </WrappedQueryComponent>
             <Toaster
                 position="top-right"

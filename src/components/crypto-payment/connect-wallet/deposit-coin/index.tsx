@@ -10,10 +10,10 @@ import { type ConnectMutate } from "wagmi/query";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { Button, Spinner, toast } from "components/common";
+import { Button, Spinner, toast } from "../../../../components/common";
 import type { I0xType, ConnectorProps } from "../../types";
-import type { IAny, onFinishResponseProps } from "types";
-import Logger from "lib/logger";
+import type { IAny, onFinishResponseProps } from "../../../../types";
+import Logger from "../../../../lib/logger";
 
 interface WalletDepositProps {
     isLoading: boolean;

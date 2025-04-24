@@ -4,7 +4,11 @@
 
 import { type FC } from "react";
 import { Loader } from "lucide-react";
-import { cn } from "utils";
+
+/* -------------------------------------------------------------------------- */
+/*                             Internal Dependency                            */
+/* -------------------------------------------------------------------------- */
+import { cn } from "../../utils";
 
 interface SpinnerProps {
     size?: number;

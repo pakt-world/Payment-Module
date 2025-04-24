@@ -65,7 +65,7 @@ const ConnectWallet = ({
 
     // Handle button disable timeout state
     useEffect(() => {
-        let timeoutId: NodeJS.Timeout;
+        let timeoutId: number;
         if (disableButtonOnClick) {
             timeoutId = setTimeout(() => {
                 setDisableButtonOnClick(false);
