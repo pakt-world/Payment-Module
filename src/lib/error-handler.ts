@@ -2,7 +2,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import { toast } from "components/common/toaster";
+import { toast } from "../components/common/toaster";
 
 let globalErrorHandler: (errorMessage: string) => void = (message: string) => {
     toast.error(message);

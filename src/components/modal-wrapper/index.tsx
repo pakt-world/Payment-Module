@@ -10,7 +10,7 @@ import { useMediaQuery } from "usehooks-ts";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import PoweredByPakt from "components/powdered-by-pakt";
+import PoweredByPakt from "../../components/powdered-by-pakt";
 
 
 const PaktWrapper = ({ children, showPakt, closeModal }: { children: ReactNode, showPakt?:boolean, closeModal?: () => void }) => {
