@@ -24,6 +24,12 @@ bun add @pakt/payment-module
 
 Wrap your application or the relevant part of your component tree with the `ConfigProvider`. This provider initializes necessary contexts, libraries (like React Query and Wagmi if not provided externally), and global settings.
 
+**Important:** You also need to import the module's stylesheet for components to render correctly. Import it in your main application entry point (e.g., `main.tsx` or `App.tsx`):
+
+```typescript
+import '@pakt/payment-module/dist/styles.css';
+```
+
 ```typescript
 import React from 'react';
 import { ConfigProvider, ConfigContextType } from '@pakt/payment-module';
@@ -31,6 +37,9 @@ import { QueryClient } from '@tanstack/react-query'; // Optional: Provide your o
 import { createConfig, http } from 'wagmi'; // Import Wagmi config setup
 import { mainnet, sepolia } from 'wagmi/chains'; // Import desired chains
 import { injected } from 'wagmi/connectors'; // Import desired connectors
+
+// Import the stylesheet
+import '@pakt/payment-module/dist/style.css';
 
 // 1. Create your Wagmi config
 const wagmiConfig = createConfig({
