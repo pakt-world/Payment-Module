@@ -43,7 +43,7 @@ const WalletConnectorList: FC<WalletConnectListType> = ({
                         onClick={() => {
                             setSelectedConnector(connector);
                         }}
-                        className={`pam-flex pam-items-center pam-justify-between pam-rounded-2xl pam-border pam-border-[#DFDFE6] pam-p-1 pam-px-4 pam-py-3 pam-text-left hover:pam-border-blue-darkest hover:!pam-border-opacity-30 disabled:pam-cursor-not-allowed disabled:pam-opacity-50 ${
+                        className={`pam-flex pam-items-center pam-justify-between pam-rounded-2xl pam-border pam-border-[#DFDFE6] pam-p-1 pam-px-4 pam-py-3 pam-text-left hover:pam-border-blue-darkest hover:!pam-border-opacity-30 disabled:pam-cursor-not-allowed disabled:pam-opacity-50 pam-text-body ${
                             isActive
                                 ? "pam-border-blue-darkest !pam-border-opacity-60 pam-bg-blue-lightest pam-bg-opacity-50 pam-text-blue-darkest"
                                 : "pam-border-[#DFDFE6]"
