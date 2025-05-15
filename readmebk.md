@@ -1,22 +1,14 @@
 # @pakt/payment-module
 
-This package provides React components for handling both fiat and cryptocurrency payments within Pakt applications. It integrates with Stripe for fiat payments and Wagmi v2 for crypto payments.
+This package provides React components for handling both fiat and cryptocurrency payments within Pakt applications. It integrates with Stripe for fiat payments and Wagmi for crypto payments.
 
 ## Features
 
 *   **Fiat Payments:** Uses Stripe Elements for secure credit card processing.
-*   **Crypto Payments:** Integrates with Wagmi v2 for connecting wallets and initiating transactions.
-*   **UI Components:** 
-  - Payment modals and forms
-  - QR code generation for crypto payments
-  - Loading states and skeletons
-  - Toast notifications
-  - Rich text editor (Quill)
-*   **State Management:** Uses Zustand for global state and TanStack Query for data fetching
-*   **Styling:** Built with Tailwind CSS, Radix UI primitives, and Framer Motion for animations
-*   **Form Handling:** React Hook Form with Zod validation
-*   **TypeScript:** Fully typed components and utilities
-*   **Modern Stack:** React 18+, Vite, modern ES modules
+*   **Crypto Payments:** Integrates with Wagmi for connecting wallets and initiating transactions. Includes a payment modal.
+*   **Configurable:** Requires a configuration provider to set up API details, theming, and integrations.
+*   **Theming:** Supports custom themes to match your application's style.
+*   **Built with:** React, TypeScript, Tailwind CSS, Radix UI, Zustand, TanStack Query, Wagmi.
 
 ## Installation
 
@@ -49,7 +41,7 @@ import { injected } from 'wagmi/connectors'; // Import desired connectors
 // Import the stylesheet
 import '@pakt/payment-module/dist/style.css';
 
-// 1. Create your Wagmi config (v2)
+// 1. Create your Wagmi config
 const wagmiConfig = createConfig({
   chains: [mainnet, sepolia],
   connectors: [injected()],
@@ -165,6 +157,31 @@ function MyCryptoPaymentTrigger() {
 ```
 *Note: The exact props for `CryptoPaymentModal` need to be checked in the source code (`src/components/crypto-payment`).*
 
+### Accessing Config
+
+You can access the provided configuration within components wrapped by `ConfigProvider`:
+
+```typescript
+import { useConfig } from '@pakt/payment-module';
+
+function MyComponent() {
+  const config = useConfig();
+
+  // Use config.baseURL, config.token, config.customConfigKey, etc.
+  console.log('API Base URL:', config.baseURL);
+
+  return <div>My Component using config</div>;
+}
+```
+
+## Development
+
+*   **Install Dependencies:** `yarn install` or `npm install` or `bun install`
+*   **Lint:** `yarn lint`
+*   **Format:** `yarn format`
+*   **Build:** `yarn build`
+*   **Run Development Server:** `yarn dev` (uses Rollup with watch mode and potentially live reload)
+*   **Test:** `yarn test` (Note: Jest setup might need configuration)
 
 ## Contributing
 
