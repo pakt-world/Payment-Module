@@ -4,22 +4,10 @@ This package provides React components for handling both fiat and cryptocurrency
 
 ## Features
 
-*   **Fiat Payments:** Uses Stripe Elements for secure credit card processing.
+*   **Fiat Payments:** Uses Stripe Elements for secure credit card processing and onramp.
 *   **Crypto Payments:** Integrates with Wagmi v2 for connecting wallets and initiating transactions.
-*   **UI Components:** 
-  - Payment modals and forms
-  - QR code generation for crypto payments
-  - Loading states and skeletons
-  - Toast notifications
-  - Rich text editor (Quill)
-*   **State Management:** Uses Zustand for global state and TanStack Query for data fetching
-*   **Styling:** Built with Tailwind CSS, Radix UI primitives, and Framer Motion for animations
-*   **Form Handling:** React Hook Form with Zod validation
-*   **TypeScript:** Fully typed components and utilities
-*   **Modern Stack:** React 18+, Vite, modern ES modules
 
 ## Installation
-
 ```bash
 yarn add @pakt/payment-module
 # or
@@ -30,9 +18,7 @@ bun add @pakt/payment-module
 
 ## Setup
 
-Wrap your application or the relevant part of your component tree with the `ConfigProvider`. This provider initializes necessary contexts, libraries (like React Query and Wagmi if not provided externally), and global settings.
-
-**Important:** You also need to import the module's stylesheet for components to render correctly. Import it in your main application entry point (e.g., `main.tsx` or `App.tsx`):
+**Important:** You need to import the module's stylesheet for components to render correctly. Import it in your main application entry point (e.g., `main.tsx` or `App.tsx`):
 
 ```typescript
 import '@pakt/payment-module/dist/styles.css';
@@ -40,14 +26,11 @@ import '@pakt/payment-module/dist/styles.css';
 
 ```typescript
 import React from 'react';
-import { ConfigProvider, ConfigContextType } from '@pakt/payment-module';
-import { QueryClient } from '@tanstack/react-query'; // Optional: Provide your own client
+import { ConfigContextType } from '@pakt/payment-module';
+
 import { createConfig, http } from 'wagmi'; // Import Wagmi config setup
 import { mainnet, sepolia } from 'wagmi/chains'; // Import desired chains
 import { injected } from 'wagmi/connectors'; // Import desired connectors
-
-// Import the stylesheet
-import '@pakt/payment-module/dist/style.css';
 
 // 1. Create your Wagmi config (v2)
 const wagmiConfig = createConfig({
@@ -61,84 +44,64 @@ const wagmiConfig = createConfig({
 
 // 2. Define your Pakt Payment Module config
 const paymentModuleConfig: ConfigContextType = {
-  baseURL: 'YOUR_API_BASE_URL', // Your backend API base URL
-  token: 'YOUR_AUTH_TOKEN', // Optional: Authentication token if needed for your API calls
-  timezone: 'UTC', // User's timezone or a default
-  // Optional: Provide your own React Query client
-  // queryClient: new QueryClient(),
-  // Optional: Provide custom error handling
-  // errorHandler: (errorMsg) => console.error("Payment Module Error:", errorMsg),
   // Optional: Customize the theme
-  // theme: { primaryColor: '#ff0000', ... },
-  // Wagmi configuration is required
-  wagmiConfig: wagmiConfig,
-  // Stripe configuration is required
+  theme: { primaryColor: '#ff0000', ... },
+   // crypto configuration is required for crypto payments
+  cryptoConfig:{
+    wagmiConfig: wagmiConfig,
+  },
+  // stripe configuration is required for fiat payments
   stripeConfig: {
     publicKey: 'YOUR_STRIPE_PUBLIC_KEY',
+    clientSecret: 'YOUR_STRIPE_CLIENT_SECRET', 
     theme: 'light', // Optional: 'light' or 'dark'
   },
-  // Optional: Add any other custom config your app needs via the context
-  // customConfigKey: 'customValue',
+  // Optional: Provide custom error handling
+  errorHandler: (errorMsg) => console.error("Payment Module Error:", errorMsg),
 };
 
-function App() {
-  return (
-    <ConfigProvider config={paymentModuleConfig}>
-      {/* Your application components */}
-      {/* <MyPaymentComponent /> */}
-    </ConfigProvider>
-  );
-}
-
-export default App;
+export default paymentModuleConfig;
 ```
 
 **Configuration Options (`ConfigContextType`):**
 
-*   `axiosInstance?: AxiosInstance`: Provide a pre-configured Axios instance.
-*   `baseURL?: string`: Base URL for internal API requests made by the module.
-*   `queryClient?: QueryClient`: Provide a TanStack Query client instance. If not provided, the module creates its own.
-*   `wagmiProvider?: WagmiProviderProps`: Provide Wagmi provider props. If not provided, the module wraps children with `<WagmiProvider>`.
-*   `publicKey?: string`: Optional public key (purpose might be specific to Pakt API).
-*   `clientId?: string`: Optional client ID (purpose might be specific to Pakt API).
-*   `token?: string`: Optional Bearer token for authenticating internal API calls.
-*   `timezone: string`: **Required.** User's timezone string (e.g., 'America/New_York', 'UTC').
 *   `errorHandler?: (errorMessage: string) => void`: Optional callback function to handle errors originating from the module.
-*   `theme?: ITheme`: Optional theme object to customize component appearance. See `src/styles/default-theme.ts` for structure.
-*   `wagmiConfig: Config`: **Required.** Your Wagmi configuration object.
-*   `stripeConfig: { publicKey: string; theme?: "light" | "dark"; }`: **Required.** Your Stripe public key and optional theme setting for Stripe Elements.
+*   `theme?: ITheme`: Optional theme object to customize component appearance.
+*   `cryptoConfig: { wagmiConfig: Config }`: **Required for crypto payments.** Your Wagmi v2 configuration object.
+*   `stripeConfig: { publicKey: string; clientSecret: string; theme?: "light" | "dark"; }`: **Required for fiat payments.** Your Stripe configuration including public key, client secret, and optional theme setting.
 
 ## Usage
-
-Once the `ConfigProvider` is set up, you can use the exported components:
-
 ### Fiat Payments
 
 ```typescript
-import { FiatPayment } from '@pakt/payment-module';
+import { FiatPaymentModal } from '@pakt/payment-module';
+import { useDisclosure } from '@your-ui-library/hooks'; // Example hook for modal state
 
 function MyFiatPaymentPage() {
-  const handleSuccess = (paymentIntent) => {
-    console.log('Fiat payment successful:', paymentIntent);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSuccess = (data: onFinishResponseProps) => {
+    console.log('Fiat payment successful:', data);
     // Handle successful payment (e.g., show success message, redirect)
   };
 
-  const handleError = (error) => {
-    console.error('Fiat payment error:', error);
-    // Handle payment error
-  };
-
   return (
-    <FiatPayment
-      clientSecret="pi_xxxxxxxx_secret_xxxxxxxx" // The client secret from your backend payment intent creation
-      onSuccess={handleSuccess}
-      onError={handleError}
-      // Add other props as needed based on the component's definition
-    />
+    <>
+      <button onClick={onOpen}>Pay with Card</button>
+      <FiatPaymentModal
+        isOpen={isOpen}
+        closeModal={onClose}
+        collectionId="your-collection-id"
+        config={paymentModuleConfig}
+        chain="ETH"
+        onFinishResponse={handleSuccess}
+        isLoading={isLoading}
+      />
+    </>
   );
 }
 ```
-*Note: You need a backend endpoint to create a Stripe Payment Intent and return its `client_secret`.*
 
 ### Crypto Payments
 
@@ -147,24 +110,84 @@ import { CryptoPaymentModal } from '@pakt/payment-module';
 import { useDisclosure } from '@your-ui-library/hooks'; // Example hook for modal state
 
 function MyCryptoPaymentTrigger() {
-  const { isOpen, onOpen, onClose } = useDisclosure(); // Or manage modal state differently
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSuccess = (data: onFinishResponseProps) => {
+    console.log('Payment successful:', data);
+    // Handle successful payment
+  };
 
   return (
     <>
       <button onClick={onOpen}>Pay with Crypto</button>
       <CryptoPaymentModal
         isOpen={isOpen}
-        onClose={onClose}
-        // Add other required props for the crypto payment modal
-        // (e.g., amount, currency, recipient address, onSuccess, onError)
-        // Check the component definition in 'src/components/crypto-payment' for details.
+        closeModal={onClose}
+        config={paymentModuleConfig}
+        collectionId="your-collection-id"
+        amount={0.1} // Amount to pay in the token's base unit
+        coin="ETH" // Token symbol (e.g., "ETH", "USDT")
+        depositAddress="0x..." // Recipient wallet address
+        chainId={1} // Network chain ID (e.g., 1 for Ethereum mainnet)
+        tokenDecimal={18} // Token decimals (e.g., 18 for ETH, 6 for USDT)
+        contractAddress="0x..." // Optional: Token contract address for ERC20 tokens
+        onSuccessResponse={handleSuccess}
+        isLoading={isLoading}
       />
     </>
   );
 }
 ```
-*Note: The exact props for `CryptoPaymentModal` need to be checked in the source code (`src/components/crypto-payment`).*
 
+Required Props for FiatPaymentModal:
+* `isOpen`: boolean - Controls modal visibility
+* `closeModal`: () => void - Function to close the modal
+* `collectionId`: string - Your collection identifier
+* `config`: ConfigContextType - Your payment module configuration
+* `chain`: CHAIN_TYPES - Chain type for the payment
+* `onFinishResponse`: (data: onFinishResponseProps) => void - Callback for successful payment
+
+Optional Props for FiatPaymentModal:
+* `isLoading`: boolean - Loading state
+
+Required Props for CryptoPaymentModal:
+* `isOpen`: boolean - Controls modal visibility
+* `closeModal`: () => void - Function to close the modal
+* `config`: ConfigContextType - Your payment module configuration
+* `collectionId`: string - Your collection identifier
+* `amount`: number - Amount to pay in the token's base unit
+* `coin`: string - Token symbol (e.g., "ETH", "USDT")
+* `depositAddress`: string - Recipient wallet address
+* `chainId`: number - Network chain ID (e.g., 1 for Ethereum mainnet)
+* `tokenDecimal`: number - Token decimals (e.g., 18 for ETH, 6 for USDT)
+* `onSuccessResponse`: (data: onFinishResponseProps) => void - Callback for successful payment
+
+Optional Props for CryptoPaymentModal:
+* `contractAddress`: string - Token contract address for ERC20 tokens
+* `isLoading`: boolean - Loading state
+
+## Configuration
+
+The module requires a configuration object of type `ConfigContextType` that includes:
+
+```typescript
+interface ConfigContextType {
+  // Required configurations
+  cryptoConfig: {
+    wagmiConfig: Config; // Your Wagmi v2 configuration
+    theme?: "light" | "dark";
+    publicKey: string; // Your Pakt public key
+  };
+  stripeConfig: {
+    publicKey: string; // Your Stripe public key
+    clientSecret?: string; // Optional: Client secret for payment intent
+    theme?: "light" | "dark";
+  };
+  errorHandler?: (errorMessage: string) => void; // Custom error handler
+  theme?: ITheme; // Custom theme object
+}
+```
 
 ## Contributing
 

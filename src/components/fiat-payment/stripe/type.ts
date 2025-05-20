@@ -1,4 +1,5 @@
 import type { OnrampAppearanceOptions, StripeOnramp } from "@stripe/crypto";
+import { ConfigContextType } from "context/type";
 import { ReactNode } from "react";
 import { BasicModalProps, IAny, onFinishResponseProps } from "types";
 
@@ -6,10 +7,12 @@ type CHAIN_TYPES = "avalanche";
 
 interface StripeConfig {
   publicKey: string;
+  clientSecret: string;
   theme?: "dark" | "light";
 }
 
 interface StripeModalProps extends BasicModalProps {
+  config: ConfigContextType;
   chain: CHAIN_TYPES;
   onFinishResponse: (data:onFinishResponseProps)=> void;
   isLoading?:boolean;
@@ -26,6 +29,7 @@ interface OnRampProps {
 }
 interface OnRampElementProps extends Record<string, IAny> {
   clientSecret: string;
+  config: ConfigContextType;
   appearance?: OnrampAppearanceOptions;
   isLoading?: boolean;
 }

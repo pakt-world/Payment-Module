@@ -7,6 +7,7 @@ import { StrictOmit, ExactPartial } from "@wagmi/core/dist/types/types/utils";
 import { type ConnectMutate } from "wagmi/query";
 
 import { BasicModalProps, IAny, onFinishResponseProps } from "types";
+import { ConfigContextType } from "../../context/type";
 
 interface ConnectorProps {
     connect: () => Promise<{
@@ -50,6 +51,7 @@ interface WalletConnectListType {
 }
 
 interface CryptoPaymentModalProps extends BasicModalProps {
+    config: ConfigContextType;
     amount: number;
     depositAddress: string;
     coin: string;
@@ -61,6 +63,7 @@ interface CryptoPaymentModalProps extends BasicModalProps {
 }
 
 interface CryptoPayWithWalletProps {
+    coin: string;
     amount: number;
     depositAddress: string;
     contractAddress?: string;

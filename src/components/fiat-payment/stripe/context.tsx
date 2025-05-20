@@ -3,14 +3,15 @@
 /* -------------------------------------------------------------------------- */
 import React, { useMemo } from 'react';
 import {loadStripeOnramp} from '@stripe/crypto';
+import { OnrampSession, OnrampUIEventMap } from '@stripe/crypto';
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { OnRampElementProps, OnRampProps, StripeContextProps } from './type';
 import { IAny } from 'types';
-import { OnrampSession, OnrampUIEventMap } from '@stripe/crypto';
 import { Spinner } from '../../../components/common';
+import { ConfigProvider } from '../../../context/config-context';
 
 const FINISHED_PAYMENT = "fulfillment_complete";
 const UIReady =  "initialized";
@@ -79,6 +80,7 @@ const OnrampElement = ({
   appearance,
   onChange,
   isLoading,
+  config,
   ...props
 }: OnRampElementProps) => {
   const stripeOnramp = useStripeOnramp();
@@ -114,10 +116,12 @@ const OnrampElement = ({
   useOnrampSessionListener(LISTER_ON_CHANGE, session as OnrampSession, onChange);
 
   return (
-  <>
+  <ConfigProvider
+    config={config}
+  >
     {(!isReady || isLoading)&& <Spinner size={30} className="pam-text-white" />}
     <div {...props} ref={onrampElementRef}></div>
-  </>
+  </ConfigProvider>
   );
 };
 

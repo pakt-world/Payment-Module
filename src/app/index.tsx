@@ -2,19 +2,16 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { useState } from "react";
-import { wagmi, connectors, chains } from "../";
+import { wagmi, connectors, chains, ConfigContextType, CryptoPaymentModal, FiatPaymentModal } from "../";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import "../styles/index.scss";
-import { ConfigProvider } from "../context/config-context";
-import MakeCryptoPaymentModal from "../components/crypto-payment";
 import { Button } from "../components/common";
-import { StripePaymentModal } from "../components/fiat-payment";
 import Logger from "../lib/logger";
 import { onFinishResponseProps } from "../types";
-import { getAxiosInstance } from "../lib/axios-instance";
+import axios from "axios";
 
 const { walletConnect } = connectors;
 const { avalanche, avalancheFuji  } = chains;
@@ -35,11 +32,32 @@ interface MakePaymentResponse {
   contractAddress: string;
 }
 
+const projectId = "810bdecb2f7f8d4bd3c732d2862df787";
+
+const transports = {
+  [avalanche.id]: http(),
+  [avalancheFuji.id]: http(),
+};
+
+const wagmiConfig = createConfig({
+  chains: [avalancheFuji],
+  connectors: [
+    walletConnect({ 
+      projectId,
+      customStoragePrefix:"pakt-"
+    }),
+  ],
+  multiInjectedProviderDiscovery: true,
+  transports,
+  ssr:false,
+  syncConnectedChain: true
+});
+
 const App = () => {
     const [openCryptoModal, setOpenCryptoModal] = useState(false);
     const [openFiatModal, setOpenFiatModal] = useState(false);
     const [pKey, setPKey] = useState("");
-    const projectId = "810bdecb2f7f8d4bd3c732d2862df787";
+    const [clientSecret, setClientSecret] = useState("");
     
     const [payData, setPayData] = useState<MakePaymentResponse>({
       address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
@@ -60,32 +78,32 @@ const App = () => {
     const [token, setToken] = useState("");
     const [collectionId, setCollectionId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    const transports = {
-      [avalanche.id]: http(),
-      [avalancheFuji.id]: http(),
-    };
-
-    const wagmiConfig = createConfig({
-      chains: [avalancheFuji],
-      connectors: [
-        walletConnect({ 
-          projectId,
-          customStoragePrefix:"pakt-"
-        }),
-      ],
-      multiInjectedProviderDiscovery: true,
-      transports,
-      ssr:false,
-      syncConnectedChain: true
+    
+    const axiosInstance = axios.create({
+      baseURL: "http://localhost:9090/v1",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
     });
 
+
     const fetchCollectionData = async () => {
-      const axios = getAxiosInstance();
-      const respData = await axios.post("/payment",{coin: "USDC", collection: collectionId});
+      const respData = await axiosInstance.post(`/payment`, { 
+        coin: "USDC", collection: collectionId
+      });
       const payD = respData.data?.data as MakePaymentResponse;
       setPayData({ ...payD });
       return respData;
+    }
+
+    const onStripPay = async () => {
+      const respData = await axiosInstance.post(`/payment/stripe/initiate`, {
+        collection: collectionId
+      });
+      console.log("respData", respData);
+      setClientSecret(respData.data?.data?.client_secret);
+      return await fetchCollectionData();
     }
 
     const onSuccessResponse = (data: onFinishResponseProps) => {
@@ -113,23 +131,21 @@ const App = () => {
       return true;
     }
 
+    const config: ConfigContextType = {
+      cryptoConfig: {
+        wagmiConfig: wagmiConfig,
+        theme: "dark",
+        publicKey: "nzTjIkbjIeb19Pm76bAeIrF2sdZRByLjkL8VSJbRrwg6dtUdNZ5ZeOFds9",
+      },
+      stripeConfig: {
+        publicKey: pKey,
+        clientSecret: clientSecret,
+        theme: "dark",
+      }
+    };
+
     return (
-        <ConfigProvider
-            config={{
-                baseURL: "http://localhost:9090/v1",
-                // baseURL: "http://192.168.0.179:9090/v1",
-                publicKey:
-                    "nzTjIkbjIeb19Pm76bAeIrF2sdZRByLjkL8VSJbRrwg6dtUdNZ5ZeOFds9",
-                clientId: "812773e0-6d93-4067-bb44-ad9eae2b0ba1",
-                token,
-                timezone: "America/New_York",
-                wagmiConfig: wagmiConfig,
-                stripeConfig: {
-                  publicKey: pKey,
-                  theme: "dark",
-                }
-            }}
-        >
+        <div>
             <div className="pam-circular-std-regular">
               <div className="pam-flex pam-h-screen pam-justify-center pam-items-center">
                 <div className="pam-flex pam-flex-col pam-border pam-rounded-2xl pam-w-[600px] pam-p-8 pam-mx-auto pam-my-auto pam-gap-4">
@@ -171,7 +187,7 @@ const App = () => {
                             async () =>{
                               const ready = toggleModal();
                               if (ready){
-                                const sucDa = await fetchCollectionData();
+                                const sucDa = await onStripPay();
                                 if (sucDa){
                                   setOpenFiatModal(true)
                                 }
@@ -185,7 +201,7 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <MakeCryptoPaymentModal 
+            <CryptoPaymentModal 
               isOpen={openCryptoModal}
               closeModal={()=>setOpenCryptoModal(false)}
               collectionId={collectionId}
@@ -197,16 +213,18 @@ const App = () => {
               contractAddress={payData.contractAddress}
               onSuccessResponse={onSuccessResponse}
               isLoading={isLoading}
+              config={config}
             />
-            <StripePaymentModal
-              isOpen={openFiatModal}
-              closeModal={()=>setOpenFiatModal(false)}
+            <FiatPaymentModal
+              config={config}
               collectionId={collectionId}
+              isOpen={openFiatModal}
               chain="avalanche"
-              onFinishResponse={onSuccessResponse}
               isLoading={isLoading}
+              closeModal={()=>setOpenFiatModal(false)}
+              onFinishResponse={onSuccessResponse}
             />
-        </ConfigProvider>
+        </div>
     );
 };
 

@@ -45,7 +45,7 @@ const DepositToAddress = ({
                 </span>
 
                 <button
-                    className="pam-flex pam-shrink-0 pam-items-center pam-gap-1 pam-rounded-lg pam-border pam-border-blue-darkest !pam-border-opacity-80 pam-bg-blue-lightest pam-px-3 pam-py-2 pam-text-xs pam-text-blue-darkest !pam-text-opacity-80"
+                    className="pam-flex pam-shrink-0 pam-items-center pam-gap-1 pam-rounded-lg pam-border pam-border-primary !pam-border-opacity-80 pam-bg-transparent pam-px-3 pam-py-2 pam-text-xs pam-text-primary !pam-text-opacity-80"
                     onClick={async () => copy(depositAddress)}
                     type="button"
                 >

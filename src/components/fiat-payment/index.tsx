@@ -3,8 +3,8 @@
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import StripePaymentModal from "./stripe";
+import FiatPaymentModal from "./stripe";
 
 export {
-  StripePaymentModal
+  FiatPaymentModal
 }

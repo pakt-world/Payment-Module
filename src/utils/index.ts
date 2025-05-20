@@ -5,37 +5,18 @@
 import { twMerge } from "tailwind-merge";
 import { type ClassValue, clsx } from "clsx";
 import CryptoJS from "crypto-js";
-// import dayjs from "dayjs";
-// import dayjsTimezone from "dayjs/plugin/timezone";
-// import dayjsUtc from "dayjs/plugin/utc";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { IGetRequestSignatureParam, IGetRequestSignature, ITheme } from "../types";
+import { ITheme } from "../types";
+const isProductionEnvironment = true;
 
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
-const isProductionEnvironment = true;
 
 
-const getRequestSignature = ({
-  url,
-  publicKey,
-  clientId,
-}: IGetRequestSignatureParam): IGetRequestSignature => {
-  const timestamp = Date.now();
-  const payload = {
-      url,
-      "time-stamp": String(timestamp),
-      "client-id": clientId,
-  };
-  const dataStr = JSON.stringify(payload);
-  const hash = CryptoJS.HmacSHA256(dataStr, String(publicKey));
-  const signature = hash.toString();
-  return { signature, timeStamp: String(timestamp) };
-};
 
 const applyTheme = (theme: ITheme) => {
   const root = document.documentElement;
@@ -57,7 +38,6 @@ const sleep = (milliseconds: number) => {
 export {
   cn,
   isProductionEnvironment,
-  getRequestSignature,
   applyTheme,
   sleep,
 }

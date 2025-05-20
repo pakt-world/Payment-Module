@@ -1,8 +1,11 @@
 /* -------------------------------------------------------------------------- */
-/*                             External Dependency                            */
+/*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
+import { ConfigContextType } from "./context/type";
+
 
 interface BasicModalProps {
+  config: ConfigContextType;
   isOpen: boolean;
   closeModal: () => void;
   collectionId: string;
@@ -18,10 +21,8 @@ type I0xAddressType = `0x${string}`;
 
 interface ITheme extends Record<string, any> {
   primary?: string;
-  info?: string;
   secondary?: string;
-  "blue-lightest"?: string;
-  "blue-darkest"?: string;
+  info?: string;
   line?: string;
   title?: string;
   body?: string;
@@ -37,25 +38,10 @@ interface ITheme extends Record<string, any> {
   "modal-radius"?: string;
 }
 
-
-interface IGetRequestSignature {
-  signature: string;
-  timeStamp: string;
-}
-
-interface IGetRequestSignatureParam {
-  url: string;
-  publicKey: string;
-  clientId: string;
-}
-
-
 export {
   IAny,
   I0xAddressType,
   type BasicModalProps,
   type onFinishResponseProps,
   type ITheme,
-  type IGetRequestSignature,
-  type IGetRequestSignatureParam
 }

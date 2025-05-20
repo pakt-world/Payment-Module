@@ -26,7 +26,8 @@ const ConnectWallet = ({
     chainId,
     tokenDecimal,
     onSuccessResponse,
-    isLoading
+    isLoading,
+    coin
 }: CryptoPayWithWalletProps): JSX.Element => {
     const {
         chain,
@@ -74,9 +75,6 @@ const ConnectWallet = ({
         return () => clearTimeout(timeoutId);
     }, [disableButtonOnClick]);
 
-    // Logger.info("Account Status ===>>>", { status, isLoading, isConnecting, disableButtonOnClick, connectingStatus });
-    // Logger.info("Selected Connector ===>>>", { selectedConnector, isToken, activeConnector, contractAddress, amount, tokenDecimal });
-
     return (
         <div className="pam-flex pam-flex-col pam-gap-8">
             <p className="pam-text-center pam-text-sm pam-text-body">
@@ -92,6 +90,13 @@ const ConnectWallet = ({
                     terms of services.
                 </button>
             </p>
+
+            <div className="pam-flex pam-items-center pam-justify-between pam-gap-2 pam-rounded-2xl pam-border pam-border-primary pam-bg-secondary pam-px-4 pam-py-6 pam-text-primary pam-max-sm:pam-h-[43px]">
+                <span className="pam-text-lg">Total Amount:</span>
+                <span className="pam-text-lg pam-font-bold">
+                    {amount} {coin.toUpperCase()}
+                </span>
+            </div>
             
             <DisclaimerDialog
               isOpen={showDisclaimer}

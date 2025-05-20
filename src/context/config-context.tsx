@@ -2,7 +2,6 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import React, { createContext, useContext, ReactNode, useEffect, useState } from "react";
-import { type AxiosInstance } from "axios";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider, type Config, type WagmiProviderProps } from "wagmi";
@@ -11,31 +10,13 @@ import { structuralSharing } from '@wagmi/core/query';
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { setAxiosInstance } from "../lib/axios-instance";
 import { setGlobalErrorHandler } from "../lib/error-handler";
 import { applyTheme } from "../utils";
-import { ITheme } from "../types";
 import defaultTheme from "../styles/default-theme";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../styles/index.scss";
+import { ConfigContextType } from "./type";
 
-interface ConfigContextType {
-    wagmiConfig: Config
-    axiosInstance?: AxiosInstance; // Optional Axios instance
-    baseURL?: string; // Base URL for API requests
-    queryClient?: QueryClient; // Optional React Query client
-    wagmiProvider?: WagmiProviderProps // Optional React Wagmi Provider
-    timezone: string; //  Timezone
-    token: string;
-    publicKey: string;
-    clientId: string;
-    errorHandler?: (errorMessage: string) => void; //  Callback to handle Error
-    theme?: ITheme; // colors to theme the package
-    stripeConfig?: {
-      publicKey: string;
-      theme?: "light" | "dark";
-    };
-}
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
@@ -59,7 +40,6 @@ interface WrappedWagmiComponentProps {
 }
 
 const WrappedQueryComponent = ({ children, queryClient }: WrappedQueryComponentProps) => {
-    // const { queryClient } = useConfig(); // Get the queryClient from config
     const [defaultQueryClient] = useState(
       () =>
         new QueryClient({
@@ -88,7 +68,6 @@ const WrappedQueryComponent = ({ children, queryClient }: WrappedQueryComponentP
 };
 
 const WrappedWagmiProvider  = ({ children, wagmiProvider, wagmiConfig  }: WrappedWagmiComponentProps) => {
-  // const { wagmiProvider, wagmiConfig } = useConfig(); // Get the queryClient from config
 
   // Conditionally create a fallback QueryClient only if queryClient is not provided
   return wagmiProvider ? (
@@ -112,9 +91,6 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     children,
 }) => {
     useEffect(() => {
-        localStorage.setItem("u53r_71m3z0n3_iop", JSON.stringify(config.timezone));
-        setAxiosInstance(config); // Set the Axios instance globally
-
         if (config?.errorHandler) {
             setGlobalErrorHandler(config.errorHandler);
         }
@@ -124,8 +100,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
 
     return (
         <ConfigContext.Provider value={config}>
-          <WrappedQueryComponent queryClient={config.queryClient}>
-            <WrappedWagmiProvider wagmiProvider={config.wagmiProvider} wagmiConfig={config.wagmiConfig}>
+          <WrappedQueryComponent queryClient={config.cryptoConfig?.queryClient}>
+            <WrappedWagmiProvider wagmiProvider={config.cryptoConfig?.wagmiProvider} wagmiConfig={config.cryptoConfig?.wagmiConfig as Config}>
                 {children}
             </WrappedWagmiProvider>
             </WrappedQueryComponent>
@@ -138,6 +114,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     );
 };
 
-export { useConfig, ConfigProvider, ConfigContextType };
-
-export default ConfigProvider;
+export { 
+    useConfig,
+    ConfigProvider,
+};
