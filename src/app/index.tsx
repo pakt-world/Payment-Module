@@ -1,8 +1,9 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
+import axios from "axios";
 import { useState } from "react";
-import { wagmi, connectors, chains, ConfigContextType, CryptoPaymentModal, FiatPaymentModal } from "../";
+import { wagmi, connectors, chains, ConfigContextType, CryptoPaymentModal, FiatPaymentModal, onFinishResponseProps } from "../";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -10,8 +11,6 @@ import { wagmi, connectors, chains, ConfigContextType, CryptoPaymentModal, FiatP
 import "../styles/index.scss";
 import { Button } from "../components/common";
 import Logger from "../lib/logger";
-import { onFinishResponseProps } from "../types";
-import axios from "axios";
 
 const { walletConnect } = connectors;
 const { avalanche, avalancheFuji  } = chains;
@@ -87,7 +86,6 @@ const App = () => {
       }
     });
 
-
     const fetchCollectionData = async () => {
       const respData = await axiosInstance.post(`/payment`, { 
         coin: "USDC", collection: collectionId
@@ -101,7 +99,6 @@ const App = () => {
       const respData = await axiosInstance.post(`/payment/stripe/initiate`, {
         collection: collectionId
       });
-      console.log("respData", respData);
       setClientSecret(respData.data?.data?.client_secret);
       return await fetchCollectionData();
     }
@@ -134,8 +131,6 @@ const App = () => {
     const config: ConfigContextType = {
       cryptoConfig: {
         wagmiConfig: wagmiConfig,
-        theme: "dark",
-        publicKey: "nzTjIkbjIeb19Pm76bAeIrF2sdZRByLjkL8VSJbRrwg6dtUdNZ5ZeOFds9",
       },
       stripeConfig: {
         publicKey: pKey,

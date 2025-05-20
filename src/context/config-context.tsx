@@ -15,7 +15,7 @@ import { applyTheme } from "../utils";
 import defaultTheme from "../styles/default-theme";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../styles/index.scss";
-import { ConfigContextType } from "./type";
+import { ConfigContextType } from "../types";
 
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);

@@ -1,7 +1,6 @@
 import type { OnrampAppearanceOptions, StripeOnramp } from "@stripe/crypto";
-import { ConfigContextType } from "context/type";
 import { ReactNode } from "react";
-import { BasicModalProps, IAny, onFinishResponseProps } from "types";
+import { BasicModalProps, IAny, onFinishResponseProps, ConfigContextType } from "../../../types";
 
 type CHAIN_TYPES = "avalanche";
 

@@ -12,7 +12,7 @@ import MetaMaskLogo from "../../../assets/icons/metamask.svg";
 import CoreWalletLogo from "../../../assets/icons/core-wallet.svg";
 import WalletConnectLogo from "../../../assets/icons/wallet-connect.svg";
 import CoinBaseWalletLogo from "../../../assets/icons/coinbase-wallet.svg";
-import Logger from "lib/logger";
+import Logger from "../../../lib/logger";
 
 const WALLET_LOGO: Record<string, string> = {
     MetaMask: MetaMaskLogo,
@@ -30,6 +30,7 @@ const WalletConnectorList: FC<WalletConnectListType> = ({
     selectedConnector,
     accountStatus,
 }) => {
+    Logger.debug("WalletConnectorList", { connectors, activeConnector, isLoading, setSelectedConnector, selectedConnector, accountStatus });
     return (
         <div className="pam-flex pam-flex-col pam-gap-6">
             {connectors.map((connector: ConnectorProps) => {

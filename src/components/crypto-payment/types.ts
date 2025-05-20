@@ -6,8 +6,7 @@ import { Config } from "wagmi";
 import { StrictOmit, ExactPartial } from "@wagmi/core/dist/types/types/utils";
 import { type ConnectMutate } from "wagmi/query";
 
-import { BasicModalProps, IAny, onFinishResponseProps } from "types";
-import { ConfigContextType } from "../../context/type";
+import { BasicModalProps, IAny, onFinishResponseProps, ConfigContextType } from "../../types";
 
 interface ConnectorProps {
     connect: () => Promise<{

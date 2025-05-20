@@ -4,7 +4,6 @@
 
 import { twMerge } from "tailwind-merge";
 import { type ClassValue, clsx } from "clsx";
-import CryptoJS from "crypto-js";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -15,8 +14,6 @@ const isProductionEnvironment = true;
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
-
-
 
 const applyTheme = (theme: ITheme) => {
   const root = document.documentElement;
