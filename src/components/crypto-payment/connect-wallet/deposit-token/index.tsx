@@ -150,7 +150,7 @@ const DepositToken = ({
                 variant="primary"
                 size="md"
             >
-                <div className="pam:flex pam:items-center pam:justify-center pam:gap-2 pam:disabled:opacity-50 pam:disabled:cursor-not-allowed">
+                <div className="pam:flex pam:items-center pam:justify-center pam:gap-2">
                   <span>{!activeConnector ? "Connect Wallet": writeLoading ? "Confirming Payment" : isLoadingAll ? "Loading...": "Make Payment"}</span> 
                   <span> {isLoadingAll && <Spinner />}</span>
                 </div>
