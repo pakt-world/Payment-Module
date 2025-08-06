@@ -17,15 +17,15 @@ export const toast = {
             (t) => {
                 return (
                     <div
-                        className={`${t.visible ? "animate-enter" : "animate-leave"} pointer-events-auto flex w-full max-w-md rounded-lg bg-red-100 ring-1 ring-red-800 ring-opacity-50`}
+                        className={`${t.visible ? "pam:animate-enter" : "pam:animate-leave"} pam:pointer-events-auto pam:flex pam:w-full pam:max-w-md pam:rounded-lg pam:bg-red-100 pam:ring-1 pam:ring-red-800 pam:ring-opacity-50`}
                     >
-                        <div className="w-0 flex-1 p-4">
-                            <div className="flex items-center">
-                                <div className="flex-shrink-0">
-                                    <CircleAlert className="h-6 w-6 text-red-600" />
+                        <div className="pam:w-0 pam:flex-1 pam:p-4">
+                            <div className="pam:flex pam:items-center">
+                                <div className="pam:flex-shrink-0">
+                                    <CircleAlert className="pam:h-6 pam:w-6 pam:text-red-600" />
                                 </div>
-                                <div className="ml-3 flex-1 md:flex md:justify-between">
-                                    <p className="text-sm leading-5 text-red-700">
+                                <div className="pam:ml-3 pam:flex-1 pam:md:pam:flex pam:md:pam:justify-between">
+                                    <p className="pam:text-sm pam:leading-5 pam:text-red-700">
                                         {message}
                                     </p>
                                 </div>
@@ -44,13 +44,13 @@ export const toast = {
                 <div
                     className={`${t.visible ? "animate-enter" : "animate-leave"} pointer-events-auto flex w-full max-w-md rounded-lg bg-green-100 ring-1 ring-green-800 ring-opacity-50`}
                 >
-                    <div className="w-0 flex-1 p-4">
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <CheckCircle className="h-6 w-6 text-green-600" />
+                    <div className="pam:w-0 pam:flex-1 pam:p-4">
+                        <div className="pam:flex pam:items-center">
+                            <div className="pam:flex-shrink-0">
+                                <CheckCircle className="pam:h-6 pam:w-6 pam:text-green-600" />
                             </div>
-                            <div className="ml-3 flex-1 md:flex md:justify-between">
-                                <p className="text-sm leading-5 text-green-700">
+                            <div className="pam:ml-3 pam:flex-1 pam:md:flex pam:md:justify-between">
+                                <p className="pam:text-sm pam:leading-5 pam:text-green-700">
                                     {message}
                                 </p>
                             </div>
@@ -78,12 +78,12 @@ export const toast = {
     // 					e.preventDefault();
     // 				}}
     // 			>
-    // 				<div className="flex-1 p-1">
-    // 					<div className="flex flex-row items-center">
+    // 				<div className="pam:flex-1 pam:p-1">
+    // 					<div className="pam:flex pam:flex-row pam:items-center">
     // 						{/* <TalentProfile src={image} size="sm" score={score ?? 0} url={`/talents/${userId}`} /> */}
-    // 						<div className="ml-3 flex flex-col">
-    // 							<h2 className="text-sm font-bold leading-5 text-green-700">{title}</h2>
-    // 							<p className="text-sm leading-5 text-green-700">{message}</p>
+    // 						<div className="pam:ml-3 pam:flex pam:flex-col">
+    // 							<h2 className="pam:text-sm pam:font-bold pam:leading-5 pam:text-green-700">{title}</h2>
+    // 							<p className="pam:text-sm pam:leading-5 pam:text-green-700">{message}</p>
     // 						</div>
     // 					</div>
     // 				</div>
@@ -93,12 +93,12 @@ export const toast = {
     // 				className={`${t.visible ? "animate-enter" : "animate-leave"} pointer-events-auto flex w-full max-w-md rounded-lg bg-green-100 ring-1
     // 					ring-green-800 ring-opacity-50`}
     // 			>
-    // 				<div className="flex-1 p-1">
-    // 					<div className="flex flex-row items-center">
+    // 				<div className="pam:flex-1 pam:p-1">
+    // 					<div className="pam:flex pam:flex-row pam:items-center">
     // 						{/* <TalentProfile src={image} size="sm" score={score ?? 0} url={`/talents/${userId}`} /> */}
-    // 						<div className="ml-3 flex flex-col">
-    // 							<h2 className="text-sm font-bold leading-5 text-green-700">{title}</h2>
-    // 							<p className="text-sm leading-5 text-green-700">{message}</p>
+    // 						<div className="pam:ml-3 pam:flex pam:flex-col">
+    // 							<h2 className="pam:text-sm pam:font-bold pam:leading-5 pam:text-green-700">{title}</h2>
+    // 							<p className="pam:text-sm pam:leading-5 pam:text-green-700">{message}</p>
     // 						</div>
     // 					</div>
     // 				</div>
@@ -112,13 +112,13 @@ export const toast = {
                 <div
                     className={`${t.visible ? "animate-enter" : "animate-leave"} pointer-events-auto flex w-full max-w-md rounded-lg bg-blue-100 ring-1 ring-blue-800 ring-opacity-50`}
                 >
-                    <div className="w-0 flex-1 p-4">
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <CircleAlert className="h-6 w-6 text-blue-600" />
+                    <div className="pam:w-0 pam:flex-1 pam:p-4">
+                        <div className="pam:flex pam:items-center">
+                            <div className="pam:flex-shrink-0">
+                                <CircleAlert className="pam:h-6 pam:w-6 pam:text-blue-600" />
                             </div>
-                            <div className="ml-3 flex md:flex md:justify-between">
-                                <p className="text-sm leading-5 text-blue-700">
+                            <div className="pam:ml-3 pam:flex pam:md:flex pam:md:justify-between">
+                                <p className="pam:text-sm pam:leading-5 pam:text-blue-700">
                                     {message}
                                 </p>
                             </div>

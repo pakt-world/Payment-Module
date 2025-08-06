@@ -14,7 +14,6 @@ import { setGlobalErrorHandler } from "../lib/error-handler";
 import { applyTheme } from "../utils";
 import defaultTheme from "../styles/default-theme";
 import "react-loading-skeleton/dist/skeleton.css";
-import "../styles/index.scss";
 import { ConfigContextType } from "../types";
 
 
@@ -108,7 +107,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
             <Toaster
                 position="top-right"
                 gutter={8}
-                containerClassName="!pam-z-[999999]"
+                containerClassName="!pam:z-[999999]"
             />
         </ConfigContext.Provider>
     );

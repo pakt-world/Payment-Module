@@ -29,7 +29,7 @@ const DepositToken = ({
     connect,
     disconnect,
     onSuccessResponse
-}: WalletDepositProps): JSX.Element => {
+}: WalletDepositProps) => {
     const [connectError, setConnectError] = useState<string | null>(null);
 
     const {
@@ -117,9 +117,9 @@ const DepositToken = ({
     }, [selectedConnector]);
 
     return (
-        <div className="pam-flex pam-flex-col pam-gap-2">
+        <div className="pam:flex pam:flex-col pam:gap-2">
             {selectedConnector && (writeError || connectError) && (
-                    <div className="pam-flex pam-flex-col pam-items-center pam-gap-2 pam-rounded-lg pam-border pam-border-red-200 pam-bg-red-50 pam-p-2 pam-text-sm pam-text-red-500">
+                    <div className="pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-red-200 pam:bg-red-50 pam:p-2 pam:text-sm pam:text-red-500">
                         <span>
                             {connectError ||
                                 // @ts-ignore
@@ -150,7 +150,7 @@ const DepositToken = ({
                 variant="primary"
                 size="md"
             >
-                <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
+                <div className="pam:flex pam:items-center pam:justify-center pam:gap-2 pam:disabled:opacity-50 pam:disabled:cursor-not-allowed">
                   <span>{!activeConnector ? "Connect Wallet": writeLoading ? "Confirming Payment" : isLoadingAll ? "Loading...": "Make Payment"}</span> 
                   <span> {isLoadingAll && <Spinner />}</span>
                 </div>

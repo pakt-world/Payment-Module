@@ -6,9 +6,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import tailwindcss from 'tailwindcss'; // Import tailwindcss
-import autoprefixer from 'autoprefixer'; // Import autoprefixer
-import postcssImport from 'postcss-import'; // Import postcss-import
+// Tailwind v4 and PostCSS imports are no longer needed in Vite config
+// since we're using the dedicated @tailwindcss/postcss plugin
 
 // Replicate __dirname behavior in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -81,15 +80,8 @@ export default defineConfig(({ command, mode }) => {
                  ]
             }),
         ].filter(Boolean), // Filter out falsy values like visualizer in dev mode
-        css: {
-             postcss: {
-                 plugins: [
-                    postcssImport(),
-                    tailwindcss(), // Use the imported tailwindcss
-                    autoprefixer(), // Use the imported autoprefixer
-                 ],
-             },
-         },
+        // CSS processing is now handled by PostCSS config file with @tailwindcss/postcss
+        // No need to configure postcss plugins here for Tailwind v4
         build: {
             outDir: 'dist', // Base output directory
             sourcemap: true,

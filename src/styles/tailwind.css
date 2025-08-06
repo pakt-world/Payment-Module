@@ -1,0 +1,80 @@
+@import "tailwindcss" prefix(pam);
+
+@theme {
+  /* Screens configuration */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-2xl-max: 1600px;
+  --breakpoint-2xl-5: 1600px;
+  --breakpoint-1xl: 1440px;
+  --breakpoint-max-sm: 639px;
+  --breakpoint-3xl: 1600px;
+  --breakpoint-xs: 375px;
+
+  /* Colors using CSS variables */
+  --color-primary: var(--pams-primary);
+  --color-info: var(--pams-info);
+  --color-secondary: var(--pams-secondary);
+  --color-blue-lightest: var(--pams-blue-lightest);
+  --color-blue-darkest: var(--pams-blue-darkest);
+  --color-line: var(--pams-line);
+  --color-title: var(--pams-title);
+  --color-body: var(--pams-body);
+  --color-warning: var(--pams-warning);
+  --color-success: var(--pams-success);
+  --color-danger: var(--pams-danger);
+  --color-magnolia: var(--pams-magnolia);
+  --color-primary-brighter: var(--pams-primary-brighter);
+  --color-refer-border: var(--pams-refer-border);
+  --color-exhibit-tab-list: var(--pams-exhibit-tab-list);
+  --color-btn-primary: var(--pams-primary);
+
+  /* Background images */
+  --background-btn-primary: var(--pams-btn-primary);
+  --background-primary-gradient: var(--pams-primary-gradient);
+
+  /* Font families */
+  --font-sans: var(--pams-circular-std-font), ui-sans-serif, system-ui, sans-serif;
+
+  /* Border radius */
+  --radius-modal: var(--pams-modal-radius);
+
+  /* Animations and keyframes - these will be handled by Tailwind's built-in animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-overlay-show: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-content-show: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Transition duration */
+  --transition-duration-default: 150ms;
+}
+
+/* Custom keyframes for animations */
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

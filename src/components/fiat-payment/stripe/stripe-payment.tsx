@@ -42,7 +42,7 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse
       disableClickOutside
     >
       <PaktWrapper showPakt={true}>
-        <div className="pam-mx-auto pam-flex pam-w-full pam-flex-col pam-gap-4 sm:pam-max-w-[400px] sm:pam-min-h-[600px] pam-border-white">
+        <div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-4 pam:sm:pam:max-w-[400px] pam:sm:pam:min-h-[600px] pam:border-white">
             <CryptoElements publicKey={stripeConfig.publicKey}>
                 <OnrampElement 
                   clientSecret={ stripeConfig.clientSecret}

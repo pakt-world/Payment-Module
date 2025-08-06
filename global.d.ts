@@ -22,3 +22,7 @@ declare module "*.svg" {
     const content: string;
     export default content;
 }
+
+// React 19 types
+/// <reference types="react" />
+/// <reference types="react-dom" />

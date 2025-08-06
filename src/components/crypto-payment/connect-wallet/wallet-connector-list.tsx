@@ -32,7 +32,7 @@ const WalletConnectorList: FC<WalletConnectListType> = ({
 }) => {
     Logger.debug("WalletConnectorList", { connectors, activeConnector, isLoading, setSelectedConnector, selectedConnector, accountStatus });
     return (
-        <div className="pam-flex pam-flex-col pam-gap-6">
+        <div className="pam:flex pam:flex-col pam:gap-6">
             {connectors.map((connector: ConnectorProps) => {
                 const isActive = selectedConnector?.id === connector.id || activeConnector?.id === connector.id;
                 const logo = WALLET_LOGO[connector.name];
@@ -44,17 +44,17 @@ const WalletConnectorList: FC<WalletConnectListType> = ({
                         onClick={() => {
                             setSelectedConnector(connector);
                         }}
-                        className={`pam-flex pam-items-center pam-justify-between pam-rounded-2xl pam-border pam-border-[#DFDFE6] pam-p-1 pam-px-4 pam-py-3 pam-text-left hover:pam-border-primary hover:!pam-border-opacity-30 disabled:pam-cursor-not-allowed disabled:pam-opacity-50 pam-text-body ${
+                        className={`pam:flex pam:items-center pam:justify-between pam:rounded-2xl pam:border pam:border-[#DFDFE6] pam:p-1 pam:px-4 pam:py-3 pam:text-left hover:pam:border-primary hover:!pam:border-opacity-30 disabled:pam:cursor-not-allowed disabled:pam:opacity-50 pam:text-body ${
                             isActive
-                                ? "pam-border-primary !pam-border-opacity-60 pam-bg-transparent pam-bg-opacity-50 pam-text-primary"
-                                : "pam-border-[#DFDFE6]"
+                                ? "pam:border-primary !pam:border-opacity-60 pam:bg-transparent pam:bg-opacity-50 pam:text-primary"
+                                : "pam:border-[#DFDFE6]"
                         }`}
                     >
-                        <span className="pam-flex pam-w-full pam-items-center pam-gap-2">
+                        <span className="pam:flex pam:w-full pam:items-center pam:gap-2">
                             <span>{connector.name}</span>
                             {isLoading &&
                                 selectedConnector?.id === connector?.id && (
-                                    <span className="pam-animate-spin">
+                                    <span className="pam:animate-spin">
                                         <Loader2 size={16} />
                                     </span>
                                 )}

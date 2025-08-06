@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "esnext",
         "jsx": "react-jsx",
+        "jsxImportSource": "react",
         "module": "esnext",
         "strict": true,
         "downlevelIteration": true,
@@ -18,8 +19,9 @@
         "baseUrl": "./src",
         "paths": {
             "@/*": ["src/*"]
-        }
+        },
+        "types": ["react", "react-dom", "node"]
     },
-    "include": ["src/**/*", "rename-types.ts", "global.d.ts", ".eslintrc.js", "vite.config.ts", "tailwind.config.ts", "test"],
+    "include": ["src/**/*", "rename-types.ts", "global.d.ts", ".eslintrc.js", "vite.config.ts", "test"],
     "exclude": ["node_modules", "dist"]
 }

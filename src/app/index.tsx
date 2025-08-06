@@ -8,7 +8,7 @@ import { wagmi, connectors, chains, ConfigContextType, CryptoPaymentModal, FiatP
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import "../styles/index.scss";
+
 import { Button } from "../components/common";
 import Logger from "../lib/logger";
 
@@ -141,25 +141,26 @@ const App = () => {
 
     return (
         <div>
-            <div className="pam-circular-std-regular">
-              <div className="pam-flex pam-h-screen pam-justify-center pam-items-center">
-                <div className="pam-flex pam-flex-col pam-border pam-rounded-2xl pam-w-[600px] pam-p-8 pam-mx-auto pam-my-auto pam-gap-4">
-                  <p className="pam-text-black pam-text-2xl pam-text-center">Trigger Crypto Payment and Fiat Payments</p>
-                  <div className="pam-flex pam-flex-row pam-items-center pam-justify-center pam-gap-2 pam-4">
+            <div className="circular-std-regular">
+              <div className="pam:flex pam:h-screen pam:justify-center pam:items-center">
+                <div className="pam:flex pam:flex-col pam:border pam:rounded-2xl pam:w-[600px] pam:p-8 mx-auto my-auto pam:gap-4">
+                  <p className="pam:text-black pam:text-2xl pam:text-center">Trigger Crypto Payment and Fiat Payments</p>
+                  <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
                     <label>Enter Auth Token</label>
-                    <input className="pam-w-full pam-p-2 pam-border pam-border-2 pam-border-grey" name="token" onChange={(e) =>setToken(e.target.value)} />
+                    <input className="pam:w-full pam:p-2 pam:border pam:border-2 pam:border-grey" name="token" onChange={(e) =>setToken(e.target.value)} />
                   </div>
-                  <div className="pam-flex pam-flex-row pam-items-center pam-justify-center pam-gap-2 pam-4">
+                  <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
                     <label>Enter Stripe Public Key</label>
-                    <input className="pam-w-full pam-p-2 pam-border pam-border-2 pam-border-grey" name="pKey" onChange={(e)=>setPKey(e.target.value)} />
+                    <input className="pam:w-full pam:p-2 pam:border pam:border-2 pam:border-grey" name="pKey" onChange={(e)=>setPKey(e.target.value)} />
                   </div>
-                  <div className="pam-flex pam-flex-row pam-items-center pam-justify-center pam-gap-2 pam-4">
+                  <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
                     <label>Enter Collection ID</label>
-                    <input className="pam-w-full pam-p-2 pam-border pam-border-2 pam-border-grey" name="collection" onChange={(e)=>setCollectionId(e.target.value)} />
+                    <input className="pam:w-full pam:p-2 pam:border pam:border-2 pam:border-grey" name="collection" onChange={(e)=>setCollectionId(e.target.value)} />
                   </div>
-                  <div className="pam-flex pam-flex-row pam-items-center pam-justify-center pam-gap-2 pam-4">
+                  <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
                       <Button
-                          className="pam-block pam-p-4 pam-bg-btn-primary"
+                          className="pam:block pam:p-4 pam:bg-primary"
+                          variant="primary"
                           type="button"
                           onClick={
                             async () =>{
@@ -176,7 +177,8 @@ const App = () => {
                           Pay with Crypto
                       </Button>
                       <Button 
-                          className="pam-block pam-p-4 pam-bg-btn-primary"
+                          className="pam:block pam:p-4 pam:bg-primary"
+                          variant="primary"
                           type="button"
                           onClick={
                             async () =>{

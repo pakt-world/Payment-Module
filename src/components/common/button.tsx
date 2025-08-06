@@ -10,32 +10,32 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils";
 
 const button = cva(
-    "pam-focus:outline-none pam-py-3 pam-whitespace-nowrap pam-duration-200 pam-capitalize pam-focus-visible:ring-1 pam-focus-visible:ring-[#19A966] pam-relative pam-z-0 pam-rounded-[10px] pam-text-center pam-w-fit pam-px-6 pam-font-semibold pam-focus-visible:border-transparent",
+    "pam:focus:outline-none pam:py-3 pam:whitespace-nowrap pam:duration-200 pam:capitalize pam:focus-visible:ring-1 pam:focus-visible:ring-[#19A966] pam:relative pam:z-0 pam:rounded-[10px] pam:text-center pam:w-fit pam:px-6 pam:font-semibold pam:focus-visible:border-transparent",
     {
         variants: {
             variant: {
                 primary:
-                    "pam-border-white pam-border-opacity-10 pam-bg-btn-primary pam-text-white",
+                    "pam:border-white pam:border-opacity-10 pam:bg-btn-primary pam:text-white",
                 secondary:
-                    "pam-border-primary pam-border pam-text-primary pam-bg-primary-brighter pam-hover:bg-green-100 pam-duration-200 pam-font-normal",
+                    "pam:border-primary pam:border pam:text-primary pam:bg-primary-brighter pam:hover:bg-green-100 pam:duration-200 pam:font-normal",
                 outline:
-                    "pam-border-primary pam-border pam-text-primary pam-border-opacity-100 pam-bg-transparent pam-hover:border-opacity-50 pam-font-normal pam-duration-200",
+                    "pam:border-primary pam:border pam:text-primary pam:border-opacity-100 pam:bg-transparent pam:hover:border-opacity-50 pam:font-normal pam:duration-200",
                 transparent:
-                    "pam-border-transparent pam-text-primary pam-bg-transparent pam-hover:bg-[#008D6C1A] pam-duration-200",
-                danger: "pam-bg-red-200 pam-text-red-600 pam-hover:bg-red-100 pam-border pam-border-transparent",
+                    "pam:border-transparent pam:text-primary pam:bg-transparent pam:hover:bg-[#008D6C1A] pam:duration-200",
+                danger: "pam:bg-red-200 pam:text-red-600 pam:hover:bg-red-100 pam:border pam:border-transparent",
             },
             size: {
-                xs: "pam-px-2 pam-py-[8px] pam-text-xs",
-                sm: "pam-px-2 pam-py-2 pam-text-sm",
-                md: "pam-px-3 pam-py-3 pam-text-base",
-                lg: "pam-px-4 pam-py-4 pam-text-lg",
-                xl: "pam-px-5 pam-py-5 pam-text-xl",
+                xs: "pam:px-2 pam:py-[8px] pam:text-xs",
+                sm: "pam:px-2 pam:py-2 pam:text-sm",
+                md: "pam:px-3 pam:py-3 pam:text-base",
+                lg: "pam:px-4 pam:py-4 pam:text-lg",
+                xl: "pam:px-5 pam:py-5 pam:text-xl",
             },
             fullWidth: {
-                true: "pam-w-full",
+                true: "pam:w-full",
             },
             disabled: {
-                true: "pam-cursor-not-allowed !pam-bg-none !pam-bg-[#E3E5E5] !pam-text-[#979C9E]",
+                true: "pam:cursor-not-allowed pam:bg-[#E3E5E5] pam:text-[#979C9E]",
             },
         },
         defaultVariants: {
@@ -46,30 +46,30 @@ const button = cva(
             {
                 variant: "outline",
                 disabled: true,
-                className: "pam-border-gray-300",
+                className: "pam:border-gray-300",
             },
             {
                 variant: "transparent",
                 disabled: true,
-                className: "pam-border-none pam-hover:bg-transparent",
+                className: "pam:border-none pam:hover:bg-transparent",
             },
         ],
     }
 );
 
 const gradientHover = cva(
-    "pam-absolute pam-inset-0 pam-rounded-lg pam-border pam-border-transparent pam-opacity-0 pam-duration-200 pam-hover:opacity-100 pam-pointer-events-none",
+    "pam:absolute pam:inset-0 pam:rounded-lg pam:border pam:border-transparent pam:opacity-0 pam:duration-200 pam:hover:opacity-100 pam:pointer-events-none",
     {
         variants: {
             variant: {
-                primary: "pam-bg-primary",
-                secondary: "pam-bg-transparent",
-                outline: "pam-bg-transparent",
-                transparent: "pam-bg-transparent",
-                danger: "pam-bg-transparent",
+                primary: "pam:bg-primary",
+                secondary: "pam:bg-transparent",
+                outline: "pam:bg-transparent",
+                transparent: "pam:bg-transparent",
+                danger: "pam:bg-transparent",
             },
             disabled: {
-                true: "pam-bg-none pam-bg-transparent",
+                true: "pam:bg-none pam:bg-transparent",
             },
         },
         defaultVariants: {

@@ -18,11 +18,7 @@ bun add @pakt/payment-module
 
 ## Setup
 
-**Important:** You need to import the module's stylesheet for components to render correctly. Import it in your main application entry point (e.g., `main.tsx` or `App.tsx`):
-
-```typescript
-import '@pakt/payment-module/dist/styles.css';
-```
+**Note:** Styles are automatically included when you import components from this module. No manual CSS import is required! ✨
 
 ```typescript
 import React from 'react';

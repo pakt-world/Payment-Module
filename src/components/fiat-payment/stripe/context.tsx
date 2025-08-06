@@ -119,7 +119,7 @@ const OnrampElement = ({
   <ConfigProvider
     config={config}
   >
-    {(!isReady || isLoading)&& <Spinner size={30} className="pam-text-white" />}
+    {(!isReady || isLoading)&& <Spinner size={30} className="pam:text-white" />}
     <div {...props} ref={onrampElementRef}></div>
   </ConfigProvider>
   );

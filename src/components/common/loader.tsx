@@ -17,8 +17,8 @@ interface SpinnerProps {
 
 export const Spinner: FC<SpinnerProps> = ({ size = 24, className }) => {
     return (
-        <div className={cn(`pam-flex pam-w-full pam-items-center pam-justify-center`, className)}>
-            <Loader className="pam-animate-spin" size={size} />
+        <div className={cn(`pam:flex pam:w-full pam:items-center pam:justify-center`, className)}>
+            <Loader className="pam:animate-spin" size={size} />
         </div>
     );
 };

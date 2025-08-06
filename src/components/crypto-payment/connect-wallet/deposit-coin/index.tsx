@@ -129,7 +129,7 @@ const DepositCoin = ({
         <div>
             {/* @ts-ignore */}
             {selectedConnector && ((isError && isError?.name != "ConnectorChainMismatchError") || txError) && (
-              <div className="pam-mb-4 pam-flex pam-flex-col pam-items-center pam-gap-2 pam-rounded-lg pam-border pam-border-red-200 pam-bg-red-50 pam-p-2 pam-text-sm pam-text-red-500">
+              <div className="pam:mb-4 pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-red-200 pam:bg-red-50 pam:p-2 pam:text-sm pam:text-red-500">
                   <span>
                       {(ErrorMsg?.name || txError?.name) ==
                       "EstimateGasExecutionError"
@@ -151,7 +151,7 @@ const DepositCoin = ({
                 variant="primary"
                 size="md"
             >
-                <div className="pam-flex pam-items-center pam-justify-center pam-gap-2">
+                <div className="pam:flex pam:items-center pam:justify-center pam:gap-2">
                     <span> { !activeConnector ? "Connect Wallet" : "Make Payment"}</span>
                     <span>{isLoadingAll && <Spinner />}</span>
                 </div>

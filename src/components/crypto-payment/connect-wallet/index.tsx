@@ -28,7 +28,7 @@ const ConnectWallet = ({
     onSuccessResponse,
     isLoading,
     coin
-}: CryptoPayWithWalletProps): JSX.Element => {
+}: CryptoPayWithWalletProps) => {
     const {
         chain,
         isConnected,
@@ -76,12 +76,12 @@ const ConnectWallet = ({
     }, [disableButtonOnClick]);
 
     return (
-        <div className="pam-flex pam-flex-col pam-gap-8">
-            <p className="pam-text-center pam-text-sm pam-text-body">
+        <div className="pam:flex pam:flex-col pam:gap-8">
+            <p className="pam:text-center pam:text-sm pam:text-body">
                 By making payment you acknowledge that you have read and
                 understand the {" "}
                 <button
-                    className="pam-cursor-pointer pam-text-[#3772FF]"
+                    className="pam:cursor-pointer pam:text-[#3772FF]"
                     rel="noreferrer"
                     onClick={() => {
                     	setShowDisclaimer(true);
@@ -91,9 +91,9 @@ const ConnectWallet = ({
                 </button>
             </p>
 
-            <div className="pam-flex pam-items-center pam-justify-between pam-gap-2 pam-rounded-2xl pam-border pam-border-primary pam-bg-secondary pam-px-4 pam-py-6 pam-text-primary pam-max-sm:pam-h-[43px]">
-                <span className="pam-text-lg">Total Amount:</span>
-                <span className="pam-text-lg pam-font-bold">
+            <div className="pam:flex pam:items-center pam:justify-between pam:gap-2 pam:rounded-2xl pam:border pam:border-primary pam:bg-secondary pam:px-4 pam:py-6 pam:text-primary pam:max-sm:pam:h-[43px]">
+                <span className="pam:text-lg">Total Amount:</span>
+                <span className="pam:text-lg pam:font-bold">
                     {amount} {coin.toUpperCase()}
                 </span>
             </div>
