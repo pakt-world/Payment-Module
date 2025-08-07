@@ -18,6 +18,10 @@ interface ConfigContextType {
       publicKey: string;
       theme?: "light" | "dark";
     };
+    paktConfig:{
+      baseUrl: string;
+      verbose?: boolean;
+    };
     errorHandler?: (errorMessage: string) => void; //  Callback to handle Error
 }
 
@@ -31,7 +35,8 @@ interface BasicModalProps {
 }
 
 interface onFinishResponseProps {
-  status: string;
+  status: "success" | "error";
+  message: string;
   txId: string;
 }
 
@@ -57,10 +62,21 @@ interface ITheme extends Record<string, any> {
   "modal-radius"?: string;
 }
 
+interface PaymentData {
+  amount: number;
+  coin: string;
+  description: string;
+  isDirect: boolean;
+  collectionType: string;
+  owner: string;
+  name: string;
+}
+
 export {
   IAny,
   I0xAddressType,
   type BasicModalProps,
   type onFinishResponseProps,
   type ITheme,
+  type PaymentData,
 }

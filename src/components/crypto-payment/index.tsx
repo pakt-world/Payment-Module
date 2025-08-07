@@ -22,7 +22,8 @@ const CryptoPaymentModal = ({
     tokenDecimal,
     onSuccessResponse,
     isLoading,
-    collectionId
+    collectionId,
+    isPreLoading = true
 }: CryptoPaymentModalProps): ReactElement => {
     return (
         <ConfigProvider config={config}>
@@ -39,6 +40,7 @@ const CryptoPaymentModal = ({
                 onSuccessResponse={onSuccessResponse}
                 isLoading={isLoading}
                 config={config}
+                isPreLoading={isPreLoading}
             />
         </ConfigProvider>
     );

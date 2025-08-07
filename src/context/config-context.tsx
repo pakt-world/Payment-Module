@@ -15,6 +15,7 @@ import { applyTheme } from "../utils";
 import defaultTheme from "../styles/default-theme";
 import "react-loading-skeleton/dist/skeleton.css";
 import { ConfigContextType } from "../types";
+import { paktSDKService } from "../lib/pakt-sdk";
 
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
@@ -95,6 +96,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
         }
 
         applyTheme({ ...defaultTheme, ...(config?.theme || {}) });
+        paktSDKService.initialize(config.paktConfig);
     }, [config]);
 
     return (

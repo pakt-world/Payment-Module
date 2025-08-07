@@ -16,8 +16,9 @@ import PaktWrapper from '../../modal-wrapper';
 import Logger from '../../../lib/logger';
 import { IAny } from '../../../types';
 import { useConfig } from '../../../context/config-context';
+import { Spinner } from '../../common';
 
-const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse, config, isLoading }:StripeModalProps): ReactElement => {
+const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse, config, isLoading, isPreLoading }:StripeModalProps): ReactElement => {
   Logger.debug("open StripePaymentModal", { collectionId, isOpen, closeModal, onFinishResponse });  
   const { stripeConfig } = useConfig();
 
@@ -28,7 +29,7 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse
   const onChange = useCallback(({ session }: { session: IAny }) => {
     Logger.debug(`OnrampSession is now in ${session.status} state.`, { session });
     if (session.status == FINISHED_PAYMENT){
-      const responseP = { status: session.status, txId:session.quote?.blockchain_tx_id }
+      const responseP = { status: session.status, message: session.status, txId:session.quote?.blockchain_tx_id }
       Logger.info(`OnrampSession is now complete ${session.status}`, { responseP });
       onFinishResponse(responseP);
       closeModal();
@@ -42,6 +43,11 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse
       disableClickOutside
     >
       <PaktWrapper showPakt={true}>
+        {isPreLoading ?
+            <div className="pam:mx-auto pam:flex pam:w-full pam:h-[550px] pam:flex-col pam:gap-6 pam:bg-white pam:p-6 pam:rounded-2xl pam:border">
+                <Spinner size={40} />
+            </div>
+        :
         <div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-4 pam:sm:pam:max-w-[400px] pam:sm:pam:min-h-[600px] pam:border-white">
             <CryptoElements publicKey={stripeConfig.publicKey}>
                 <OnrampElement 
@@ -53,6 +59,7 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse
                 />
             </CryptoElements>
         </div>
+        }
       </PaktWrapper>
     </Modal>
   )

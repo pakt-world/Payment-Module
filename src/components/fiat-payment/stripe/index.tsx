@@ -4,7 +4,7 @@ import { ReactElement } from "react"
 import { StripeModalProps } from "./type"
 
 
-const FiatPaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse, config, isLoading, chain }:StripeModalProps): ReactElement  => {
+const FiatPaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse, config, isLoading, chain, isPreLoading }:StripeModalProps): ReactElement  => {
   return (
     <ConfigProvider config={config} >
         <StripePaymentModal 
@@ -15,6 +15,7 @@ const FiatPaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse, 
             onFinishResponse={onFinishResponse}
             config={config}
             isLoading={isLoading}
+            isPreLoading={isPreLoading}
         />
     </ConfigProvider>
   )

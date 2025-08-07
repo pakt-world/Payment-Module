@@ -59,6 +59,7 @@ interface CryptoPaymentModalProps extends BasicModalProps {
     tokenDecimal: number;
     onSuccessResponse:(data: onFinishResponseProps) => void;
     isLoading?:boolean;
+    isPreLoading?:boolean;
 }
 
 interface CryptoPayWithWalletProps {

@@ -2,9 +2,8 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 import axios from "axios";
-import { useRef, useState } from "react";
-import { wagmi, connectors, chains, ConfigContextType, onFinishResponseProps, PaymentSystemRef } from "..";
-import PaktPaymentModule from "../components";
+import { useState } from "react";
+import { wagmi, connectors, chains, ConfigContextType, CryptoPaymentModal, FiatPaymentModal, onFinishResponseProps } from "..";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -54,7 +53,6 @@ const wagmiConfig = createConfig({
 });
 
 const App = () => {
-    const paymentRef = useRef<PaymentSystemRef>(null);
     const [openCryptoModal, setOpenCryptoModal] = useState(false);
     const [openFiatModal, setOpenFiatModal] = useState(false);
     const [pKey, setPKey] = useState("");
@@ -130,13 +128,6 @@ const App = () => {
       return true;
     }
 
-    const handleCryptoPayment = () =>{
-        console.log("handleCryptoPayment");
-        paymentRef.current?.startCryptoPayment?.({ amount: 10, coin: "usdc", description: "test", isDirect: true, collectionType: "tip", owner: "67d05d221a22ed512faabed0", name: "test" });
-    }
-    
-    const handleFiatPayment = () => paymentRef.current?.startFiatPayment?.({ amount: 10, coin: "usdc", description: "test", isDirect: false, collectionType: "tip", owner: "67d05d221a22ed512faabed0", name: "test" });
-
     const config: ConfigContextType = {
       cryptoConfig: {
         wagmiConfig: wagmiConfig,
@@ -145,10 +136,6 @@ const App = () => {
         publicKey: pKey,
         clientSecret: clientSecret,
         theme: "dark",
-      },
-      paktConfig:{
-        baseUrl: "http://localhost:9090/v1",
-        verbose: true,
       }
     };
 
@@ -159,11 +146,33 @@ const App = () => {
                 <div className="pam:flex pam:flex-col pam:border pam:rounded-2xl pam:w-[600px] pam:p-8 mx-auto my-auto pam:gap-4">
                   <p className="pam:text-black pam:text-2xl pam:text-center">Trigger Crypto Payment and Fiat Payments</p>
                   <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
+                    <label>Enter Auth Token</label>
+                    <input className="pam:w-full pam:p-2 pam:border pam:border-2 pam:border-grey" name="token" onChange={(e) =>setToken(e.target.value)} />
+                  </div>
+                  <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
+                    <label>Enter Stripe Public Key</label>
+                    <input className="pam:w-full pam:p-2 pam:border pam:border-2 pam:border-grey" name="pKey" onChange={(e)=>setPKey(e.target.value)} />
+                  </div>
+                  <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
+                    <label>Enter Collection ID</label>
+                    <input className="pam:w-full pam:p-2 pam:border pam:border-2 pam:border-grey" name="collection" onChange={(e)=>setCollectionId(e.target.value)} />
+                  </div>
+                  <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
                       <Button
                           className="pam:block pam:p-4 pam:bg-primary"
                           variant="primary"
                           type="button"
-                          onClick={handleCryptoPayment}
+                          onClick={
+                            async () =>{
+                              const ready = toggleModal();
+                              if (ready) {
+                                const sucDa = await fetchCollectionData();
+                                if (sucDa){
+                                  setOpenCryptoModal(true);
+                                }
+                              }
+                            }
+                          }
                       >
                           Pay with Crypto
                       </Button>
@@ -171,7 +180,17 @@ const App = () => {
                           className="pam:block pam:p-4 pam:bg-primary"
                           variant="primary"
                           type="button"
-                          onClick={handleFiatPayment}
+                          onClick={
+                            async () =>{
+                              const ready = toggleModal();
+                              if (ready){
+                                const sucDa = await onStripPay();
+                                if (sucDa){
+                                  setOpenFiatModal(true)
+                                }
+                              }
+                            }
+                          }
                       >
                         Pay with Fiat
                       </Button>
@@ -179,11 +198,28 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <PaktPaymentModule 
-                ref={paymentRef}
-                config={config} 
-                onPaymentSuccess={onSuccessResponse} 
-                onPaymentError={onSuccessResponse}
+            <CryptoPaymentModal 
+              isOpen={openCryptoModal}
+              closeModal={()=>setOpenCryptoModal(false)}
+              collectionId={collectionId}
+              amount={payData.amountToPay}
+              chainId={Number(payData.chainId)}
+              coin={payData.coin}
+              depositAddress={payData.address}
+              tokenDecimal={6}
+              contractAddress={payData.contractAddress}
+              onSuccessResponse={onSuccessResponse}
+              isLoading={isLoading}
+              config={config}
+            />
+            <FiatPaymentModal
+              config={config}
+              collectionId={collectionId}
+              isOpen={openFiatModal}
+              chain="avalanche"
+              isLoading={isLoading}
+              closeModal={()=>setOpenFiatModal(false)}
+              onFinishResponse={onSuccessResponse}
             />
         </div>
     );

@@ -5,4 +5,5 @@ import "./styles/index.css";
 export * from "./components/fiat-payment";
 export * from "./components/wagmi"
 export * from "./components/crypto-payment";
+export * from "./components/payment-system";
 export * from "./types";

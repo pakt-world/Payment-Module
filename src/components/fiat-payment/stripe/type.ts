@@ -15,6 +15,7 @@ interface StripeModalProps extends BasicModalProps {
   chain: CHAIN_TYPES;
   onFinishResponse: (data:onFinishResponseProps)=> void;
   isLoading?:boolean;
+  isPreLoading?:boolean;
 }
 
 interface StripeContextProps {
