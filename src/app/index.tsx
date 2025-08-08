@@ -1,8 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
-import axios from "axios";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import {
     wagmi,
     connectors,
@@ -23,21 +22,6 @@ import Logger from "../lib/logger";
 const { walletConnect } = connectors;
 const { avalanche, avalancheFuji } = chains;
 const { http, createConfig } = wagmi;
-
-interface MakePaymentResponse {
-    address: string;
-    amountToPay: number;
-    chainId: string;
-    coin: string;
-    collectionAmount: number;
-    collectionAmountCoin: number;
-    expectedFee: number;
-    feePercentage: number;
-    rate: number;
-    usdAmount: number;
-    usdFee: number;
-    contractAddress: string;
-}
 
 const projectId = "810bdecb2f7f8d4bd3c732d2862df787";
 
@@ -62,53 +46,40 @@ const wagmiConfig = createConfig({
 
 const App = () => {
     const paymentRef = useRef<PaymentSystemRef>(null);
-    const [clientSecret, setClientSecret] = useState("");
+    // const [clientSecret, setClientSecret] = useState("");
+    // const token = "1234567890";
 
-    const [payData, setPayData] = useState<MakePaymentResponse>({
-        address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
-        amountToPay: 0.323,
-        chainId: "43113",
-        coin: "USDC",
-        collectionAmount: 10,
-        collectionAmountCoin: 10,
-        // contractAddress: "",
-        contractAddress: "0x5425890298aed601595a70AB815c96711a31Bc65",
-        expectedFee: 10,
-        feePercentage: 10,
-        rate: 12345,
-        usdAmount: 500,
-        usdFee: 10,
-    });
+    // const [payData, setPayData] = useState<MakePaymentResponse>({
+    //     address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
+    //     amountToPay: 0.323,
+    //     chainId: "43113",
+    //     coin: "USDC",
+    //     collectionAmount: 10,
+    //     collectionAmountCoin: 10,
+    //     // contractAddress: "",
+    //     contractAddress: "0x5425890298aed601595a70AB815c96711a31Bc65",
+    //     expectedFee: 10,
+    //     feePercentage: 10,
+    //     rate: 12345,
+    //     usdAmount: 500,
+    //     usdFee: 10,
+    // });
 
-    const [token, setToken] = useState("");
-    const [collectionId, setCollectionId] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    // const axiosInstance = axios.create({
+    //     baseURL: "http://localhost:9090/v1",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         "Authorization": `Bearer ${token}`,
+    //     },
+    // });
 
-    const axiosInstance = axios.create({
-        baseURL: "http://localhost:9090/v1",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        },
-    });
-
-    const fetchCollectionData = async () => {
-        const respData = await axiosInstance.post(`/payment`, {
-            coin: "USDC",
-            collection: collectionId,
-        });
-        const payD = respData.data?.data as MakePaymentResponse;
-        setPayData({ ...payD });
-        return respData;
-    };
-
-    const onStripPay = async () => {
-        const respData = await axiosInstance.post(`/payment/stripe/initiate`, {
-            collection: collectionId,
-        });
-        setClientSecret(respData.data?.data?.client_secret);
-        return fetchCollectionData();
-    };
+    // const onStripPay = async () => {
+    //     const respData = await axiosInstance.post(`/payment/stripe/initiate`, {
+    //         collection: collectionId,
+    //     });
+    //     setClientSecret(respData.data?.data?.client_secret);
+    //     return fetchCollectionData();
+    // };
 
     const onSuccessResponse = (data: onFinishResponseProps) => {
         // setIsLoading(true);
@@ -148,8 +119,10 @@ const App = () => {
             wagmiConfig,
         },
         stripeConfig: {
-            publicKey: "pk_test_51N00000000000000000000000000000000000000000000000000000000000000000000000000000000",
-            clientSecret,
+            publicKey:
+                "pk_test_51N00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            clientSecret:
+                "sk_test_51N00000000000000000000000000000000000000000000000000000000000000000000000000000000",
             theme: "dark",
         },
         paktConfig: {
@@ -192,7 +165,7 @@ const App = () => {
                 config={config}
                 onPaymentSuccess={onSuccessResponse}
                 onPaymentError={onSuccessResponse}
-                isLoading={isLoading}
+                isLoading={false}
             />
         </div>
     );

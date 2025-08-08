@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
@@ -233,6 +234,5 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
     }
 );
 
-export default PaymentSystem;
 export { PaymentSystem };
 export type { PaymentSystemProps, PaymentSystemRef };

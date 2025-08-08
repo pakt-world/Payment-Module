@@ -7,13 +7,22 @@ import { forwardRef, Ref, useImperativeHandle, useRef } from "react";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { ConfigProvider } from "../context/config-context";
-import PaymentSystem, { PaymentSystemProps, PaymentSystemRef } from "./payment-system";
+import {
+    PaymentSystem,
+    PaymentSystemProps,
+    PaymentSystemRef,
+} from "./payment-system";
 import "../styles/index.css";
 import { ConfigContextType, PaymentData } from "../types";
 
 const PaktPaymentModule = forwardRef(
     (
-        { config, onPaymentSuccess, onPaymentError, isLoading }: PaymentSystemProps & { config: ConfigContextType },
+        {
+            config,
+            onPaymentSuccess,
+            onPaymentError,
+            isLoading,
+        }: PaymentSystemProps & { config: ConfigContextType },
         ref: Ref<PaymentSystemRef>
     ) => {
         const paymentModuleRef = useRef<PaymentSystemRef>(null);
@@ -30,7 +39,7 @@ const PaktPaymentModule = forwardRef(
             },
             close: () => {
                 paymentModuleRef.current?.close();
-            }
+            },
         }));
 
         return (
