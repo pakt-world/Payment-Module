@@ -119,10 +119,8 @@ const App = () => {
             wagmiConfig,
         },
         stripeConfig: {
-            publicKey:
-                "pk_test_51N00000000000000000000000000000000000000000000000000000000000000000000000000000000",
-            clientSecret:
-                "sk_test_51N00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            publicKey: "",
+            clientSecret: "",
             theme: "dark",
         },
         paktConfig: {
