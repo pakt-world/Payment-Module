@@ -1,17 +1,16 @@
+/* eslint-disable no-unused-vars */
 /* -------------------------------------------------------------------------- */
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState } from "react";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 
 import { paktSDKService } from "../lib/pakt-sdk";
-import type {
-    PaymentResponse,
-} from "../lib/pakt-sdk";
+import type { PaymentResponse } from "../lib/pakt-sdk";
 
 interface Payment {
     collectionId?: string;
@@ -22,17 +21,17 @@ interface Payment {
     [key: string]: any;
 }
 
-interface UsePaymentModuleReturn {
+export interface UsePaymentModuleReturn {
     // State
     payment: Payment | null;
     loading: boolean;
     error: string | null;
-    
+
     // Authentication Methods
     initiateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
     validateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
     // initiateFiatPayment: (payload: IValidateDirectDepositPayload) => Promise<PaymentResponse<IValidateDirectDepositResponse>>;
-    
+
     // Utility Methods
     clearError: () => void;
     clearPayment: () => void;
@@ -44,16 +43,22 @@ export const usePaymentModule = (): UsePaymentModuleReturn => {
     const [error, setError] = useState<string | null>(null);
 
     // Helper function to create error response
-    const createErrorResponse = useCallback(<T>(errorMessage: string, defaultMessage: string): PaymentResponse<T> => {
-        const message = errorMessage || defaultMessage;
-        setError(message);
-        return {
-            status: 'error',
-            message,
-            data: null as unknown as T,
-            statusCode: 500
-        };
-    }, []);
+    const createErrorResponse = useCallback(
+        <T>(
+            errorMessage: string,
+            defaultMessage: string
+        ): PaymentResponse<T> => {
+            const message = errorMessage || defaultMessage;
+            setError(message);
+            return {
+                status: "error",
+                message,
+                data: null as unknown as T,
+                statusCode: 500,
+            };
+        },
+        []
+    );
 
     // Clear error
     const clearError = useCallback(() => {
@@ -66,79 +71,105 @@ export const usePaymentModule = (): UsePaymentModuleReturn => {
     }, []);
 
     // Initiate crypto payment
-    const initiateCryptoPayment = useCallback(async (payload: any): Promise<PaymentResponse<any>> => {
-        setLoading(true);
-        setError(null);
-        
-        try {
-            const response = await paktSDKService.makeDirectDeposit(payload);
-            
-            if (response.status === 'success' && response.data) {
-                setPayment(response.data);
-            } else {
-                setError(response.message || 'Payment failed');
+    const initiateCryptoPayment = useCallback(
+        async (payload: any): Promise<PaymentResponse<any>> => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response =
+                    await paktSDKService.makeDirectDeposit(payload);
+
+                if (response.status === "success" && response.data) {
+                    setPayment(response.data);
+                } else {
+                    setError(response.message || "Payment failed");
+                }
+
+                return response;
+            } catch (errorr: any) {
+                const errorMessage =
+                    errorr instanceof Error ? errorr.message : "Payment failed";
+                return createErrorResponse<any>(errorMessage, "Payment failed");
+            } finally {
+                setLoading(false);
             }
-            
-            return response;
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Payment failed';
-            return createErrorResponse<any>(errorMessage, 'Payment failed');
-        } finally {
-            setLoading(false);
-        }
-    }, [createErrorResponse]);
+        },
+        [createErrorResponse]
+    );
 
     // initiate fiat payment
     // const initiateFiatPayment = useCallback(async (payload: any): Promise<PaymentResponse<any>> => {
     //     setLoading(true);
     //     setError(null);
-        
+
     //     try {
     // }, []);
-    
-    // validate crypto payment
-    const validateCryptoPayment = useCallback(async (collectionId: string, retries: number = 10, retryDelay: number = 2000): Promise<PaymentResponse<any>> => {
-        console.log("validateCryptoPayment", collectionId);
-        const maxRetries = retries;
-        setLoading(true);
-        setError(null);
-        
-        for (let attempt = 1; attempt <= retries; attempt++) {
-            console.log("attempt--number", attempt);
-            try {
-                const response = await paktSDKService.validateDirectDeposit({ collection: collectionId });
-                if (response.status !== 'success') {
-                    throw new Error(response.message || 'Payment failed');
-                }
-                return response;
-            } catch (error) {
-                console.log(`Attempt ${attempt} failed:`, error);
-                
-                if (attempt === maxRetries) {
-                    const errorMessage = error instanceof Error ? error.message : 'Payment failed';
-                    return createErrorResponse<any>(errorMessage, 'Payment failed after maximum retries');
-                }
-                
-                // Wait before retrying
-                await new Promise(resolve => setTimeout(resolve, retryDelay));
-            }
-        }
-        
-        // This should never be reached, but TypeScript requires it
-        return createErrorResponse<any>('Unexpected error', 'Payment failed');
-    }, [createErrorResponse]);
 
+    // validate crypto payment
+    const validateCryptoPayment = useCallback(
+        async (
+            collectionId: string,
+            retries: number = 10,
+            retryDelay: number = 2000
+        ): Promise<PaymentResponse<any>> => {
+            console.log("validateCryptoPayment", collectionId);
+            const maxRetries = retries;
+            setLoading(true);
+            setError(null);
+
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                console.log("attempt--number", attempt);
+                try {
+                    const response = await paktSDKService.validateDirectDeposit(
+                        {
+                            collection: collectionId,
+                        }
+                    );
+                    if (response.status !== "success") {
+                        throw new Error(response.message || "Payment failed");
+                    }
+                    return response;
+                } catch (errorr: any) {
+                    console.log(`Attempt ${attempt} failed:`, errorr);
+
+                    if (attempt === maxRetries) {
+                        const errorMessage =
+                            errorr instanceof Error
+                                ? errorr.message
+                                : "Payment failed";
+                        return createErrorResponse<any>(
+                            errorMessage,
+                            "Payment failed after maximum retries"
+                        );
+                    }
+
+                    // Wait before retrying
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, retryDelay)
+                    );
+                }
+            }
+
+            // This should never be reached, but TypeScript requires it
+            return createErrorResponse<any>(
+                "Unexpected error",
+                "Payment failed"
+            );
+        },
+        [createErrorResponse]
+    );
 
     return {
         // State
         payment,
         loading,
         error,
-        
+
         // Authentication Methods
         initiateCryptoPayment,
         validateCryptoPayment,
-        
+
         // Utility Methods
         clearError,
         clearPayment,

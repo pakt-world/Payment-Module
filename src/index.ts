@@ -12,6 +12,10 @@ export * from "./components/payment-system";
 
 // Hooks
 export { usePaymentModule } from "./hooks/use-payment-module";
+export type { UsePaymentModuleReturn } from "./hooks/use-payment-module";
+
+// SDK types
+export type { PaymentResponse } from "./lib/pakt-sdk";
 
 // Utilities and types
 export * from "./components/wagmi";

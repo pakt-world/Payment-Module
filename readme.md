@@ -24,7 +24,7 @@ bun add @pakt/payment-module
 
 ```typescript
 import React from 'react';
-import { ConfigContextType } from '@pakt/payment-module';
+import { ConfigContextType, ITheme } from '@pakt/payment-module';
 
 import { createConfig, http } from 'wagmi'; // Import Wagmi config setup
 import { mainnet, sepolia } from 'wagmi/chains'; // Import desired chains
@@ -84,7 +84,12 @@ The new unified payment system provides a single component that can handle both 
 
 ```typescript
 import React, { useRef } from 'react';
-import PaktPaymentModule, { PaymentSystemRef, ConfigContextType, onFinishResponseProps } from '@pakt/payment-module';
+import PaktPaymentModule, { 
+  PaymentSystemRef, 
+  ConfigContextType, 
+  onFinishResponseProps,
+  PaymentData 
+} from '@pakt/payment-module';
 
 function MyPaymentComponent() {
   const paymentRef = useRef<PaymentSystemRef>(null);
@@ -196,7 +201,7 @@ For backward compatibility, you can still use the individual payment modal compo
 #### Fiat Payments
 
 ```typescript
-import { FiatPaymentModal } from '@pakt/payment-module';
+import { FiatPaymentModal, ConfigContextType, onFinishResponseProps } from '@pakt/payment-module';
 import { useDisclosure } from '@your-ui-library/hooks'; // Example hook for modal state
 
 function MyFiatPaymentPage() {
@@ -225,10 +230,10 @@ function MyFiatPaymentPage() {
 }
 ```
 
-### Crypto Payments
+#### Crypto Payments
 
 ```typescript
-import { CryptoPaymentModal } from '@pakt/payment-module';
+import { CryptoPaymentModal, ConfigContextType, onFinishResponseProps } from '@pakt/payment-module';
 import { useDisclosure } from '@your-ui-library/hooks'; // Example hook for modal state
 
 function MyCryptoPaymentTrigger() {
@@ -321,7 +326,7 @@ interface ConfigContextType {
 The package also provides a custom hook for advanced payment operations:
 
 ```typescript
-import { usePaymentModule } from '@pakt/payment-module';
+import { usePaymentModule, UsePaymentModuleReturn, PaymentResponse } from '@pakt/payment-module';
 
 function MyComponent() {
   const {
@@ -346,11 +351,284 @@ function MyComponent() {
     }
   };
 
+  const handleClearError = () => {
+    clearError();
+  };
+
+  const handleClearPayment = () => {
+    clearPayment();
+  };
+
   return (
-    // Your component JSX
+    <div>
+      {loading && <p>Loading...</p>}
+      {error && (
+        <div>
+          <p>Error: {error}</p>
+          <button onClick={handleClearError}>Clear Error</button>
+        </div>
+      )}
+      <button onClick={handleCryptoPayment}>
+        Start Crypto Payment
+      </button>
+      <button onClick={handleClearPayment}>
+        Clear Payment Data
+      </button>
+    </div>
   );
 }
 ```
+
+**usePaymentModule Return Type:**
+```typescript
+interface UsePaymentModuleReturn {
+  // State
+  payment: Payment | null;
+  loading: boolean;
+  error: string | null;
+  
+  // Payment Methods
+  initiateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
+  validateCryptoPayment: (collectionId: string, retries?: number, retryDelay?: number) => Promise<PaymentResponse<any>>;
+  
+  // Utility Methods
+  clearError: () => void;
+  clearPayment: () => void;
+}
+```
+
+## Types Reference
+
+The package exports comprehensive TypeScript types for better development experience:
+
+### Core Types
+
+```typescript
+// Configuration interface
+interface ConfigContextType {
+  cryptoConfig?: {
+    wagmiConfig: Config;
+    wagmiProvider?: WagmiProviderProps;
+    queryClient?: QueryClient;
+  };
+  stripeConfig?: {
+    publicKey: string;
+    clientSecret: string;
+    theme?: "light" | "dark";
+  };
+  paktConfig: {
+    baseUrl: string;
+    verbose?: boolean;
+  };
+  errorHandler?: (errorMessage: string) => void;
+  theme?: ITheme;
+}
+
+// Payment data structure
+interface PaymentData {
+  amount: number;          // Payment amount
+  coin: string;           // Currency/token symbol
+  description: string;    // Payment description
+  isDirect: boolean;      // Whether this is a direct payment
+  collectionType: string; // Type of collection
+  owner: string;          // Owner/recipient ID
+  name: string;           // Collection/service name
+}
+
+// Response interface for payment callbacks
+interface onFinishResponseProps {
+  status: "success" | "error";
+  message: string;
+  txId: string;
+  collectionId?: string;
+}
+
+// Theme customization interface
+interface ITheme {
+  primary?: string;
+  secondary?: string;
+  info?: string;
+  line?: string;
+  title?: string;
+  body?: string;
+  warning?: string;
+  success?: string;
+  danger?: string;
+  magnolia?: string;
+  "exhibit-tab-list"?: string;
+  "primary-brighter"?: string;
+  "refer-border"?: string;
+  "btn-primary"?: string;
+  "primary-gradient"?: string;
+  "modal-radius"?: string;
+}
+```
+
+### Component Props Types
+
+```typescript
+// Main payment module props
+interface PaymentSystemProps {
+  onPaymentSuccess?: (response: onFinishResponseProps) => void;
+  onPaymentError?: (response: onFinishResponseProps) => void;
+  enabledMethods?: ("crypto" | "fiat")[];
+  isLoading?: boolean;
+}
+
+// Payment system ref methods
+type PaymentSystemRef = {
+  startPayment: (data: PaymentData) => void;
+  startCryptoPayment: (data: PaymentData) => void;
+  startFiatPayment: (data: PaymentData) => void;
+  close: () => void;
+};
+
+// Basic modal props (for legacy components)
+interface BasicModalProps {
+  config: ConfigContextType;
+  isOpen: boolean;
+  closeModal: () => void;
+  collectionId: string;
+}
+```
+
+### Hook Types
+
+```typescript
+// usePaymentModule hook return type
+interface UsePaymentModuleReturn {
+  payment: Payment | null;
+  loading: boolean;
+  error: string | null;
+  initiateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
+  validateCryptoPayment: (collectionId: string, retries?: number, retryDelay?: number) => Promise<PaymentResponse<any>>;
+  clearError: () => void;
+  clearPayment: () => void;
+}
+
+// Payment response type
+interface PaymentResponse<T = any> {
+  status: 'success' | 'error';
+  message: string;
+  data: T;
+  statusCode: number;
+}
+```
+
+### Utility Types
+
+```typescript
+// Generic any type
+type IAny = any;
+
+// Ethereum address type
+type I0xAddressType = `0x${string}`;
+```
+
+## Quick Start Example
+
+Here's a complete example showing how to use the package with proper TypeScript types:
+
+```typescript
+import React, { useRef, useState } from 'react';
+import { createConfig, http } from 'wagmi';
+import { avalancheFuji } from 'wagmi/chains';
+import { injected } from 'wagmi/connectors';
+
+import PaktPaymentModule, {
+  PaymentSystemRef,
+  ConfigContextType,
+  PaymentData,
+  onFinishResponseProps,
+  usePaymentModule,
+  UsePaymentModuleReturn,
+  PaymentResponse
+} from '@pakt/payment-module';
+
+// Wagmi configuration
+const wagmiConfig = createConfig({
+  chains: [avalancheFuji],
+  connectors: [injected()],
+  transports: {
+    [avalancheFuji.id]: http(),
+  },
+});
+
+// Payment module configuration
+const config: ConfigContextType = {
+  cryptoConfig: {
+    wagmiConfig,
+  },
+  stripeConfig: {
+    publicKey: 'pk_test_...',
+    clientSecret: 'pi_...',
+    theme: 'dark',
+  },
+  paktConfig: {
+    baseUrl: 'https://api.pakt.com/v1',
+    verbose: true,
+  },
+};
+
+function App() {
+  const paymentRef = useRef<PaymentSystemRef>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handlePaymentSuccess = (response: onFinishResponseProps) => {
+    console.log('Payment successful:', response);
+    setIsLoading(false);
+  };
+
+  const handlePaymentError = (response: onFinishResponseProps) => {
+    console.error('Payment failed:', response);
+    setIsLoading(false);
+  };
+
+  const startPayment = () => {
+    setIsLoading(true);
+    const paymentData: PaymentData = {
+      amount: 100,
+      coin: 'USDC',
+      description: 'Service payment',
+      isDirect: true,
+      collectionType: 'service',
+      owner: 'user-123',
+      name: 'Premium Service'
+    };
+    paymentRef.current?.startPayment(paymentData);
+  };
+
+  return (
+    <div>
+      <button onClick={startPayment} disabled={isLoading}>
+        {isLoading ? 'Processing...' : 'Pay $100'}
+      </button>
+      
+      <PaktPaymentModule
+        ref={paymentRef}
+        config={config}
+        onPaymentSuccess={handlePaymentSuccess}
+        onPaymentError={handlePaymentError}
+        enabledMethods={['crypto', 'fiat']}
+        isLoading={isLoading}
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+## Changelog
+
+### v0.2.1
+- ✨ **New**: Unified `PaktPaymentModule` component with ref-based API
+- ✨ **New**: Support for enabling/disabling specific payment methods
+- ✨ **New**: `usePaymentModule` hook for advanced payment operations
+- ✨ **New**: Comprehensive TypeScript type exports
+- 🔧 **Updated**: Configuration structure with optional crypto/stripe configs
+- 🔧 **Added**: Required `paktConfig` for API communication
+- 📚 **Improved**: Documentation with complete type reference
 
 ## Contributing
 
