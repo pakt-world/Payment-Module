@@ -6,7 +6,11 @@ import { Config } from "wagmi";
 import { StrictOmit, ExactPartial } from "@wagmi/core/dist/types/types/utils";
 import { type ConnectMutate } from "wagmi/query";
 
-import { BasicModalProps, IAny, onFinishResponseProps, ConfigContextType } from "../../types";
+import {
+    BasicModalProps,
+    onFinishResponseProps,
+    ConfigContextType,
+} from "../../types";
 
 interface ConnectorProps {
     connect: () => Promise<{
@@ -57,9 +61,9 @@ interface CryptoPaymentModalProps extends BasicModalProps {
     chainId: number;
     contractAddress?: string;
     tokenDecimal: number;
-    onSuccessResponse:(data: onFinishResponseProps) => void;
-    isLoading?:boolean;
-    isPreLoading?:boolean;
+    onResponse: (data: onFinishResponseProps) => void;
+    isLoading?: boolean;
+    isPreLoading?: boolean;
 }
 
 interface CryptoPayWithWalletProps {
@@ -69,8 +73,8 @@ interface CryptoPayWithWalletProps {
     contractAddress?: string;
     tokenDecimal: number;
     chainId: number;
-    onSuccessResponse:(data: onFinishResponseProps) => void;
-    isLoading?:boolean;
+    isLoading?: boolean;
+    onResponse: (data: onFinishResponseProps) => void;
 }
 
 type I0xType = `0x${string}`;
@@ -93,25 +97,26 @@ interface WalletDepositProps {
     connect: ConnectMutate<Config, unknown>;
     showReconfirmButton?: boolean;
     disableButtonOnClick?: boolean;
-    disconnect: ()=>void;
-    onSuccessResponse:(data: onFinishResponseProps) => void;
+    isVerifying?: boolean;
+    disconnect: () => void;
+    onResponse: (data: onFinishResponseProps) => void;
 }
 
 interface DepositToAddressProps {
-  amount: number;
-  coin: string;
-  depositAddress: string;
-  onSuccessResponse:(data: onFinishResponseProps) => void;
-  isLoading?:boolean;
+    amount: number;
+    coin: string;
+    depositAddress: string;
+    onResponse: (data: onFinishResponseProps) => void;
+    isLoading?: boolean;
 }
 
 export {
-  type CryptoPaymentModalProps,
-  type CryptoPayWithWalletProps,
-  type ConnectorProps,
-  type WalletConnectListType,
-  type I0xType,
-  type WalletDepositProps,
-  type ContractErrorType,
-  type DepositToAddressProps,
+    type CryptoPaymentModalProps,
+    type CryptoPayWithWalletProps,
+    type ConnectorProps,
+    type WalletConnectListType,
+    type I0xType,
+    type WalletDepositProps,
+    type ContractErrorType,
+    type DepositToAddressProps,
 };

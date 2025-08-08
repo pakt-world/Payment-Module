@@ -6,21 +6,20 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
+import { Button } from "../common";
 import { useConfig } from "../../context/config-context";
 import { onFinishResponseProps } from "../../types";
 import CryptoPaymentExtended from "./crypto";
 import FiatPaymentExtended from "./fiat";
+import { usePaymentModule } from "../../hooks/use-payment-module";
 
-type PaymentView = 
-    | "payment-method"
-    | "crypto-payment" 
-    | "fiat-payment"
-    | "";
+type PaymentView = "payment-method" | "crypto-payment" | "fiat-payment" | "";
 
 interface PaymentSystemProps {
     onPaymentSuccess?: (response: onFinishResponseProps) => void;
     onPaymentError?: (response: onFinishResponseProps) => void;
     enabledMethods?: ("crypto" | "fiat")[];
+    isLoading?: boolean;
 }
 
 interface PaymentData {
@@ -41,29 +40,67 @@ type PaymentSystemRef = {
 };
 
 const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
-    ({ 
-        onPaymentSuccess, 
-        onPaymentError,
-        enabledMethods = ["crypto", "fiat"]
-    }: PaymentSystemProps, ref) => {
+    (
+        {
+            onPaymentSuccess,
+            onPaymentError,
+            enabledMethods = ["crypto", "fiat"],
+            isLoading = false,
+        }: PaymentSystemProps,
+        ref
+    ) => {
         const [currentView, setCurrentView] = useState<PaymentView>("");
-        const [isLoading, setIsLoading] = useState(false);
-        const config = useConfig();
-        const [paymentData, setPaymentData] = useState<PaymentData>({ amount: 0, coin: "", description: "", isDirect: false, collectionType: "", owner: "", name: "" });
 
+        const config = useConfig();
+        const [paymentData, setPaymentData] = useState<PaymentData>({
+            amount: 0,
+            coin: "",
+            description: "",
+            isDirect: false,
+            collectionType: "",
+            owner: "",
+            name: "",
+        });
+        const { validateCryptoPayment } = usePaymentModule();
         const resetCurrentView = () => {
             setCurrentView("");
-            setIsLoading(false);
         };
 
-        const handlePaymentSuccess = (response: onFinishResponseProps) => {
-            onPaymentSuccess?.(response);
-            resetCurrentView();
-        };
-
-        const handlePaymentError = (response: onFinishResponseProps) => {
-            onPaymentError?.(response);
-            setIsLoading(false);
+        const handlePaymentSuccess = async (
+            response: onFinishResponseProps
+        ) => {
+            if (response.status === "success") {
+                // Perform async validation
+                try {
+                    const validateResponse = await validateCryptoPayment(
+                        response.collectionId
+                    );
+                    if (validateResponse.status === "success") {
+                        onPaymentSuccess?.({
+                            status: "success",
+                            message: "Payment successful",
+                            txId: response.txId,
+                        });
+                    } else {
+                        onPaymentError?.({
+                            status: "error",
+                            message: validateResponse.message,
+                            txId: response.txId,
+                        });
+                    }
+                } catch (error: any) {
+                    onPaymentError?.({
+                        status: "error",
+                        message: error.message,
+                        txId: response.txId,
+                    });
+                } finally {
+                    resetCurrentView();
+                }
+            } else {
+                onPaymentError?.(response);
+                console.log("handlePaymentError", response);
+            }
         };
 
         // Determine which payment methods are available
@@ -89,7 +126,12 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                 startPaymentFlow(data);
             },
             startCryptoPayment: (data: PaymentData) => {
-                console.log("startCryptoPayment", data, isCryptoEnabled, currentView);
+                console.log(
+                    "startCryptoPayment",
+                    data,
+                    isCryptoEnabled,
+                    currentView
+                );
                 setPaymentData(data);
                 if (isCryptoEnabled) {
                     setCurrentView("crypto-payment");
@@ -110,39 +152,52 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
             <>
                 {/* Payment Method Selection (when both methods are enabled) */}
                 {bothMethodsEnabled && (
-                    <div className={`pam:fixed pam:inset-0 pam:z-50 pam:flex pam:items-center pam:justify-center pam:bg-black pam:bg-opacity-50 ${currentView === "payment-method" ? "" : "pam:hidden"}`}>
+                    <div
+                        className={`pam:fixed pam:inset-0 pam:z-50 pam:flex pam:items-center pam:justify-center pam:bg-black pam:bg-opacity-50 ${currentView === "payment-method" ? "" : "pam:hidden"}`}
+                    >
                         <div className="pam:bg-white pam:rounded-lg pam:p-6 pam:max-w-md pam:w-full pam:mx-4">
-                            <h2 className="pam:text-xl pam:font-semibold pam:mb-4">Choose Payment Method</h2>
+                            <h2 className="pam:text-xl pam:font-semibold pam:mb-4">
+                                Choose Payment Method
+                            </h2>
                             <p className="pam:text-gray-600 pam:mb-6">
                                 Amount: {paymentData.coin} {paymentData.amount}
-                                {paymentData.description && <><br />Description: {paymentData.description}</>}
+                                {paymentData.description && (
+                                    <>
+                                        <br />
+                                        Description: {paymentData.description}
+                                    </>
+                                )}
                             </p>
                             <div className="pam:space-y-3">
                                 {isCryptoEnabled && (
-                                    <button
-                                        onClick={() => setCurrentView("crypto-payment")}
-                                        className="pam:w-full pam:bg-blue-500 pam:text-white pam:py-3 pam:px-4 pam:rounded-lg pam:hover:bg-blue-600 pam:transition-colors"
+                                    <Button
+                                        variant="primary"
+                                        onClick={() =>
+                                            setCurrentView("crypto-payment")
+                                        }
                                         disabled={isLoading}
                                     >
                                         Pay with Cryptocurrency
-                                    </button>
+                                    </Button>
                                 )}
                                 {isFiatEnabled && (
-                                    <button
-                                        onClick={() => setCurrentView("fiat-payment")}
-                                        className="pam:w-full pam:bg-green-500 pam:text-white pam:py-3 pam:px-4 pam:rounded-lg pam:hover:bg-green-600 pam:transition-colors"
+                                    <Button
+                                        variant="primary"
+                                        onClick={() =>
+                                            setCurrentView("fiat-payment")
+                                        }
                                         disabled={isLoading}
                                     >
                                         Pay with Card
-                                    </button>
+                                    </Button>
                                 )}
                             </div>
-                            <button
+                            <Button
+                                variant="secondary"
                                 onClick={resetCurrentView}
-                                className="pam:w-full pam:mt-4 pam:bg-gray-300 pam:text-gray-700 pam:py-2 pam:px-4 pam:rounded-lg pam:hover:bg-gray-400 pam:transition-colors"
                             >
                                 Cancel
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 )}
@@ -158,8 +213,8 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                         isDirect={paymentData.isDirect}
                         collectionType={paymentData.collectionType}
                         owner={paymentData.owner}
-                        handlePaymentSuccess={handlePaymentSuccess}
-                        handlePaymentError={handlePaymentError}
+                        handlePaymentResponse={handlePaymentSuccess}
+                        isLoading={isLoading}
                     />
                 )}
 
@@ -169,8 +224,8 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                         isOpen={currentView === "fiat-payment"}
                         config={config}
                         amount={paymentData.amount}
-                        handlePaymentSuccess={handlePaymentSuccess}
-                        handlePaymentError={handlePaymentError}
+                        handlePaymentResponse={handlePaymentSuccess}
+                        isLoading={isLoading}
                     />
                 )}
             </>

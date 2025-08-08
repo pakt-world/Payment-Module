@@ -15,7 +15,7 @@ const button = cva(
         variants: {
             variant: {
                 primary:
-                    "pam:border-white pam:border-opacity-10 pam:bg-btn-primary pam:text-white",
+                    "pam:border-white pam:border-opacity-10 pam:bg-primary pam:text-white",
                 secondary:
                     "pam:border-primary pam:border pam:text-primary pam:bg-primary-brighter pam:hover:bg-green-100 pam:duration-200 pam:font-normal",
                 outline:

@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import StripePayment from "../fiat-payment/stripe";
 import { ConfigContextType, onFinishResponseProps } from "../../types";
 import { usePaymentModule } from "../../hooks/use-payment-module";
 
-const FiatPaymentExtended = ({
-    isOpen,
-    config,
-    amount,
-    handlePaymentSuccess,
-    handlePaymentError,
-}: {
+interface FiatPaymentExtendedProps {
     isOpen: boolean;
     config: ConfigContextType;
     amount: number;
-    handlePaymentSuccess: (response: onFinishResponseProps) => void;
-    handlePaymentError: (response: onFinishResponseProps) => void;
-}) => {
+    isLoading: boolean;
+    handlePaymentResponse: (response: onFinishResponseProps) => void;
+}
+
+const FiatPaymentExtended = forwardRef<HTMLDivElement, FiatPaymentExtendedProps>(({
+    isOpen,
+    config,
+    amount,
+    isLoading,
+    handlePaymentResponse,
+}, ref) => {
     const [isPreLoading, setIsPreLoading] = useState(true);
     const [collectionId, setCollectionId] = useState("");
     const { initiateCryptoPayment } = usePaymentModule();
@@ -30,7 +32,7 @@ const FiatPaymentExtended = ({
         if (response.status === "success") {
             setCollectionId(response.data.collectionId);
         } else {
-            handlePaymentError({
+            handlePaymentResponse({
                 status: "error",
                 message: response.message,
                 txId: "",
@@ -49,17 +51,21 @@ const FiatPaymentExtended = ({
     }, [isOpen]);
 
     return (
-        <StripePayment
-            isOpen={isOpen}
-            closeModal={closeModal}
-            config={config}
-            collectionId={collectionId}
-            chain="avalanche"
-            onFinishResponse={handlePaymentSuccess}
-            isLoading={false}
-            isPreLoading={isPreLoading}
-        />
+        <div ref={ref}>
+            <StripePayment
+                isOpen={isOpen}
+                closeModal={closeModal}
+                config={config}
+                collectionId={collectionId}
+                chain="avalanche"
+                onFinishResponse={handlePaymentResponse}
+                isLoading={isLoading}
+                isPreLoading={isPreLoading}
+            />
+        </div>
     )
-}
+});
+
+FiatPaymentExtended.displayName = 'FiatPaymentExtended';
 
 export default FiatPaymentExtended;

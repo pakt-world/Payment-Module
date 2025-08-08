@@ -20,14 +20,14 @@ const CryptoPaymentModal = ({
     contractAddress,
     chainId,
     tokenDecimal,
-    onSuccessResponse,
+    onResponse,
     isLoading,
     collectionId,
-    isPreLoading = true
+    isPreLoading = true,
 }: CryptoPaymentModalProps): ReactElement => {
     return (
         <ConfigProvider config={config}>
-            <CryptoPayment 
+            <CryptoPayment
                 isOpen={isOpen}
                 closeModal={closeModal}
                 amount={amount}
@@ -37,7 +37,7 @@ const CryptoPaymentModal = ({
                 chainId={chainId}
                 tokenDecimal={tokenDecimal}
                 collectionId={collectionId}
-                onSuccessResponse={onSuccessResponse}
+                onResponse={onResponse}
                 isLoading={isLoading}
                 config={config}
                 isPreLoading={isPreLoading}

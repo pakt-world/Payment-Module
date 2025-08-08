@@ -9,14 +9,13 @@ import * as Tabs from "@radix-ui/react-tabs";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import type { CryptoPaymentModalProps } from "./types";
-import Modal from "../../components/common/modal";
+import Modal from "../common/modal";
 import ConnectWallet from "./connect-wallet";
 import DepositToAddress from "./address-deposit";
-import PaktWrapper from "../../components/modal-wrapper";
-import { Spinner } from "../common";
+import PaktWrapper from "../modal-wrapper";
+import { BrandLoader } from "../common/brand-loader";
 
 const CryptoPayment = ({
-    config,
     isOpen,
     closeModal,
     amount,
@@ -25,19 +24,17 @@ const CryptoPayment = ({
     contractAddress,
     chainId,
     tokenDecimal,
-    onSuccessResponse,
+    onResponse,
     isLoading,
-    isPreLoading = true
+    isPreLoading = true,
 }: CryptoPaymentModalProps): ReactElement => {
     return (
         <Modal isOpen={isOpen} closeModal={closeModal} disableClickOutside>
-            <PaktWrapper showPakt>
-                {isPreLoading ?
-                    <div className="pam:mx-auto pam:flex pam:w-full pam:h-[550px] pam:flex-col pam:gap-6 pam:bg-white pam:p-6 pam:rounded-2xl pam:border">
-                            <Spinner size={40} />
-                    </div>
-                :
-                    <div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-6 pam:bg-white pam:p-6 pam:rounded-2xl pam:border">
+            {isPreLoading ? (
+                <BrandLoader />
+            ) : (
+                <PaktWrapper showPakt>
+                    <div className="pam:mx-auto pam:flex pam:w-full pam:h-full pam:flex-col pam:gap-6 pam:bg-white pam:p-6 pam:rounded-2xl pam:border">
                         <div className="pam:flex pam:w-full pam:items-center pam:justify-between">
                             <h2 className="pam:text-lg pam:font-bold pam:text-title pam:sm:pam:text-2xl">
                                 Make Payment
@@ -57,7 +54,10 @@ const CryptoPayment = ({
                                 defaultValue="connect-wallet"
                                 className="pam:relative pam:flex pam:w-full pam:flex-col pam:gap-6"
                             >
-                                <Tabs.List className="pam:grid pam:grid-cols-2 pam:gap-1 pam:rounded-lg pam:bg-[#F0F2F5] pam:p-0.5 pam:text-base pam:text-[#828A9B]" color="white">
+                                <Tabs.List
+                                    className="pam:grid pam:grid-cols-2 pam:gap-1 pam:rounded-lg pam:bg-input-background pam:p-0.5 pam:text-base pam:text-input-placeholder"
+                                    color="white"
+                                >
                                     <Tabs.Trigger
                                         className="pam:rounded-lg pam:p-2 pam:px-2 pam:duration-200 pam:hover:bg-white pam:data-[state=active]:bg-white"
                                         value="connect-wallet"
@@ -74,14 +74,17 @@ const CryptoPayment = ({
                                     </Tabs.Trigger>
                                 </Tabs.List>
 
-                                <Tabs.Content value="connect-wallet">
+                                <Tabs.Content
+                                    value="connect-wallet"
+                                    className="pam:h-[500px]"
+                                >
                                     <ConnectWallet
                                         amount={amount}
                                         depositAddress={depositAddress}
                                         contractAddress={contractAddress}
                                         tokenDecimal={tokenDecimal}
                                         chainId={chainId}
-                                        onSuccessResponse={onSuccessResponse}
+                                        onResponse={onResponse}
                                         isLoading={isLoading}
                                         coin={coin}
                                     />
@@ -91,15 +94,15 @@ const CryptoPayment = ({
                                         coin={coin}
                                         amount={amount}
                                         depositAddress={depositAddress}
-                                        onSuccessResponse={onSuccessResponse}
+                                        onResponse={onResponse}
                                         isLoading={isLoading}
                                     />
                                 </Tabs.Content>
                             </Tabs.Root>
                         </div>
                     </div>
-                }
-            </PaktWrapper>
+                </PaktWrapper>
+            )}
         </Modal>
     );
 };

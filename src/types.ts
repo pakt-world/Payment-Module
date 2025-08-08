@@ -38,6 +38,7 @@ interface onFinishResponseProps {
   status: "success" | "error";
   message: string;
   txId: string;
+  collectionId?: string;
 }
 
 type IAny = any;

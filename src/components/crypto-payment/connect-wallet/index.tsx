@@ -4,7 +4,7 @@
 /*                             External Dependency                            */
 /* -------------------------------------------------------------------------- */
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { parseUnits } from "viem";
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
 
@@ -25,7 +25,7 @@ const ConnectWallet = ({
     contractAddress,
     chainId,
     tokenDecimal,
-    onSuccessResponse,
+    onResponse,
     isLoading,
     coin
 }: CryptoPayWithWalletProps) => {
@@ -44,17 +44,48 @@ const ConnectWallet = ({
     const [showReconfirmButton, setShowReconfirmButton] = useState(false);
     const [disableButtonOnClick, setDisableButtonOnClick] = useState(false);
     const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [isVerifying, setIsVerifying] = useState(false);
 
     const amountToPay = useMemo(
         () => parseUnits(amount.toString(), tokenDecimal),
         [amount, tokenDecimal]
     );
+    
+    // Wrapper function to handle payment response and verification state
+    const handlePaymentResponse = useCallback((response: any) => {
+        // Use setTimeout to defer the state updates to avoid render conflicts
+        setTimeout(() => {
+            if (response.status === "success") {
+                setIsVerifying(true);
+            } else {
+                setIsVerifying(false);
+            }
+            
+            // Call the original onResponse callback
+            onResponse(response);
+        }, 0);
+    }, [onResponse]);
+
+    // Reset verification state when component unmounts or modal closes
+    useEffect(() => {
+        return () => {
+            setIsVerifying(false);
+        };
+    }, []);
+
+    // Reset verification state when a new payment session starts
+    useEffect(() => {
+        setIsVerifying(false);
+    }, [depositAddress, contractAddress]);
 
     const isToken = !!contractAddress;
     const isWrongChain = chain?.id !== chainId;
 
     const ReadyConnectors = connectors
         .map((c: IAny) => ({ ...c, name: String(c.name) }))
+        .filter((connector, index, self) => 
+            index === self.findIndex((c) => c.id === connector.id)
+        )
         .sort((a: any, b: any) => a.name.localeCompare(b.name));
 
     // switch network if wrong chain
@@ -76,7 +107,7 @@ const ConnectWallet = ({
     }, [disableButtonOnClick]);
 
     return (
-        <div className="pam:flex pam:flex-col pam:gap-8">
+        <div className="pam:flex pam:flex-col pam:gap-4">
             <p className="pam:text-center pam:text-sm pam:text-body">
                 By making payment you acknowledge that you have read and
                 understand the {" "}
@@ -127,12 +158,13 @@ const ConnectWallet = ({
                 isLoading={isConnecting || !!isLoading}
                 disableButtonOnClick={disableButtonOnClick}
                 connect={connect}
-                onSuccessResponse={onSuccessResponse}
+                onResponse={handlePaymentResponse}
                 disconnect={disconnect}
+                isVerifying={isVerifying}
               />
             ) : (
               <DepositCoin
-                isLoading={!!isLoading || isConnecting}
+                isLoading={!!isLoading || isConnecting || !!isVerifying}
                 amount={amount}
                 depositAddress={depositAddress}
                 chainId={chainId}
@@ -141,7 +173,7 @@ const ConnectWallet = ({
                 setDisableButtonOnClick={setDisableButtonOnClick}
                 connect={connect}
                 isDisabled={!selectedConnector || isConnecting || !!isLoading}
-                onSuccessResponse={onSuccessResponse}
+                onResponse={handlePaymentResponse}
                 disconnect={disconnect}
               />
             )}

@@ -1,20 +1,9 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { ConfigContextType, onFinishResponseProps } from "../../types";
 import { usePaymentModule } from "../../hooks/use-payment-module";
 import CryptoPayment from "../crypto-payment/cryptoPay";
 
-const CryptoPaymentExtended = ({
-    isOpen,
-    config,
-    amount,
-    coin,
-    description,
-    isDirect,
-    collectionType,
-    owner,
-    handlePaymentSuccess,
-    handlePaymentError,
-}: {
+interface CryptoPaymentExtendedProps {
     isOpen: boolean;
     config: ConfigContextType;
     amount: number;
@@ -23,19 +12,29 @@ const CryptoPaymentExtended = ({
     isDirect: boolean;
     collectionType: string;
     owner: string;
-    handlePaymentSuccess: (response: onFinishResponseProps) => void;
-    handlePaymentError: (response: onFinishResponseProps) => void;
-}) => {
+    isLoading: boolean;
+    handlePaymentResponse: (response: onFinishResponseProps) => void;
+}
+
+const CryptoPaymentExtended = forwardRef<HTMLDivElement, CryptoPaymentExtendedProps>(({
+    isOpen,
+    config,
+    amount,
+    coin,
+    description,
+    isDirect,
+    collectionType,
+    owner,
+    isLoading,
+    handlePaymentResponse,
+}, ref) => {
     const [isPreLoading, setIsPreLoading] = useState(true);
     const [collectionId, setCollectionId] = useState("");
     const [paymentData, setPaymentData] = useState<any>({});
     const { initiateCryptoPayment, validateCryptoPayment } = usePaymentModule();
     
-    console.log("CryptoPaymentExtended", isOpen, config, amount, coin, isPreLoading, collectionId);
-    
     const createCryptoPayment = async () => {
         try {
-            console.log("createCryptoPayment", amount, coin, collectionId);
             const response = await initiateCryptoPayment({
                 collectionType,
                 amount,
@@ -45,7 +44,6 @@ const CryptoPaymentExtended = ({
                 systemDeposit: isDirect,
                 name: description,
             });
-            console.log("createCryptoPayment response", response);
             if (response.status === "success") {
                 setCollectionId(response.data.collectionId);
                 setPaymentData(response.data);
@@ -54,8 +52,7 @@ const CryptoPaymentExtended = ({
                 throw new Error(response.message);
             }  
         } catch (error: any) {
-            console.log("createCryptoPayment error", error);
-            handlePaymentError({
+            handlePaymentResponse({
                 status: "error",
                 message: error.message,
                 txId: "",
@@ -67,6 +64,14 @@ const CryptoPaymentExtended = ({
         setIsPreLoading(false);
     }
 
+    const handlePaymentPostResponse = async (response: onFinishResponseProps) => 
+                handlePaymentResponse({
+                    status: response.status,
+                    message: response.message,
+                    txId: response.txId,
+                    collectionId: collectionId,
+                });
+
     useEffect(() => {
         if (isOpen) {
             createCryptoPayment();
@@ -74,22 +79,26 @@ const CryptoPaymentExtended = ({
     }, [isOpen]);
 
     return (
-        <CryptoPayment
-            isOpen={isOpen}
-            closeModal={closeModal}
-            config={config}
-            collectionId={paymentData.collectionId ?? ""}
-            amount={paymentData.amountToPay}
-            coin={paymentData.coin} // Default coin - this should be configurable
-            depositAddress={paymentData.address ?? ""} // This should be provided from config
-            chainId={Number(paymentData.chainId)} // Default to Avalanche - should be configurable
-            contractAddress={paymentData.contractAddress ?? ""} // Should be provided from config
-            tokenDecimal={6} // USDC decimals - should be configurable
-            onSuccessResponse={handlePaymentSuccess}
-            isLoading={false}
-            isPreLoading={isPreLoading}
-        />
+        <div ref={ref}>
+            <CryptoPayment
+                isOpen={isOpen}
+                closeModal={closeModal}
+                config={config}
+                collectionId={paymentData.collectionId ?? ""}
+                amount={paymentData.amountToPay}
+                coin={paymentData.coin} // Default coin - this should be configurable
+                depositAddress={paymentData.address ?? ""} // This should be provided from config
+                chainId={Number(paymentData.chainId)} // Default to Avalanche - should be configurable
+                contractAddress={paymentData.contractAddress ?? ""} // Should be provided from config
+                tokenDecimal={6} // USDC decimals - should be configurable
+                onResponse={handlePaymentPostResponse}
+                isLoading={isLoading}
+                isPreLoading={isPreLoading}
+            />
+        </div>
     )
-}
+});
+
+CryptoPaymentExtended.displayName = 'CryptoPaymentExtended';
 
 export default CryptoPaymentExtended;

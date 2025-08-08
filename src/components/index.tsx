@@ -13,7 +13,7 @@ import { ConfigContextType, PaymentData } from "../types";
 
 const PaktPaymentModule = forwardRef(
     (
-        { config, onPaymentSuccess, onPaymentError }: PaymentSystemProps & { config: ConfigContextType },
+        { config, onPaymentSuccess, onPaymentError, isLoading }: PaymentSystemProps & { config: ConfigContextType },
         ref: Ref<PaymentSystemRef>
     ) => {
         const paymentModuleRef = useRef<PaymentSystemRef>(null);
@@ -40,6 +40,7 @@ const PaktPaymentModule = forwardRef(
                         ref={paymentModuleRef}
                         onPaymentSuccess={onPaymentSuccess}
                         onPaymentError={onPaymentError}
+                        isLoading={isLoading || false}
                     />
                 </ConfigProvider>
             </div>

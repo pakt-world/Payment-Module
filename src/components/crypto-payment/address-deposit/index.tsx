@@ -17,7 +17,7 @@ const DepositToAddress = ({
     amount,
     depositAddress,
     coin,
-    onSuccessResponse,
+    onResponse,
     isLoading
 }: DepositToAddressProps): React.JSX.Element => {
     const [value, copy] = useCopyToClipboard();
@@ -64,7 +64,7 @@ const DepositToAddress = ({
                 </button>
             </div>
 
-            <div className="pam:flex pam:items-center pam:justify-center pam:gap-2 pam:rounded-2xl pam:border pam:border-line pam:bg-[#fcfcfc] pam:px-4 pam:py-4 pam:shadow">
+            <div className="pam:flex pam:items-center pam:justify-center pam:gap-2 pam:rounded-2xl pam:border pam:border-line pam:bg-[#fcfcfc] pam:px-4 pam:py-4 pam:shadow pam:h-[170px]">
                 <QRCode 
                   value={depositAddress}
                   size={150}
@@ -72,7 +72,7 @@ const DepositToAddress = ({
             </div>
 
             <Button
-                onClick={()=>onSuccessResponse({ status:"success", txId: "deposit"})}
+                onClick={()=>onResponse({ status:"success", message: "Payment successful", txId: "deposit"})}
                 disabled={isLoading}
                 fullWidth
                 variant="primary"

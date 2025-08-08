@@ -4,8 +4,10 @@ This package provides React components for handling both fiat and cryptocurrency
 
 ## Features
 
+*   **Unified Payment System:** New ref-based API for seamless payment method selection
 *   **Fiat Payments:** Uses Stripe Elements for secure credit card processing and onramp.
 *   **Crypto Payments:** Integrates with Wagmi v2 for connecting wallets and initiating transactions.
+*   **Flexible Configuration:** Support for enabling/disabling specific payment methods
 
 ## Installation
 ```bash
@@ -41,16 +43,21 @@ const wagmiConfig = createConfig({
 // 2. Define your Pakt Payment Module config
 const paymentModuleConfig: ConfigContextType = {
   // Optional: Customize the theme
-  theme: { primaryColor: '#ff0000', ... },
-   // crypto configuration is required for crypto payments
-  cryptoConfig:{
+  theme: { primary: '#ff0000', ... },
+  // crypto configuration is optional for crypto payments
+  cryptoConfig: {
     wagmiConfig: wagmiConfig,
   },
-  // stripe configuration is required for fiat payments
+  // stripe configuration is optional for fiat payments
   stripeConfig: {
     publicKey: 'YOUR_STRIPE_PUBLIC_KEY',
     clientSecret: 'YOUR_STRIPE_CLIENT_SECRET', 
     theme: 'light', // Optional: 'light' or 'dark'
+  },
+  // Required: Pakt configuration
+  paktConfig: {
+    baseUrl: 'YOUR_PAKT_API_BASE_URL',
+    verbose: true, // Optional: Enable debug logging
   },
   // Optional: Provide custom error handling
   errorHandler: (errorMsg) => console.error("Payment Module Error:", errorMsg),
@@ -63,11 +70,130 @@ export default paymentModuleConfig;
 
 *   `errorHandler?: (errorMessage: string) => void`: Optional callback function to handle errors originating from the module.
 *   `theme?: ITheme`: Optional theme object to customize component appearance.
-*   `cryptoConfig: { wagmiConfig: Config }`: **Required for crypto payments.** Your Wagmi v2 configuration object.
-*   `stripeConfig: { publicKey: string; clientSecret: string; theme?: "light" | "dark"; }`: **Required for fiat payments.** Your Stripe configuration including public key, client secret, and optional theme setting.
+*   `cryptoConfig?: { wagmiConfig: Config }`: Optional. Required for crypto payments. Your Wagmi v2 configuration object.
+*   `stripeConfig?: { publicKey: string; clientSecret: string; theme?: "light" | "dark"; }`: Optional. Required for fiat payments. Your Stripe configuration including public key, client secret, and optional theme setting.
+*   `paktConfig: { baseUrl: string; verbose?: boolean }`: **Required.** Pakt API configuration including base URL and optional verbose logging.
 
 ## Usage
-### Fiat Payments
+
+> **✨ New in v0.2.1:** We've introduced a unified payment system with a ref-based API that simplifies payment integration. This is now the recommended approach for new implementations.
+
+### Unified Payment System (Recommended)
+
+The new unified payment system provides a single component that can handle both crypto and fiat payments with an intuitive ref-based API.
+
+```typescript
+import React, { useRef } from 'react';
+import PaktPaymentModule, { PaymentSystemRef, ConfigContextType, onFinishResponseProps } from '@pakt/payment-module';
+
+function MyPaymentComponent() {
+  const paymentRef = useRef<PaymentSystemRef>(null);
+
+  const handlePaymentSuccess = (response: onFinishResponseProps) => {
+    console.log('Payment successful:', response);
+    // Handle successful payment (e.g., show success message, redirect)
+  };
+
+  const handlePaymentError = (response: onFinishResponseProps) => {
+    console.error('Payment failed:', response);
+    // Handle payment error
+  };
+
+  const handleStartPayment = () => {
+    // Start payment with automatic method selection
+    paymentRef.current?.startPayment({
+      amount: 10.5,
+      coin: "USDC",
+      description: "Service payment",
+      isDirect: true,
+      collectionType: "service",
+      owner: "user-id",
+      name: "Service Name"
+    });
+  };
+
+  const handleStartCryptoPayment = () => {
+    // Start crypto payment directly
+    paymentRef.current?.startCryptoPayment({
+      amount: 10.5,
+      coin: "USDC", 
+      description: "Crypto payment",
+      isDirect: true,
+      collectionType: "service",
+      owner: "user-id",
+      name: "Service Name"
+    });
+  };
+
+  const handleStartFiatPayment = () => {
+    // Start fiat payment directly
+    paymentRef.current?.startFiatPayment({
+      amount: 10.5,
+      coin: "USD",
+      description: "Card payment", 
+      isDirect: false,
+      collectionType: "service",
+      owner: "user-id",
+      name: "Service Name"
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleStartPayment}>
+        Pay Now
+      </button>
+      <button onClick={handleStartCryptoPayment}>
+        Pay with Crypto
+      </button>
+      <button onClick={handleStartFiatPayment}>
+        Pay with Card
+      </button>
+      
+      <PaktPaymentModule
+        ref={paymentRef}
+        config={paymentModuleConfig}
+        onPaymentSuccess={handlePaymentSuccess}
+        onPaymentError={handlePaymentError}
+        enabledMethods={["crypto", "fiat"]} // Optional: specify which methods to enable
+        isLoading={false}
+      />
+    </div>
+  );
+}
+```
+
+**PaktPaymentModule Props:**
+* `config`: ConfigContextType - Your payment module configuration
+* `onPaymentSuccess?`: (response: onFinishResponseProps) => void - Success callback
+* `onPaymentError?`: (response: onFinishResponseProps) => void - Error callback  
+* `enabledMethods?`: ("crypto" | "fiat")[] - Array of enabled payment methods (default: ["crypto", "fiat"])
+* `isLoading?`: boolean - Loading state
+
+**PaymentSystemRef Methods:**
+* `startPayment(data: PaymentData)`: Start payment with automatic method selection
+* `startCryptoPayment(data: PaymentData)`: Start crypto payment directly
+* `startFiatPayment(data: PaymentData)`: Start fiat payment directly
+* `close()`: Close any open payment modals
+
+**PaymentData Interface:**
+```typescript
+interface PaymentData {
+  amount: number;          // Payment amount
+  coin: string;           // Currency/token symbol (e.g., "USDC", "USD")
+  description: string;    // Payment description
+  isDirect: boolean;      // Whether this is a direct payment
+  collectionType: string; // Type of collection (e.g., "service", "tip")
+  owner: string;          // Owner/recipient ID
+  name: string;           // Collection/service name
+}
+```
+
+### Individual Payment Components (Legacy)
+
+For backward compatibility, you can still use the individual payment modal components:
+
+#### Fiat Payments
 
 ```typescript
 import { FiatPaymentModal } from '@pakt/payment-module';
@@ -169,19 +295,60 @@ The module requires a configuration object of type `ConfigContextType` that incl
 
 ```typescript
 interface ConfigContextType {
-  // Required configurations
-  cryptoConfig: {
+  // Optional configurations (enable features as needed)
+  cryptoConfig?: {
     wagmiConfig: Config; // Your Wagmi v2 configuration
-    theme?: "light" | "dark";
-    publicKey: string; // Your Pakt public key
+    wagmiProvider?: WagmiProviderProps;
+    queryClient?: QueryClient;
   };
-  stripeConfig: {
+  stripeConfig?: {
     publicKey: string; // Your Stripe public key
-    clientSecret?: string; // Optional: Client secret for payment intent
+    clientSecret: string; // Client secret for payment intent
     theme?: "light" | "dark";
+  };
+  // Required configuration
+  paktConfig: {
+    baseUrl: string; // Pakt API base URL
+    verbose?: boolean; // Enable debug logging
   };
   errorHandler?: (errorMessage: string) => void; // Custom error handler
   theme?: ITheme; // Custom theme object
+}
+```
+
+## Hooks
+
+The package also provides a custom hook for advanced payment operations:
+
+```typescript
+import { usePaymentModule } from '@pakt/payment-module';
+
+function MyComponent() {
+  const {
+    payment,
+    loading,
+    error,
+    initiateCryptoPayment,
+    validateCryptoPayment,
+    clearError,
+    clearPayment
+  } = usePaymentModule();
+
+  const handleCryptoPayment = async () => {
+    const response = await initiateCryptoPayment({
+      // payment data
+    });
+    
+    if (response.status === 'success') {
+      // Payment initiated successfully
+      const validationResponse = await validateCryptoPayment(collectionId);
+      // Handle validation result
+    }
+  };
+
+  return (
+    // Your component JSX
+  );
 }
 ```
 

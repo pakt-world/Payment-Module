@@ -32,7 +32,7 @@ const WalletConnectorList: FC<WalletConnectListType> = ({
 }) => {
     Logger.debug("WalletConnectorList", { connectors, activeConnector, isLoading, setSelectedConnector, selectedConnector, accountStatus });
     return (
-        <div className="pam:flex pam:flex-col pam:gap-6">
+        <div className="pam:flex pam:flex-col pam:gap-6 pam:overflow-y-auto pam:overflow-x-hidden pam:h-[250px]">
             {connectors.map((connector: ConnectorProps) => {
                 const isActive = selectedConnector?.id === connector.id || activeConnector?.id === connector.id;
                 const logo = WALLET_LOGO[connector.name];

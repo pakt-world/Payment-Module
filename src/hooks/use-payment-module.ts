@@ -87,22 +87,45 @@ export const usePaymentModule = (): UsePaymentModuleReturn => {
             setLoading(false);
         }
     }, [createErrorResponse]);
+
+    // initiate fiat payment
+    // const initiateFiatPayment = useCallback(async (payload: any): Promise<PaymentResponse<any>> => {
+    //     setLoading(true);
+    //     setError(null);
+        
+    //     try {
+    // }, []);
     
     // validate crypto payment
-    const validateCryptoPayment = useCallback(async (payload: any): Promise<PaymentResponse<any>> => {
-        console.log("validateCryptoPayment", payload);
+    const validateCryptoPayment = useCallback(async (collectionId: string, retries: number = 10, retryDelay: number = 2000): Promise<PaymentResponse<any>> => {
+        console.log("validateCryptoPayment", collectionId);
+        const maxRetries = retries;
         setLoading(true);
         setError(null);
         
-        try {
-            const response = await paktSDKService.validateDirectDeposit(payload);
-            return response;
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Payment failed';
-            return createErrorResponse<any>(errorMessage, 'Payment failed');
-        } finally {
-            setLoading(false);
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            console.log("attempt--number", attempt);
+            try {
+                const response = await paktSDKService.validateDirectDeposit({ collection: collectionId });
+                if (response.status !== 'success') {
+                    throw new Error(response.message || 'Payment failed');
+                }
+                return response;
+            } catch (error) {
+                console.log(`Attempt ${attempt} failed:`, error);
+                
+                if (attempt === maxRetries) {
+                    const errorMessage = error instanceof Error ? error.message : 'Payment failed';
+                    return createErrorResponse<any>(errorMessage, 'Payment failed after maximum retries');
+                }
+                
+                // Wait before retrying
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
+            }
         }
+        
+        // This should never be reached, but TypeScript requires it
+        return createErrorResponse<any>('Unexpected error', 'Payment failed');
     }, [createErrorResponse]);
 
 

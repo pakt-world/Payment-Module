@@ -32,6 +32,95 @@
   --color-exhibit-tab-list: var(--pams-exhibit-tab-list);
   --color-btn-primary: var(--pams-primary);
 
+  /* Legacy colors (kept for backward compatibility) */
+  --color-primary: var(--pams-primary);
+  --color-info: var(--pams-info);
+  --color-secondary: var(--pams-secondary);
+  --color-blue-lightest: var(--pams-blue-lightest);
+  --color-blue-darkest: var(--pams-blue-darkest);
+  --color-line: var(--pams-line);
+  --color-title: var(--pams-title);
+  --color-body: var(--pams-body);
+  --color-warning: var(--pams-warning);
+  --color-success: var(--pams-success);
+  --color-danger: var(--pams-danger);
+  --color-magnolia: var(--pams-magnolia);
+  --color-primary-brighter: var(--pams-primary-brighter);
+  --color-refer-border: var(--pams-refer-border);
+  --color-exhibit-tab-list: var(--pams-exhibit-tab-list);
+
+  /* Legacy text colors (kept for backward compatibility) */
+  --color-text-primary: var(--pams-text-primary);
+  --color-text-body: var(--pams-text-body);
+  --color-text-title: var(--pams-text-title);
+  --color-text-danger: var(--pams-text-danger);
+  --color-text-success: var(--pams-text-success);
+  --color-text-warning: var(--pams-text-warning);
+
+  /* Brand Colors */
+  --color-brand-primary: var(--pams-brand-primary);
+  --color-brand-secondary: var(--pams-brand-secondary);
+  --color-brand-accent: var(--pams-brand-accent);
+
+  /* Text Colors */
+  --color-heading-text: var(--pams-heading-text);
+  --color-body-text: var(--pams-body-text);
+  --color-link-text: var(--pams-link-text);
+  --color-inverse-text: var(--pams-inverse-text);
+
+  /* Background Colors */
+  --color-modal-overlay: var(--pams-modal-overlay);
+  --color-page-background: var(--pams-page-background);
+  --color-card-background: var(--pams-card-background);
+
+  /* Border Colors */
+  --color-border-color: var(--pams-border-color);
+  --color-divider-color: var(--pams-divider-color);
+
+  /* Interactive Elements */
+  --color-button-primary-background: var(--pams-button-primary-background);
+  --color-button-primary-text: var(--pams-button-primary-text);
+  --color-button-primary-hover: var(--pams-button-primary-hover);
+  --color-button-outline-background: var(--pams-button-outline-background);
+  --color-button-outline-text: var(--pams-button-outline-text);
+  --color-button-outline-border: var(--pams-button-outline-border);
+  --color-button-outline-hover-background: var(--pams-button-outline-hover-background);
+  --color-button-outline-hover-text: var(--pams-button-outline-hover-text);
+
+  /* Form Input Colors */
+  --color-input-background: var(--pams-input-background);
+  --color-input-border: var(--pams-input-border);
+  --color-input-focus-border: var(--pams-input-focus-border);
+  --color-input-placeholder: var(--pams-input-placeholder);
+  --color-input-text: var(--pams-input-text);
+  --color-input-label: var(--pams-input-label);
+
+  /* State Colors */
+  --color-error-background: var(--pams-error-background);
+  --color-error-text: var(--pams-error-text);
+  --color-error-border: var(--pams-error-border);
+  --color-success-background: var(--pams-success-background);
+  --color-success-text: var(--pams-success-text);
+  --color-warning-background: var(--pams-warning-background);
+  --color-warning-text: var(--pams-warning-text);
+
+  /* Nested structure colors (kept for backward compatibility) */
+  --color-text-primary: var(--pams-text-primary);
+  --color-text-secondary: var(--pams-text-secondary);
+  --color-text-inverse: var(--pams-text-inverse);
+  --color-input-focus: var(--pams-input-focus);
+  --color-error-bg: var(--pams-error-bg);
+  --color-success-bg: var(--pams-success-bg);
+  --color-warning-bg: var(--pams-warning-bg);
+  --color-btn-primary-bg: var(--pams-btn-primary-bg);
+  --color-btn-primary-text: var(--pams-btn-primary-text);
+  --color-btn-primary-hover: var(--pams-btn-primary-hover);
+  --color-btn-outline-bg: var(--pams-btn-outline-bg);
+  --color-btn-outline-text: var(--pams-btn-outline-text);
+  --color-btn-outline-border: var(--pams-btn-outline-border);
+  --color-btn-outline-hover-bg: var(--pams-btn-outline-hover-bg);
+  --color-btn-outline-hover-text: var(--pams-btn-outline-hover-text);
+
   /* Background images */
   --background-btn-primary: var(--pams-btn-primary);
   --background-primary-gradient: var(--pams-primary-gradient);
@@ -50,6 +139,7 @@
 
   /* Transition duration */
   --transition-duration-default: 150ms;
+
 }
 
 /* Custom keyframes for animations */

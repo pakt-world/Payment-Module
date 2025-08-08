@@ -28,7 +28,8 @@ const DepositToken = ({
     disableButtonOnClick,
     connect,
     disconnect,
-    onSuccessResponse
+    onResponse,
+    isVerifying
 }: WalletDepositProps) => {
     const [connectError, setConnectError] = useState<string | null>(null);
 
@@ -43,17 +44,18 @@ const DepositToken = ({
             Logger.info(`contract-interaction-success-->`, { txId:data });
             console.info(`contract-interaction-success-->`, { txId:data });
             disconnect();
-            onSuccessResponse({ status:"completed", txId:data });
+            onResponse({ status:"success", message: "Payment successful", txId:data });
         },
         onError(error: any) {
           Logger.error(`contract-interaction-error-->`, { error });
           console.error(`contract-interaction-error-->`, JSON.stringify(error));
-            toast.error(error.message);
+          disconnect();
+          onResponse({ status:"error", message: error.message, txId:"" });
         }
       }
     });
-
-    const isLoadingAll = isLoading || writeLoading;
+    
+    const isLoadingAll = isLoading || writeLoading || !!isVerifying;
     const isDisabledAll = isDisabled || disableButtonOnClick  || writeIsError;
 
     if(writeIsError){
@@ -117,17 +119,18 @@ const DepositToken = ({
     }, [selectedConnector]);
 
     return (
-        <div className="pam:flex pam:flex-col pam:gap-2">
-            {selectedConnector && (writeError || connectError) && (
-                    <div className="pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-red-200 pam:bg-red-50 pam:p-2 pam:text-sm pam:text-red-500">
-                        <span>
-                            {connectError ||
-                                // @ts-ignore
-                                writeError?.cause?.reason ||
-                                "An error occurred while making payment."}
-                        </span>
-                    </div>
-                )}
+        <div className="pam:flex pam:flex-col pam:gap-2 pam:items-end pam:h-full">
+          {selectedConnector && (writeError || connectError) && (
+          <div className="pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-red-200 pam:bg-red-50 pam:p-2 pam:text-sm pam:text-red-500">
+            
+              <span>
+              {connectError ||
+                // @ts-ignore
+                writeError?.cause?.reason ||
+                "An error occurred while making payment."}
+              </span>
+            </div>
+            ) }
 
             {showReconfirmButton && (
                 <Button
@@ -151,7 +154,7 @@ const DepositToken = ({
                 size="md"
             >
                 <div className="pam:flex pam:items-center pam:justify-center pam:gap-2">
-                  <span>{!activeConnector ? "Connect Wallet": writeLoading ? "Confirming Payment" : isLoadingAll ? "Loading...": "Make Payment"}</span> 
+                  <span>{!activeConnector ? "Connect Wallet": writeLoading ? "Confirming Payment" : isVerifying ? "Verifying Payment" : isLoadingAll ? "Loading...": "Make Payment"}</span> 
                   <span> {isLoadingAll && <Spinner />}</span>
                 </div>
             </Button>

@@ -24,7 +24,7 @@ interface WalletDepositProps {
     isDisabled: boolean;
     activeConnector: unknown;
     setDisableButtonOnClick: (v: boolean) => void;
-    onSuccessResponse:(data: onFinishResponseProps) => void;
+    onResponse:(data: onFinishResponseProps) => void;
     connect: ConnectMutate<Config, unknown>;
     disconnect: ()=>void;
 }
@@ -39,7 +39,7 @@ const DepositCoin = ({
     setDisableButtonOnClick,
     connect,
     disconnect,
-    onSuccessResponse,
+    onResponse,
     isDisabled
 }: WalletDepositProps): ReactElement => {
     const [connectError, setConnectError] = useState<string | null>(null);
@@ -80,11 +80,12 @@ const DepositCoin = ({
             onSuccess(data) {
               Logger.info(`send-tx-success-->`, { txId:data });
               disconnect();
-              onSuccessResponse({ status:"completed", txId:data });
+              onResponse({ status:"success", message: "Payment successful", txId:data });
             },
             onError(error: any) {
                 Logger.info("ggg", error);
                 toast.error(error.message);
+                onResponse({ status:"error", message: error.message, txId:"" });
             },
           }
       );
