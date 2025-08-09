@@ -5,6 +5,7 @@
 
 import { QueryClient } from "@tanstack/react-query";
 import { WagmiProviderProps, Config } from "wagmi";
+import type { PaktConfig } from "pakt-sdk";
 
 interface ConfigContextType {
     theme?: ITheme; // colors to theme the package
@@ -18,10 +19,7 @@ interface ConfigContextType {
         publicKey: string;
         theme?: "light" | "dark";
     };
-    paktConfig: {
-        baseUrl: string;
-        verbose?: boolean;
-    };
+    paktConfig: PaktConfig;
     errorHandler?: (errorMessage: string) => void; //  Callback to handle Error
 }
 
@@ -49,23 +47,23 @@ interface ITheme extends Record<string, any> {
     brandPrimary?: string;
     brandSecondary?: string;
     brandAccent?: string;
-    
+
     // Text Colors
     headingText?: string;
     bodyText?: string;
     linkText?: string;
     inverseText?: string;
-    
+
     // Background Colors
     formBackground?: string;
     modalOverlay?: string;
     pageBackground?: string;
     cardBackground?: string;
-    
+
     // Border Colors
     borderColor?: string;
     dividerColor?: string;
-    
+
     // Interactive Elements
     buttonPrimaryBackground?: string;
     buttonPrimaryText?: string;
@@ -75,7 +73,7 @@ interface ITheme extends Record<string, any> {
     buttonOutlineBorder?: string;
     buttonOutlineHoverBackground?: string;
     buttonOutlineHoverText?: string;
-    
+
     // Form Input Colors
     inputBackground?: string;
     inputBorder?: string;
@@ -83,7 +81,7 @@ interface ITheme extends Record<string, any> {
     inputPlaceholder?: string;
     inputText?: string;
     inputLabel?: string;
-    
+
     // State Colors
     errorBackground?: string;
     errorText?: string;
@@ -92,14 +90,14 @@ interface ITheme extends Record<string, any> {
     successText?: string;
     warningBackground?: string;
     warningText?: string;
-    
+
     // Gradients
     primaryGradient?: string;
     secondaryGradient?: string;
-    
+
     // Spacing and Layout
     modalBorderRadius?: string;
-    
+
     // Legacy Support (deprecated but kept for backward compatibility)
     primary?: string;
     secondary?: string;
@@ -119,14 +117,14 @@ interface ITheme extends Record<string, any> {
     "modal-radius"?: string;
     "blue-lightest"?: string;
     "blue-darkest"?: string;
-    
+
     // Nested structure for complex token groups (kept for backward compatibility)
     text?: {
         primary?: string;
         secondary?: string;
         inverse?: string;
     };
-    
+
     input?: {
         background?: string;
         border?: string;
@@ -135,7 +133,7 @@ interface ITheme extends Record<string, any> {
         text?: string;
         label?: string;
     };
-    
+
     states?: {
         error?: {
             background?: string;

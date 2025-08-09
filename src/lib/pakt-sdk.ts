@@ -1,8 +1,6 @@
 // Import PAKT SDK types and classes
-import {
-    PaktSDK,
-    ICreateDirectDepositPayload,
-} from "pakt-sdk";
+import { PaktSDK, ICreateDirectDepositPayload } from "pakt-sdk";
+import Logger from "./logger";
 
 export interface PaktSDKConfig {
     baseUrl: string;
@@ -29,32 +27,39 @@ class PaktSDKService {
             this.config = config;
             this.sdk = await PaktSDK.init(config);
             this.isInitialized = true;
-            console.log("PAKT SDK initialized");
+            Logger.debug("PAKT SDK initialized");
         } catch (error) {
             this.isInitialized = false;
-            throw new Error(`Failed to initialize PAKT SDK: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            throw new Error(
+                `Failed to initialize PAKT SDK: ${error instanceof Error ? error.message : "Unknown error"}`
+            );
         }
     }
 
     private ensureInitialized(): any {
         if (!this.isInitialized || !this.sdk) {
-            throw new Error("PAKT SDK not initialized. Call initialize() first.");
+            throw new Error(
+                "PAKT SDK not initialized. Call initialize() first."
+            );
         }
         return this.sdk;
     }
 
-    private createErrorResponse<T>(error: unknown, defaultMessage: string): PaymentResponse<T> {
+    private createErrorResponse<T>(
+        error: unknown,
+        defaultMessage: string
+    ): PaymentResponse<T> {
         return {
             status: "error",
             message: error instanceof Error ? error.message : defaultMessage,
             data: null as T,
-            statusCode: 500
+            statusCode: 500,
         };
     }
 
     // Check if SDK is initialized
     getInitialized(): boolean {
-        console.log("PAKT SDK initialized", this.isInitialized);
+        Logger.debug("PAKT SDK initialized");
         return this.isInitialized;
     }
 
@@ -64,16 +69,18 @@ class PaktSDKService {
     }
 
     // Authentication Methods
-    async makeDirectDeposit(payload: ICreateDirectDepositPayload): Promise<PaymentResponse<any>> {
+    async makeDirectDeposit(
+        payload: ICreateDirectDepositPayload
+    ): Promise<PaymentResponse<any>> {
         const sdk = this.ensureInitialized();
         try {
             const response = await sdk.directDeposit.createDirectDeposit({
                 authToken: this.authToken,
                 payload,
-              });
+            });
             return response as PaymentResponse<any>;
         } catch (error) {
-            console.log("====>", error)
+            Logger.error(`Failed to create direct deposit ${String(error)}`);
             return this.createErrorResponse<any>(error, "Login failed");
         }
     }
@@ -84,10 +91,13 @@ class PaktSDKService {
             const response = await sdk.directDeposit.validateDirectDeposit({
                 authToken: payload.authToken,
                 payload,
-              });
+            });
             return response as PaymentResponse<any>;
         } catch (error) {
-            return this.createErrorResponse<any>(error, "Validate direct deposit failed");
+            return this.createErrorResponse<any>(
+                error,
+                "Validate direct deposit failed"
+            );
         }
     }
 
@@ -101,13 +111,3 @@ class PaktSDKService {
 
 // Export a singleton instance
 export const paktSDKService = new PaktSDKService();
-
-// Export types for use in components
-// Export types when they become available in pakt-sdk
-// export type {
-//     ICreateDirectDepositPayload,
-//     IValidateDirectDepositPayload,
-//     ICreateDirectDepositResponse,
-//     IValidateDirectDepositResponse,
-//     ICreatePaymentPayload,
-// }; 

@@ -20,12 +20,11 @@ import Logger from "../lib/logger";
 const { connectors, chains, http, createConfig } = wagmi;
 
 const { walletConnect } = connectors;
-const { avalanche, avalancheFuji } = chains;
+const { avalancheFuji } = chains;
 
 const projectId = "810bdecb2f7f8d4bd3c732d2862df787";
 
 const transports = {
-    [avalanche.id]: http(),
     [avalancheFuji.id]: http(),
 };
 
@@ -45,40 +44,6 @@ const wagmiConfig = createConfig({
 
 const App = () => {
     const paymentRef = useRef<PaymentSystemRef>(null);
-    // const [clientSecret, setClientSecret] = useState("");
-    // const token = "1234567890";
-
-    // const [payData, setPayData] = useState<MakePaymentResponse>({
-    //     address: "0x90B780d7546ab754e35e0d2E80d76557A012D4fE",
-    //     amountToPay: 0.323,
-    //     chainId: "43113",
-    //     coin: "USDC",
-    //     collectionAmount: 10,
-    //     collectionAmountCoin: 10,
-    //     // contractAddress: "",
-    //     contractAddress: "0x5425890298aed601595a70AB815c96711a31Bc65",
-    //     expectedFee: 10,
-    //     feePercentage: 10,
-    //     rate: 12345,
-    //     usdAmount: 500,
-    //     usdFee: 10,
-    // });
-
-    // const axiosInstance = axios.create({
-    //     baseURL: "http://localhost:9090/v1",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "Authorization": `Bearer ${token}`,
-    //     },
-    // });
-
-    // const onStripPay = async () => {
-    //     const respData = await axiosInstance.post(`/payment/stripe/initiate`, {
-    //         collection: collectionId,
-    //     });
-    //     setClientSecret(respData.data?.data?.client_secret);
-    //     return fetchCollectionData();
-    // };
 
     const onSuccessResponse = (data: onResponseProps) => {
         // setIsLoading(true);
