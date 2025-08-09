@@ -13,7 +13,7 @@ import { onResponseProps } from "../../types";
 import CryptoPaymentExtended from "./crypto";
 import FiatPaymentExtended from "./fiat";
 import { usePaymentModule } from "../../hooks/use-payment-module";
-import Logger from "lib/logger";
+import Logger from "../../lib/logger";
 
 type PaymentView = "payment-method" | "crypto-payment" | "fiat-payment" | "";
 
