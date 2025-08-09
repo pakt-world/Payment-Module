@@ -13,6 +13,7 @@ import { onResponseProps } from "../../types";
 import CryptoPaymentExtended from "./crypto";
 import FiatPaymentExtended from "./fiat";
 import { usePaymentModule } from "../../hooks/use-payment-module";
+import Logger from "lib/logger";
 
 type PaymentView = "payment-method" | "crypto-payment" | "fiat-payment" | "";
 
@@ -98,7 +99,7 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                 }
             } else {
                 onPaymentError?.(response);
-                console.log("handlePaymentError", response);
+                Logger.error(`handlePaymentError ${JSON.stringify(response)}`);
             }
         };
 
@@ -123,12 +124,6 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                 startPaymentFlow(data);
             },
             startCryptoPayment: (data: PaymentData) => {
-                console.log(
-                    "startCryptoPayment",
-                    data,
-                    isCryptoEnabled,
-                    currentView
-                );
                 setPaymentData(data);
                 if (isCryptoEnabled) {
                     setCurrentView("crypto-payment");
@@ -160,6 +155,7 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                         owner={paymentData.owner}
                         handlePaymentResponse={handlePaymentSuccess}
                         isLoading={isLoading}
+                        closeModal={resetCurrentView}
                     />
                 )}
 

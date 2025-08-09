@@ -16,6 +16,7 @@ interface CryptoPaymentExtendedProps {
     owner: string;
     isLoading: boolean;
     handlePaymentResponse: (response: onResponseProps) => void; // eslint-disable-line no-unused-vars
+    closeModal: () => void;
 }
 
 const CryptoPaymentExtended = forwardRef<
@@ -34,6 +35,7 @@ const CryptoPaymentExtended = forwardRef<
             owner,
             isLoading,
             handlePaymentResponse,
+            closeModal: closeModalFromParent,
         },
         ref
     ) => {
@@ -69,10 +71,6 @@ const CryptoPaymentExtended = forwardRef<
             }
         };
 
-        const closeModal = () => {
-            setIsPreLoading(false);
-        };
-
         const handlePaymentPostResponse = async (response: onResponseProps) =>
             handlePaymentResponse({
                 status: response.status,
@@ -91,7 +89,7 @@ const CryptoPaymentExtended = forwardRef<
             <div ref={ref}>
                 <CryptoPayment
                     isOpen={isOpen}
-                    closeModal={closeModal}
+                    closeModal={closeModalFromParent}
                     config={config}
                     collectionId={paymentData.collectionId ?? ""}
                     amount={paymentData.amountToPay}

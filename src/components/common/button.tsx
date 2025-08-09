@@ -10,19 +10,19 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils";
 
 const button = cva(
-    "pam:focus:outline-none pam:py-3 pam:whitespace-nowrap pam:duration-200 pam:capitalize pam:focus-visible:ring-1 pam:focus-visible:ring-brand-primary pam:relative pam:z-0 pam:rounded-[10px] pam:text-center pam:w-fit pam:px-6 pam:font-semibold pam:focus-visible:border-transparent",
+    "pam:focus:outline-none pam:py-3 pam:whitespace-nowrap pam:duration-200 pam:capitalize pam:focus-visible:ring-1 pam:focus-visible:ring-[#19A966] pam:relative pam:z-0 pam:rounded-[10px] pam:text-center pam:w-fit pam:px-6 pam:font-semibold pam:focus-visible:border-transparent",
     {
         variants: {
             variant: {
                 primary:
-                    "pam:border-white pam:border-opacity-10 pam:bg-button-primary-background pam:text-button-primary-text pam:hover:pam:bg-button-primary-hover",
+                    "pam:border-white pam:border-opacity-10 pam:bg-button-primary-background pam:text-button-primary-text",
                 secondary:
-                    "pam:border-button-outline-border pam:border pam:text-button-outline-text pam:bg-brand-secondary pam:hover:bg-brand-secondary/80 pam:duration-200 pam:font-normal",
+                    "pam:border-brand-primary pam:border pam:text-brand-primary pam:bg-brand-secondary pam:hover:bg-button-primary-hover pam:duration-200 pam:font-normal",
                 outline:
-                    "pam:border-button-outline-border pam:border pam:text-button-outline-text pam:border-opacity-100 pam:bg-button-outline-background pam:hover:pam:bg-button-outline-hover-background pam:hover:pam:text-button-outline-hover-text pam:font-normal pam:duration-200",
+                    "pam:border-brand-primary pam:border pam:text-button-outline-text pam:border-opacity-100 pam:bg-button-outline-background pam:hover:border-opacity-50 pam:hover:bg-button-outline-hover-background pam:hover:text-button-outline-hover-text pam:font-normal pam:duration-200",
                 transparent:
-                    "pam:border-transparent pam:text-button-outline-text pam:bg-transparent pam:hover:bg-brand-primary/10 pam:duration-200",
-                danger: "pam:bg-error-background pam:text-error-text pam:hover:bg-error-background/80 pam:border pam:border-transparent",
+                    "pam:border-transparent pam:text-brand-primary pam:bg-transparent pam:hover:bg-[#008D6C1A] pam:duration-200",
+                danger: "pam:bg-error-background pam:text-error-text pam:hover:bg-error-background pam:border pam:border-transparent",
             },
             size: {
                 xs: "pam:px-2 pam:py-[8px] pam:text-xs",
@@ -35,7 +35,7 @@ const button = cva(
                 true: "pam:w-full",
             },
             disabled: {
-                true: "pam:cursor-not-allowed pam:bg-border-color pam:text-body-text",
+                true: "pam:cursor-not-allowed !pam:bg-none !pam:bg-[#E3E5E5] !pam:text-[#979C9E]",
             },
         },
         defaultVariants: {
@@ -46,7 +46,7 @@ const button = cva(
             {
                 variant: "outline",
                 disabled: true,
-                className: "pam:border-border-color",
+                className: "pam:border-gray-300",
             },
             {
                 variant: "transparent",
