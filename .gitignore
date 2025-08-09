@@ -65,3 +65,4 @@ dist/
 stats.html
 yarn.lock
 .npmrc
+package-lock.json
