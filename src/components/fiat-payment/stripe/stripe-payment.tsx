@@ -44,7 +44,7 @@ const StripePaymentModal = ({ collectionId, isOpen, closeModal, onFinishResponse
     >
       <PaktWrapper showPakt={true}>
         {isPreLoading ?
-            <div className="pam:mx-auto pam:flex pam:w-full pam:h-[550px] pam:flex-col pam:gap-6 pam:bg-white pam:p-6 pam:rounded-2xl pam:border">
+            <div className="pam:mx-auto pam:flex pam:w-full pam:h-[550px] pam:flex-col pam:gap-6 pam:bg-form-background pam:p-6 pam:rounded-2xl pam:border pam:border-border-color">
                 <Spinner size={40} />
             </div>
         :

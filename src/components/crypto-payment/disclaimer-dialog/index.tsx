@@ -23,12 +23,12 @@ const DisclaimerDialog = ({ isOpen, closeModal }: { isOpen: boolean; closeModal:
 			// disableClickOutside
 		>
 			<div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-4 vsm:max-w-[400px]">
-				<div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-6 pam:bg-white pam:p-6 pam:sm:pam:rounded-2xl pam:sm:pam:border">
+				<div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-6 pam:bg-form-background pam:p-6 pam:sm:pam:rounded-2xl pam:sm:pam:border pam:sm:pam:border-border-color">
 					<div className="pam:flex pam:w-full pam:items-center pam:justify-between">
-						<h2 className="pam:text-2xl pam:font-bold pam:text-title">Disclaimer</h2>
+						<h2 className="pam:text-2xl pam:font-bold pam:text-heading-text">Disclaimer</h2>
 
 						<button
-							className="pam:rounded-full pam:border pam:border-[#DFDFE6] pam:p-2 pam:text-black pam:duration-200 pam:hover:vborder-danger pam:hover:pam:text-danger"
+							                        className="pam:rounded-full pam:border pam:border-border-color pam:p-2 pam:text-heading-text pam:duration-200 pam:hover:pam:border-error-text pam:hover:pam:text-error-text"
 							onClick={() => {
 								closeModal();
 							}}
@@ -38,7 +38,7 @@ const DisclaimerDialog = ({ isOpen, closeModal }: { isOpen: boolean; closeModal:
 							<X size={16} strokeWidth={2} />
 						</button>
 					</div>
-					<ul className="pam:pl-4 pam:text-left pam:text-sm pam:text-body">
+					<ul className="pam:pl-4 pam:text-left pam:text-sm pam:text-body-text">
 						<li className="pam:list-disc">
 							I understand that this transaction, like all blockchain transactions, is irreversible.
 							Neither the Chainsite upon which this transaction occurs nor Pakt can manually access or

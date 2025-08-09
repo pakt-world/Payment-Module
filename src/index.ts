@@ -18,5 +18,5 @@ export type { UsePaymentModuleReturn } from "./hooks/use-payment-module";
 export type { PaymentResponse } from "./lib/pakt-sdk";
 
 // Utilities and types
-export * from "./components/wagmi";
+export * as wagmi from "./components/wagmi";
 export * from "./types";

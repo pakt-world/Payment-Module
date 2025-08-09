@@ -45,6 +45,62 @@ type IAny = any;
 type I0xAddressType = `0x${string}`;
 
 interface ITheme extends Record<string, any> {
+    // Brand Colors
+    brandPrimary?: string;
+    brandSecondary?: string;
+    brandAccent?: string;
+    
+    // Text Colors
+    headingText?: string;
+    bodyText?: string;
+    linkText?: string;
+    inverseText?: string;
+    
+    // Background Colors
+    formBackground?: string;
+    modalOverlay?: string;
+    pageBackground?: string;
+    cardBackground?: string;
+    
+    // Border Colors
+    borderColor?: string;
+    dividerColor?: string;
+    
+    // Interactive Elements
+    buttonPrimaryBackground?: string;
+    buttonPrimaryText?: string;
+    buttonPrimaryHover?: string;
+    buttonOutlineBackground?: string;
+    buttonOutlineText?: string;
+    buttonOutlineBorder?: string;
+    buttonOutlineHoverBackground?: string;
+    buttonOutlineHoverText?: string;
+    
+    // Form Input Colors
+    inputBackground?: string;
+    inputBorder?: string;
+    inputFocusBorder?: string;
+    inputPlaceholder?: string;
+    inputText?: string;
+    inputLabel?: string;
+    
+    // State Colors
+    errorBackground?: string;
+    errorText?: string;
+    errorBorder?: string;
+    successBackground?: string;
+    successText?: string;
+    warningBackground?: string;
+    warningText?: string;
+    
+    // Gradients
+    primaryGradient?: string;
+    secondaryGradient?: string;
+    
+    // Spacing and Layout
+    modalBorderRadius?: string;
+    
+    // Legacy Support (deprecated but kept for backward compatibility)
     primary?: string;
     secondary?: string;
     info?: string;
@@ -61,6 +117,40 @@ interface ITheme extends Record<string, any> {
     "btn-primary"?: string;
     "primary-gradient"?: string;
     "modal-radius"?: string;
+    "blue-lightest"?: string;
+    "blue-darkest"?: string;
+    
+    // Nested structure for complex token groups (kept for backward compatibility)
+    text?: {
+        primary?: string;
+        secondary?: string;
+        inverse?: string;
+    };
+    
+    input?: {
+        background?: string;
+        border?: string;
+        focus?: string;
+        placeholder?: string;
+        text?: string;
+        label?: string;
+    };
+    
+    states?: {
+        error?: {
+            background?: string;
+            text?: string;
+            border?: string;
+        };
+        success?: {
+            background?: string;
+            text?: string;
+        };
+        warning?: {
+            background?: string;
+            text?: string;
+        };
+    };
 }
 
 interface PaymentData {

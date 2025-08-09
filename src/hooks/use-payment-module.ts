@@ -113,7 +113,6 @@ export const usePaymentModule = (): UsePaymentModuleReturn => {
             retries: number = 10,
             retryDelay: number = 2000
         ): Promise<PaymentResponse<any>> => {
-            console.log("validateCryptoPayment", collectionId);
             const maxRetries = retries;
             setLoading(true);
             setError(null);

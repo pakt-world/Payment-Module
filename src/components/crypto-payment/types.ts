@@ -8,7 +8,7 @@ import { type ConnectMutate } from "wagmi/query";
 
 import {
     BasicModalProps,
-    onFinishResponseProps,
+    onResponseProps,
     ConfigContextType,
 } from "../../types";
 
@@ -61,7 +61,7 @@ interface CryptoPaymentModalProps extends BasicModalProps {
     chainId: number;
     contractAddress?: string;
     tokenDecimal: number;
-    onResponse: (data: onFinishResponseProps) => void;
+    onResponse: (data: onResponseProps) => void; // eslint-disable-line no-unused-vars
     isLoading?: boolean;
     isPreLoading?: boolean;
 }
@@ -74,7 +74,7 @@ interface CryptoPayWithWalletProps {
     tokenDecimal: number;
     chainId: number;
     isLoading?: boolean;
-    onResponse: (data: onFinishResponseProps) => void;
+    onResponse: (data: onResponseProps) => void; // eslint-disable-line no-unused-vars
 }
 
 type I0xType = `0x${string}`;
@@ -99,14 +99,14 @@ interface WalletDepositProps {
     disableButtonOnClick?: boolean;
     isVerifying?: boolean;
     disconnect: () => void;
-    onResponse: (data: onFinishResponseProps) => void;
+    onResponse: (data: onResponseProps) => void; // eslint-disable-line no-unused-vars
 }
 
 interface DepositToAddressProps {
     amount: number;
     coin: string;
     depositAddress: string;
-    onResponse: (data: onFinishResponseProps) => void;
+    onResponse: (data: onResponseProps) => void; // eslint-disable-line no-unused-vars
     isLoading?: boolean;
 }
 

@@ -6,6 +6,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import tailwindcss from '@tailwindcss/vite';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 // Tailwind v4 and PostCSS imports are no longer needed in Vite config
 // since we're using the dedicated @tailwindcss/postcss plugin
 
@@ -40,6 +42,8 @@ export default defineConfig(({ command, mode }) => {
 
     return {
         plugins: [
+            tailwindcss(),
+            cssInjectedByJsPlugin(),
             react({
                 // Use babel configuration defined in .babelrc.js
                 babel: {

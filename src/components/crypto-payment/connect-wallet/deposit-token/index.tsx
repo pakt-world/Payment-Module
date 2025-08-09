@@ -11,7 +11,7 @@ import { erc20Abi } from "viem";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { I0xAddressType, IAny } from "../../../../types";
-import { Button, toast, Spinner } from "../../../../components/common";
+import { Button, toast, Spinner } from "../../../common";
 import { WalletDepositProps } from "../../types";
 import Logger from "../../../../lib/logger";
 
@@ -29,7 +29,7 @@ const DepositToken = ({
     connect,
     disconnect,
     onResponse,
-    isVerifying
+    isVerifying,
 }: WalletDepositProps) => {
     const [connectError, setConnectError] = useState<string | null>(null);
 
@@ -39,69 +39,86 @@ const DepositToken = ({
         error: writeError,
         isPending: writeLoading,
     } = useWriteContract({
-      mutation:{
-        onSuccess(data) {
-            Logger.info(`contract-interaction-success-->`, { txId:data });
-            console.info(`contract-interaction-success-->`, { txId:data });
-            disconnect();
-            onResponse({ status:"success", message: "Payment successful", txId:data });
+        mutation: {
+            onSuccess(data) {
+                Logger.info(`contract-interaction-success-->`, { txId: data });
+                console.info(`contract-interaction-success-->`, { txId: data });
+                disconnect();
+                onResponse({
+                    status: "success",
+                    message: "Payment successful",
+                    txId: data,
+                });
+            },
+            onError(error: any) {
+                Logger.error(`contract-interaction-error-->`, { error });
+                console.error(
+                    `contract-interaction-error-->`,
+                    JSON.stringify(error)
+                );
+                disconnect();
+                onResponse({
+                    status: "error",
+                    message: error.message,
+                    txId: "",
+                });
+            },
         },
-        onError(error: any) {
-          Logger.error(`contract-interaction-error-->`, { error });
-          console.error(`contract-interaction-error-->`, JSON.stringify(error));
-          disconnect();
-          onResponse({ status:"error", message: error.message, txId:"" });
-        }
-      }
     });
-    
-    const isLoadingAll = isLoading || writeLoading || !!isVerifying;
-    const isDisabledAll = isDisabled || disableButtonOnClick  || writeIsError;
 
-    if(writeIsError){
-      Logger.error("contract-error", {writeLoading, writeIsError, writeError, isDisabledAll, isLoadingAll});
+    const isLoadingAll = isLoading || writeLoading || !!isVerifying;
+    const isDisabledAll = isDisabled || disableButtonOnClick || writeIsError;
+
+    if (writeIsError) {
+        Logger.error("contract-error", {
+            writeLoading,
+            writeIsError,
+            writeError,
+            isDisabledAll,
+            isLoadingAll,
+        });
     }
 
     const TriggerPayment = async () => {
-      Logger.info(`requesting-payments-->`);
-      try {
-        await writeContract({
-          abi: erc20Abi,
-          chainId,
-          functionName: "transfer",
-          address: `${contractAddress as I0xAddressType}`,
-          args: [`${depositAddress as I0xAddressType}`, amountToPay],
-        });
-      } catch (error) {
-        Logger.error("error-->", {error});
-        if (error instanceof Error) {
-            toast.error(error.message);
-        } else {
-            toast.error("An unknown error occurred.");
+        Logger.info(`requesting-payments-->`);
+        try {
+            writeContract({
+                abi: erc20Abi,
+                chainId,
+                functionName: "transfer",
+                address: `${contractAddress as I0xAddressType}`,
+                args: [`${depositAddress as I0xAddressType}`, amountToPay],
+            });
+        } catch (error) {
+            Logger.error("error-->", { error });
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unknown error occurred.");
+            }
         }
-      }
     };
 
-    const ConnectWallet = () => 
-      connect(
-          { connector: selectedConnector as IAny },
-          {
-              onError: (err) => {
-                setConnectError(err?.name);
-                Logger.error("connect-error-", {err})
-                return;
-              },
-              onSuccess: () => TriggerPayment(),
-              // onSettled: () => TriggerPayment()
-          }
-      );
+    const ConnectWallet = () =>
+        connect(
+            { connector: selectedConnector as IAny },
+            {
+                onError: (err) => {
+                    setConnectError(err?.name);
+                    Logger.error("connect-error-", { err });
+                    // return;
+                },
+                onSuccess: () => TriggerPayment(),
+                // onSettled: () => TriggerPayment()
+            }
+        );
 
     const MakePayment = async (): Promise<void> => {
         try {
-          if (!activeConnector) {
-              return ConnectWallet();
-          }
-          return TriggerPayment();
+            if (!activeConnector) {
+                return ConnectWallet();
+            }
+            return await TriggerPayment();
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);
@@ -120,22 +137,21 @@ const DepositToken = ({
 
     return (
         <div className="pam:flex pam:flex-col pam:gap-2 pam:items-end pam:h-full">
-          {selectedConnector && (writeError || connectError) && (
-          <div className="pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-red-200 pam:bg-red-50 pam:p-2 pam:text-sm pam:text-red-500">
-            
-              <span>
-              {connectError ||
-                // @ts-ignore
-                writeError?.cause?.reason ||
-                "An error occurred while making payment."}
-              </span>
-            </div>
-            ) }
+            {selectedConnector && (writeError || connectError) && (
+                <div className="pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-error-border pam:bg-error-background pam:p-2 pam:text-sm pam:text-error-text">
+                    <span>
+                        {connectError ||
+                            // @ts-expect-error allow to call function without await
+                            writeError?.cause?.reason ||
+                            "An error occurred while making payment."}
+                    </span>
+                </div>
+            )}
 
             {showReconfirmButton && (
                 <Button
                     fullWidth
-                    disabled={isLoadingAll ||isDisabledAll}
+                    disabled={isLoadingAll || isDisabledAll}
                     onClick={() => {}}
                     variant="primary"
                     size="md"
@@ -146,16 +162,24 @@ const DepositToken = ({
 
             <Button
                 fullWidth
-                disabled={isLoadingAll || isDisabledAll }
-                onClick={() => {
-                  !activeConnector ? ConnectWallet() :MakePayment();
-                }}
+                disabled={isLoadingAll || isDisabledAll}
+                onClick={!activeConnector ? ConnectWallet : MakePayment}
                 variant="primary"
                 size="md"
             >
                 <div className="pam:flex pam:items-center pam:justify-center pam:gap-2">
-                  <span>{!activeConnector ? "Connect Wallet": writeLoading ? "Confirming Payment" : isVerifying ? "Verifying Payment" : isLoadingAll ? "Loading...": "Make Payment"}</span> 
-                  <span> {isLoadingAll && <Spinner />}</span>
+                    <span>
+                        {!activeConnector
+                            ? "Connect Wallet"
+                            : writeLoading
+                              ? "Confirming Payment"
+                              : isVerifying
+                                ? "Verifying Payment"
+                                : isLoadingAll
+                                  ? "Loading..."
+                                  : "Make Payment"}
+                    </span>
+                    <span> {isLoadingAll && <Spinner />}</span>
                 </div>
             </Button>
         </div>

@@ -4,10 +4,8 @@
 import { useRef } from "react";
 import {
     wagmi,
-    connectors,
-    chains,
     ConfigContextType,
-    onFinishResponseProps,
+    onResponseProps,
     PaymentSystemRef,
 } from "..";
 import PaktPaymentModule from "../components";
@@ -19,9 +17,10 @@ import PaktPaymentModule from "../components";
 import { Button } from "../components/common";
 import Logger from "../lib/logger";
 
+const { connectors, chains, http, createConfig } = wagmi;
+
 const { walletConnect } = connectors;
 const { avalanche, avalancheFuji } = chains;
-const { http, createConfig } = wagmi;
 
 const projectId = "810bdecb2f7f8d4bd3c732d2862df787";
 
@@ -81,7 +80,7 @@ const App = () => {
     //     return fetchCollectionData();
     // };
 
-    const onSuccessResponse = (data: onFinishResponseProps) => {
+    const onSuccessResponse = (data: onResponseProps) => {
         // setIsLoading(true);
         Logger.debug(`on-finish-response--final---->`, { data });
         // setTimeout(()=>{
@@ -139,7 +138,6 @@ const App = () => {
                         </p>
                         <div className="pam:flex pam:flex-row pam:items-center pam:justify-center pam:gap-2 4">
                             <Button
-                                className="pam:block pam:p-4 pam:bg-primary"
                                 variant="primary"
                                 type="button"
                                 onClick={handleCryptoPayment}
@@ -147,7 +145,6 @@ const App = () => {
                                 Pay with Crypto
                             </Button>
                             <Button
-                                className="pam:block pam:p-4 pam:bg-primary"
                                 variant="primary"
                                 type="button"
                                 onClick={handleFiatPayment}

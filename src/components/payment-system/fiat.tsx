@@ -1,6 +1,6 @@
 import { useEffect, useState, forwardRef } from "react";
 import StripePayment from "../fiat-payment/stripe";
-import { ConfigContextType, onFinishResponseProps } from "../../types";
+import { ConfigContextType, onResponseProps } from "../../types";
 import { usePaymentModule } from "../../hooks/use-payment-module";
 
 interface FiatPaymentExtendedProps {
@@ -8,16 +8,13 @@ interface FiatPaymentExtendedProps {
     config: ConfigContextType;
     amount: number;
     isLoading: boolean;
-    handlePaymentResponse: (response: onFinishResponseProps) => void;
+    handlePaymentResponse: (response: onResponseProps) => void; // eslint-disable-line no-unused-vars
 }
 
-const FiatPaymentExtended = forwardRef<HTMLDivElement, FiatPaymentExtendedProps>(({
-    isOpen,
-    config,
-    amount,
-    isLoading,
-    handlePaymentResponse,
-}, ref) => {
+const FiatPaymentExtended = forwardRef<
+    HTMLDivElement,
+    FiatPaymentExtendedProps
+>(({ isOpen, config, amount, isLoading, handlePaymentResponse }, ref) => {
     const [isPreLoading, setIsPreLoading] = useState(true);
     const [collectionId, setCollectionId] = useState("");
     const { initiateCryptoPayment } = usePaymentModule();
@@ -38,17 +35,17 @@ const FiatPaymentExtended = forwardRef<HTMLDivElement, FiatPaymentExtendedProps>
                 txId: "",
             });
         }
-    }
+    };
 
     const closeModal = () => {
         setIsPreLoading(false);
-    }
+    };
 
     useEffect(() => {
         if (isOpen) {
             createCryptoPayment();
         }
-    }, [isOpen]);
+    }, [isOpen, createCryptoPayment]);
 
     return (
         <div ref={ref}>
@@ -63,9 +60,9 @@ const FiatPaymentExtended = forwardRef<HTMLDivElement, FiatPaymentExtendedProps>
                 isPreLoading={isPreLoading}
             />
         </div>
-    )
+    );
 });
 
-FiatPaymentExtended.displayName = 'FiatPaymentExtended';
+FiatPaymentExtended.displayName = "FiatPaymentExtended";
 
 export default FiatPaymentExtended;

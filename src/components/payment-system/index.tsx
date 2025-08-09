@@ -7,9 +7,9 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-import { Button } from "../common";
+// import { Button } from "../common";
 import { useConfig } from "../../context/config-context";
-import { onFinishResponseProps } from "../../types";
+import { onResponseProps } from "../../types";
 import CryptoPaymentExtended from "./crypto";
 import FiatPaymentExtended from "./fiat";
 import { usePaymentModule } from "../../hooks/use-payment-module";
@@ -17,8 +17,8 @@ import { usePaymentModule } from "../../hooks/use-payment-module";
 type PaymentView = "payment-method" | "crypto-payment" | "fiat-payment" | "";
 
 interface PaymentSystemProps {
-    onPaymentSuccess?: (response: onFinishResponseProps) => void;
-    onPaymentError?: (response: onFinishResponseProps) => void;
+    onPaymentSuccess?: (response: onResponseProps) => void;
+    onPaymentError?: (response: onResponseProps) => void;
     enabledMethods?: ("crypto" | "fiat")[];
     isLoading?: boolean;
 }
@@ -67,9 +67,7 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
             setCurrentView("");
         };
 
-        const handlePaymentSuccess = async (
-            response: onFinishResponseProps
-        ) => {
+        const handlePaymentSuccess = async (response: onResponseProps) => {
             if (response.status === "success") {
                 // Perform async validation
                 try {
@@ -107,7 +105,7 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
         // Determine which payment methods are available
         const isCryptoEnabled = enabledMethods.includes("crypto");
         const isFiatEnabled = enabledMethods.includes("fiat");
-        const bothMethodsEnabled = isCryptoEnabled && isFiatEnabled;
+        // const bothMethodsEnabled = isCryptoEnabled && isFiatEnabled;
 
         const startPaymentFlow = (data: PaymentData) => {
             setPaymentData(data);
@@ -116,10 +114,8 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                 setCurrentView("crypto-payment");
             } else if (isFiatEnabled && !isCryptoEnabled) {
                 setCurrentView("fiat-payment");
-            } else if (bothMethodsEnabled) {
-                // Show method selection if both are enabled
-                setCurrentView("payment-method");
             }
+            setCurrentView("");
         };
 
         useImperativeHandle(ref, () => ({
@@ -151,58 +147,6 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
 
         return (
             <>
-                {/* Payment Method Selection (when both methods are enabled) */}
-                {bothMethodsEnabled && (
-                    <div
-                        className={`pam:fixed pam:inset-0 pam:z-50 pam:flex pam:items-center pam:justify-center pam:bg-black pam:bg-opacity-50 ${currentView === "payment-method" ? "" : "pam:hidden"}`}
-                    >
-                        <div className="pam:bg-white pam:rounded-lg pam:p-6 pam:max-w-md pam:w-full pam:mx-4">
-                            <h2 className="pam:text-xl pam:font-semibold pam:mb-4">
-                                Choose Payment Method
-                            </h2>
-                            <p className="pam:text-gray-600 pam:mb-6">
-                                Amount: {paymentData.coin} {paymentData.amount}
-                                {paymentData.description && (
-                                    <>
-                                        <br />
-                                        Description: {paymentData.description}
-                                    </>
-                                )}
-                            </p>
-                            <div className="pam:space-y-3">
-                                {isCryptoEnabled && (
-                                    <Button
-                                        variant="primary"
-                                        onClick={() =>
-                                            setCurrentView("crypto-payment")
-                                        }
-                                        disabled={isLoading}
-                                    >
-                                        Pay with Cryptocurrency
-                                    </Button>
-                                )}
-                                {isFiatEnabled && (
-                                    <Button
-                                        variant="primary"
-                                        onClick={() =>
-                                            setCurrentView("fiat-payment")
-                                        }
-                                        disabled={isLoading}
-                                    >
-                                        Pay with Card
-                                    </Button>
-                                )}
-                            </div>
-                            <Button
-                                variant="secondary"
-                                onClick={resetCurrentView}
-                            >
-                                Cancel
-                            </Button>
-                        </div>
-                    </div>
-                )}
-
                 {/* Crypto Payment Modal */}
                 {isCryptoEnabled && (
                     <CryptoPaymentExtended

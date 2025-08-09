@@ -22,7 +22,7 @@ const ModalCloseBtn = ({ onClick, text }: ModalCloseBtnProps) => {
             variant="secondary"
             onClick={onClick}
         >
-            <XIcon className="pam:cursor-pointer pam:text-primary" />
+            <XIcon className="pam:cursor-pointer pam:text-brand-primary" />
             <span className="!pam:text-sm sm:!pam:text-lg">
                 {text || "Cancel"}
             </span>
