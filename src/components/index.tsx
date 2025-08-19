@@ -21,7 +21,6 @@ const PaktPaymentModule = forwardRef(
             config,
             onPaymentSuccess,
             onPaymentError,
-            isLoading,
         }: PaymentSystemProps & { config: ConfigContextType },
         ref: Ref<PaymentSystemRef>
     ) => {
@@ -49,7 +48,6 @@ const PaktPaymentModule = forwardRef(
                         ref={paymentModuleRef}
                         onPaymentSuccess={onPaymentSuccess}
                         onPaymentError={onPaymentError}
-                        isLoading={isLoading || false}
                     />
                 </ConfigProvider>
             </div>

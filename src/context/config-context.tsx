@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider, type Config, type WagmiProviderProps } from "wagmi";
 import { structuralSharing } from '@wagmi/core/query';
+import { CircleX } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -18,7 +19,7 @@ import { ConfigContextType } from "../types";
 import { paktSDKService } from "../lib/pakt-sdk";
 
 
-const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
+const ConfigContext = createContext<ConfigContextType & { setErrorMessage: (message: string | null) => void, error: string | null } | undefined>(undefined);
 
 const useConfig = () => {
     const context = useContext(ConfigContext);
@@ -90,6 +91,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     config,
     children,
 }) => {
+    const [error, setError] = useState<string | null>(null);
     useEffect(() => {
         if (config?.errorHandler) {
             setGlobalErrorHandler(config.errorHandler);
@@ -99,8 +101,13 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
         paktSDKService.initialize(config.paktConfig);
     }, [config]);
 
+    const setErrorMessage = (message: string | null) =>{ 
+        setError(message);
+        console.log("message", message);
+    }
+
     return (
-        <ConfigContext.Provider value={config}>
+        <ConfigContext.Provider value={{...config, setErrorMessage, error}}>
           <WrappedQueryComponent queryClient={config.cryptoConfig?.queryClient}>
             <WrappedWagmiProvider wagmiProvider={config.cryptoConfig?.wagmiProvider} wagmiConfig={config.cryptoConfig?.wagmiConfig as Config}>
                 {children}

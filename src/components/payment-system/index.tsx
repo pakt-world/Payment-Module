@@ -7,7 +7,6 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
-// import { Button } from "../common";
 import { useConfig } from "../../context/config-context";
 import { onResponseProps } from "../../types";
 import CryptoPaymentExtended from "./crypto";
@@ -21,7 +20,6 @@ interface PaymentSystemProps {
     onPaymentSuccess?: (response: onResponseProps) => void;
     onPaymentError?: (response: onResponseProps) => void;
     enabledMethods?: ("crypto" | "fiat")[];
-    isLoading?: boolean;
 }
 
 interface PaymentData {
@@ -46,8 +44,7 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
         {
             onPaymentSuccess,
             onPaymentError,
-            enabledMethods = ["crypto", "fiat"],
-            isLoading = false,
+            enabledMethods = ["crypto"],
         }: PaymentSystemProps,
         ref
     ) => {
@@ -154,21 +151,21 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                         collectionType={paymentData.collectionType}
                         owner={paymentData.owner}
                         handlePaymentResponse={handlePaymentSuccess}
-                        isLoading={isLoading}
+                        isLoading={false}
                         closeModal={resetCurrentView}
                     />
                 )}
 
                 {/* Fiat Payment Modal */}
-                {isFiatEnabled && (
+                {/* {isFiatEnabled && (
                     <FiatPaymentExtended
                         isOpen={currentView === "fiat-payment"}
                         config={config}
                         amount={paymentData.amount}
                         handlePaymentResponse={handlePaymentSuccess}
-                        isLoading={isLoading}
+                        isLoading={false}
                     />
-                )}
+                )} */}
             </>
         );
     }

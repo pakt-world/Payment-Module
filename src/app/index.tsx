@@ -125,7 +125,6 @@ const App = () => {
                 config={config}
                 onPaymentSuccess={onSuccessResponse}
                 onPaymentError={onSuccessResponse}
-                isLoading={false}
             />
         </div>
     );

@@ -14,6 +14,7 @@ import { I0xAddressType, IAny } from "../../../../types";
 import { Button, toast, Spinner } from "../../../common";
 import { WalletDepositProps } from "../../types";
 import Logger from "../../../../lib/logger";
+import { useConfig } from "../../../../context/config-context";
 
 const DepositToken = ({
     chainId,
@@ -31,8 +32,8 @@ const DepositToken = ({
     onResponse,
     isVerifying,
 }: WalletDepositProps) => {
-    const [connectError, setConnectError] = useState<string | null>(null);
-
+    const [connectError, setConnectError] = useState<string | null>(null)
+    const { setErrorMessage } = useConfig();
     const {
         writeContract,
         isError: writeIsError,
@@ -135,19 +136,16 @@ const DepositToken = ({
         }
     }, [selectedConnector]);
 
+    useEffect(() => {
+        console.log("writeError", writeError);
+        console.log("connectError", connectError);
+        if (selectedConnector && (writeError || connectError)) {
+            setErrorMessage(writeError?.message || connectError || "An error occurred while making payment.");
+        }
+    }, [writeError, connectError]);
+
     return (
         <div className="pam:flex pam:flex-col pam:gap-2 pam:items-end pam:h-full">
-            {selectedConnector && (writeError || connectError) && (
-                <div className="pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-error-border pam:bg-error-background pam:p-2 pam:text-sm pam:text-error-text">
-                    <span>
-                        {connectError ||
-                            // @ts-expect-error allow to call function without await
-                            writeError?.cause?.reason ||
-                            "An error occurred while making payment."}
-                    </span>
-                </div>
-            )}
-
             {showReconfirmButton && (
                 <Button
                     fullWidth

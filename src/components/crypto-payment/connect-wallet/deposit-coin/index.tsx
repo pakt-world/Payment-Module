@@ -6,6 +6,7 @@ import React, { useEffect, useState, type ReactElement } from "react";
 import { parseEther } from "viem";
 import { type Config, useEstimateGas, useSendTransaction } from "wagmi";
 import { type ConnectMutate } from "wagmi/query";
+import { useConfig } from "../../../../context/config-context";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -43,6 +44,7 @@ const DepositCoin = ({
     isDisabled,
 }: WalletDepositProps): ReactElement => {
     const [connectError, setConnectError] = useState<string | null>(null);
+    const { setErrorMessage } = useConfig();
 
     const SendTxPayload = {
         to: depositAddress as I0xType,
@@ -134,25 +136,22 @@ const DepositCoin = ({
         }
     }, [selectedConnector]);
 
+    useEffect(() => {
+        if (selectedConnector && (isError || txError)) {
+            setErrorMessage(
+                (ErrorMsg?.name || txError?.name) ===
+                    "EstimateGasExecutionError"
+                    ? "InsufficientFundsError: The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account."
+                    : connectError ||
+                          (ErrorMsg?.message ??
+                              txError?.message ??
+                              "An error occurred while making payment.")
+            );
+        }
+    }, [isError, txError, connectError, ErrorMsg, txError]);
+
     return (
         <div>
-            {selectedConnector &&
-                ((isError &&
-                    (isError as any)?.name !== "ConnectorChainMismatchError") ||
-                    txError) && (
-                    <div className="pam:mb-4 pam:flex pam:flex-col pam:items-center pam:gap-2 pam:rounded-lg pam:border pam:border-error-border pam:bg-error-background pam:p-2 pam:text-sm pam:text-error-text">
-                        <span>
-                            {(ErrorMsg?.name || txError?.name) ===
-                            "EstimateGasExecutionError"
-                                ? "InsufficientFundsError: The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account."
-                                : connectError ||
-                                  (ErrorMsg?.message ??
-                                      txError?.message ??
-                                      "An error occurred while making payment.")}
-                        </span>
-                    </div>
-                )}
-
             <Button
                 disabled={isDisabled || isLoadingAll}
                 onClick={() => {
