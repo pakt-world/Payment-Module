@@ -32,7 +32,7 @@ const DepositToken = ({
     onResponse,
     isVerifying,
 }: WalletDepositProps) => {
-    const [connectError, setConnectError] = useState<string | null>(null)
+    const [connectError, setConnectError] = useState<string | null>(null);
     const { setErrorMessage } = useConfig();
     const {
         writeContract,
@@ -43,7 +43,6 @@ const DepositToken = ({
         mutation: {
             onSuccess(data) {
                 Logger.info(`contract-interaction-success-->`, { txId: data });
-                console.info(`contract-interaction-success-->`, { txId: data });
                 disconnect();
                 onResponse({
                     status: "success",
@@ -53,14 +52,10 @@ const DepositToken = ({
             },
             onError(error: any) {
                 Logger.error(`contract-interaction-error-->`, { error });
-                console.error(
-                    `contract-interaction-error-->`,
-                    JSON.stringify(error)
-                );
                 disconnect();
                 onResponse({
                     status: "error",
-                    message: error.message,
+                    message: (error?.cause as any)?.reason || error?.message,
                     txId: "",
                 });
             },
@@ -68,8 +63,8 @@ const DepositToken = ({
     });
 
     const isLoadingAll = isLoading || writeLoading || !!isVerifying;
-    const isDisabledAll = isDisabled || disableButtonOnClick || writeIsError;
-
+    const isDisabledAll = isDisabled || disableButtonOnClick;
+    
     if (writeIsError) {
         Logger.error("contract-error", {
             writeLoading,
@@ -137,10 +132,10 @@ const DepositToken = ({
     }, [selectedConnector]);
 
     useEffect(() => {
-        console.log("writeError", writeError);
-        console.log("connectError", connectError);
         if (selectedConnector && (writeError || connectError)) {
-            setErrorMessage(writeError?.message || connectError || "An error occurred while making payment.");
+            setErrorMessage(
+                (writeError?.cause as any)?.reason || connectError || "An error occurred while making payment."
+            );
         }
     }, [writeError, connectError]);
 
@@ -169,15 +164,15 @@ const DepositToken = ({
                     <span>
                         {!activeConnector
                             ? "Connect Wallet"
-                            : writeLoading
-                              ? "Confirming Payment"
-                              : isVerifying
-                                ? "Verifying Payment"
-                                : isLoadingAll
-                                  ? "Loading..."
+                            : isLoadingAll
+                              ? "Loading..."
+                              : writeLoading
+                                ? "Confirming Payment"
+                                : isVerifying
+                                  ? "Verifying Payment"
                                   : "Make Payment"}
                     </span>
-                    <span> {isLoadingAll && <Spinner />}</span>
+                    <span> {isLoadingAll && <Spinner size={16} className="pam:text-white" />}</span>
                 </div>
             </Button>
         </div>

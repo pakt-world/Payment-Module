@@ -100,9 +100,10 @@ const ConnectWallet = ({
     // switch network if wrong chain
     useEffect(() => {
         if (isWrongChain && switchChain != null) {
+            console.log("switchChain", chainId);
             switchChain({ chainId });
         }
-    }, [chainId, isConnected, isWrongChain, switchChain]);
+    }, [chainId, isConnected, isWrongChain]);
 
     // Handle button disable timeout state
     useEffect(() => {

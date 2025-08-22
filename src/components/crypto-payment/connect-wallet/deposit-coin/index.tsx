@@ -170,7 +170,7 @@ const DepositCoin = ({
                         {" "}
                         {!activeConnector ? "Connect Wallet" : "Make Payment"}
                     </span>
-                    <span>{isLoadingAll && <Spinner />}</span>
+                    <span>{isLoadingAll && <Spinner size={16} className="pam:text-white" />}</span>
                 </div>
             </Button>
         </div>

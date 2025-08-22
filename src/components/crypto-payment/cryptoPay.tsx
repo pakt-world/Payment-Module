@@ -13,7 +13,6 @@ import Modal from "../common/modal";
 import ConnectWallet from "./connect-wallet";
 import DepositToAddress from "./address-deposit";
 import PaktWrapper from "../modal-wrapper";
-import ErrorToaster from "../errorToaster";
 
 const CryptoPayment = ({
     isOpen,
@@ -36,7 +35,6 @@ const CryptoPayment = ({
             isPreLoading={isPreLoading}
         >
             <PaktWrapper showPakt>
-                <ErrorToaster />
                 <div className="pam:mx-auto pam:flex pam:w-full pam:h-full pam:flex-col pam:gap-6 pam:bg-form-background pam:p-6 pam:rounded-2xl pam:border pam:border-border-color">
                     <div className="pam:flex pam:w-full pam:items-center pam:justify-between">
                         <h2 className="pam:text-lg pam:font-bold pam:text-heading-text pam:sm:pam:text-2xl">

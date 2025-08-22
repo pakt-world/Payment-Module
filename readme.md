@@ -528,11 +528,10 @@ const {
 const customPaymentFlow = async () => {
   // Step 1: Initiate payment
   const initResponse = await initiateCryptoPayment({
-    collectionType: "service",
     amount: 100,
     coin: "USDC",
     description: "Custom payment",
-    isDirect: true,
+    isSystemDeposit: true,
     owner: "user-id",
   });
   

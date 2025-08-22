@@ -10,7 +10,7 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { useConfig } from "../../context/config-context";
 import { onResponseProps } from "../../types";
 import CryptoPaymentExtended from "./crypto";
-import FiatPaymentExtended from "./fiat";
+// import FiatPaymentExtended from "./fiat";
 import { usePaymentModule } from "../../hooks/use-payment-module";
 import Logger from "../../lib/logger";
 
@@ -26,9 +26,8 @@ interface PaymentData {
     amount: number;
     coin: string;
     description: string;
-    isDirect: boolean;
-    collectionType: string;
-    owner: string;
+    isSystemDeposit: boolean;
+    chainId: string;
     name: string;
 }
 
@@ -51,26 +50,31 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
         const [currentView, setCurrentView] = useState<PaymentView>("");
 
         const config = useConfig();
+
         const [paymentData, setPaymentData] = useState<PaymentData>({
             amount: 0,
             coin: "",
             description: "",
-            isDirect: false,
-            collectionType: "",
-            owner: "",
+            isSystemDeposit: false,
+            chainId: "",
             name: "",
         });
+
         const { validateCryptoPayment } = usePaymentModule();
+
         const resetCurrentView = () => {
             setCurrentView("");
         };
 
         const handlePaymentSuccess = async (response: onResponseProps) => {
-            if (response.status === "success") {
+            if (response.status === "success" && response.collectionId) {
                 // Perform async validation
                 try {
                     const validateResponse = await validateCryptoPayment(
-                        response.collectionId
+                        response?.collectionId ?? "",
+                        response?.chainId ?? "",
+                        10,
+                        5000,
                     );
                     if (validateResponse.status === "success") {
                         onPaymentSuccess?.({
@@ -147,9 +151,8 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
                         amount={paymentData.amount}
                         coin={paymentData.coin}
                         description={paymentData.description}
-                        isDirect={paymentData.isDirect}
-                        collectionType={paymentData.collectionType}
-                        owner={paymentData.owner}
+                        isSystemDeposit={paymentData.isSystemDeposit}
+                        chainId={paymentData.chainId}
                         handlePaymentResponse={handlePaymentSuccess}
                         isLoading={false}
                         closeModal={resetCurrentView}

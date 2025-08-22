@@ -60,9 +60,8 @@ const App = () => {
             amount: 1,
             coin: "usdc",
             description: "test",
-            isDirect: true,
-            collectionType: "tip",
-            owner: "67d05d221a22ed512faabed0",
+            isSystemDeposit: true,
+            chainId: "43114",
             name: "test",
         });
     };
@@ -72,9 +71,8 @@ const App = () => {
             amount: 1,
             coin: "usdc",
             description: "test",
-            isDirect: false,
-            collectionType: "tip",
-            owner: "67d05d221a22ed512faabed0",
+            isSystemDeposit: false,
+            chainId: "43113",
             name: "test",
         });
 

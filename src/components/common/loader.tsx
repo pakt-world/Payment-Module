@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 
 import { type FC } from "react";
-import { Loader } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -23,7 +23,7 @@ export const Spinner: FC<SpinnerProps> = ({ size = 24, className }) => {
                 className
             )}
         >
-            <Loader className="pam:animate-spin" size={size} />
+            <Loader2 className="pam:animate-spin" size={size} />
         </div>
     );
 };

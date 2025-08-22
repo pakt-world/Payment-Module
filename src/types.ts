@@ -37,6 +37,7 @@ interface onResponseProps {
     message: string;
     txId: string;
     collectionId?: string;
+    chainId?: string;
 }
 
 type IAny = any;

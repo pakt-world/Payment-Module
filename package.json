@@ -1,7 +1,7 @@
 {
     "name": "@pakt/payment-module",
     "license": "MIT",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "repository": "git://github.com/pakt-world/payment-module.git",
     "description": "",
     "author": "Pakt",
@@ -103,7 +103,7 @@
         "dompurify": "^3.1.7",
         "framer-motion": "^11.9.0",
         "lucide-react": "^0.446.0",
-        "pakt-sdk": "^0.1.50-beta",
+        "pakt-sdk": "^0.1.53-beta",
         "quill": "^2.0.2",
         "react-hook-form": "^7.53.0",
         "react-hot-toast": "^2.4.1",

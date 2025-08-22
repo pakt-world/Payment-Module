@@ -4,6 +4,7 @@
 /* -------------------------------------------------------------------------- */
 
 import { useCallback, useState } from "react";
+import { ICreateDirectDepositPayload, ICreateDirectDepositResponse } from "pakt-sdk";
 
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
@@ -29,7 +30,12 @@ export interface UsePaymentModuleReturn {
 
     // Authentication Methods
     initiateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
-    validateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
+    validateCryptoPayment: (
+        collectionId: string,
+        chainId: string,
+        retries?: number,
+        retryDelay?: number
+    ) => Promise<PaymentResponse<any>>;
     // initiateFiatPayment: (payload: IValidateDirectDepositPayload) => Promise<PaymentResponse<IValidateDirectDepositResponse>>;
 
     // Utility Methods
@@ -72,7 +78,7 @@ export const usePaymentModule = (): UsePaymentModuleReturn => {
 
     // Initiate crypto payment
     const initiateCryptoPayment = useCallback(
-        async (payload: any): Promise<PaymentResponse<any>> => {
+        async (payload: ICreateDirectDepositPayload): Promise<PaymentResponse<ICreateDirectDepositResponse>> => {
             setLoading(true);
             setError(null);
 
@@ -98,18 +104,11 @@ export const usePaymentModule = (): UsePaymentModuleReturn => {
         [createErrorResponse]
     );
 
-    // initiate fiat payment
-    // const initiateFiatPayment = useCallback(async (payload: any): Promise<PaymentResponse<any>> => {
-    //     setLoading(true);
-    //     setError(null);
-
-    //     try {
-    // }, []);
-
     // validate crypto payment
     const validateCryptoPayment = useCallback(
         async (
             collectionId: string,
+            chainId: string,
             retries: number = 10,
             retryDelay: number = 2000
         ): Promise<PaymentResponse<any>> => {
@@ -123,6 +122,7 @@ export const usePaymentModule = (): UsePaymentModuleReturn => {
                     const response = await paktSDKService.validateDirectDeposit(
                         {
                             collection: collectionId,
+                            chainId: chainId,
                         }
                     );
                     if (response.status !== "success") {

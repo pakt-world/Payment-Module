@@ -11,9 +11,8 @@ interface CryptoPaymentExtendedProps {
     amount: number;
     coin: string;
     description: string;
-    isDirect: boolean;
-    collectionType: string;
-    owner: string;
+    isSystemDeposit: boolean;
+    chainId: string;
     isLoading: boolean;
     handlePaymentResponse: (response: onResponseProps) => void; // eslint-disable-line no-unused-vars
     closeModal: () => void;
@@ -29,11 +28,9 @@ const CryptoPaymentExtended = forwardRef<
             config,
             amount,
             coin,
+            chainId,
             description,
-            isDirect,
-            collectionType,
-            owner,
-            isLoading,
+            isSystemDeposit,
             handlePaymentResponse,
             closeModal: closeModalFromParent,
         },
@@ -42,18 +39,17 @@ const CryptoPaymentExtended = forwardRef<
         const [isPreLoading, setIsPreLoading] = useState(true);
         const [collectionId, setCollectionId] = useState("");
         const [paymentData, setPaymentData] = useState<any>({});
-        const { initiateCryptoPayment } = usePaymentModule();
+        const { initiateCryptoPayment, loading } = usePaymentModule();
 
         const createCryptoPayment = async () => {
             try {
                 const response = await initiateCryptoPayment({
-                    collectionType,
                     amount,
                     coin,
                     description,
-                    owner,
-                    systemDeposit: isDirect,
+                    systemDeposit: isSystemDeposit,
                     name: description,
+                    chainId,
                 });
                 if (response.status === "success") {
                     setCollectionId(response.data.collectionId);
@@ -77,6 +73,7 @@ const CryptoPaymentExtended = forwardRef<
                 message: response.message,
                 txId: response.txId,
                 collectionId,
+                chainId: paymentData?.chainId,
             });
 
         useEffect(() => {
@@ -99,7 +96,7 @@ const CryptoPaymentExtended = forwardRef<
                     contractAddress={paymentData.contractAddress ?? ""} // Should be provided from config
                     tokenDecimal={6} // USDC decimals - should be configurable
                     onResponse={handlePaymentPostResponse}
-                    isLoading={isLoading}
+                    isLoading={loading}
                     isPreLoading={isPreLoading}
                 />
             </div>

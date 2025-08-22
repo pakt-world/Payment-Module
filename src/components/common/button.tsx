@@ -35,7 +35,7 @@ const button = cva(
                 true: "pam:w-full",
             },
             disabled: {
-                true: "pam:cursor-not-allowed !pam:bg-none !pam:bg-[#E3E5E5] !pam:text-[#979C9E]",
+                true: "pam:cursor-not-allowed !pam:bg-none !pam:bg-[#E3E5E5] !pam:text-[#979C9E] pam:opacity-50",
             },
         },
         defaultVariants: {
