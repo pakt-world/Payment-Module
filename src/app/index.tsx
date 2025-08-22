@@ -61,7 +61,7 @@ const App = () => {
             coin: "usdc",
             description: "test",
             isSystemDeposit: true,
-            chainId: "43114",
+            chainId: "43113",
             name: "test",
         });
     };

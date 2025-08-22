@@ -153,13 +153,12 @@ interface ITheme extends Record<string, any> {
 }
 
 interface PaymentData {
+    name: string;
+    description: string;
     amount: number;
     coin: string;
-    description: string;
-    isDirect: boolean;
-    collectionType: string;
-    owner: string;
-    name: string;
+    isSystemDeposit: boolean;
+    chainId: string;
 }
 
 export {
