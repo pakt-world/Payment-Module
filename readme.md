@@ -138,14 +138,8 @@ function MyPaymentComponent() {
 
   return (
     <div>
-      <button onClick={handleStartPayment}>
-        Pay Now
-      </button>
       <button onClick={handleStartCryptoPayment}>
         Pay with Crypto
-      </button>
-      <button onClick={handleStartFiatPayment}>
-        Pay with Card
       </button>
       
       <PaktPaymentModule
