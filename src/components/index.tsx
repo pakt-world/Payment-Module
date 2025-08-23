@@ -9,11 +9,11 @@ import { forwardRef, Ref, useImperativeHandle, useRef } from "react";
 import { ConfigProvider } from "../context/config-context";
 import {
     PaymentSystem,
-    PaymentSystemProps,
+    PaymentModuleProps,
     PaymentSystemRef,
 } from "./payment-system";
 import "../styles/index.css";
-import { ConfigContextType, PaymentData } from "../types";
+import { PaymentData } from "../types";
 
 const PaktPaymentModule = forwardRef(
     (
@@ -21,7 +21,7 @@ const PaktPaymentModule = forwardRef(
             config,
             onPaymentSuccess,
             onPaymentError,
-        }: PaymentSystemProps & { config: ConfigContextType },
+        }: PaymentModuleProps,
         ref: Ref<PaymentSystemRef>
     ) => {
         const paymentModuleRef = useRef<PaymentSystemRef>(null);

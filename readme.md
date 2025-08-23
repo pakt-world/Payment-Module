@@ -1,17 +1,6 @@
 # @pakt/payment-module
 
 This package provides React components for handling both fiat and cryptocurrency payments within Pakt applications. It integrates with Stripe for fiat payments and Wagmi v2 for crypto payments.
-
-## Features
-
-*   **Unified Payment System:** New ref-based API for seamless payment method selection
-*   **Fiat Payments:** Uses Stripe Elements for secure credit card processing and onramp.
-*   **Crypto Payments:** Integrates with Wagmi v2 for connecting wallets and initiating transactions.
-*   **Flexible Configuration:** Support for enabling/disabling specific payment methods
-*   **Complete Theme System:** Comprehensive theming with 60+ customizable design tokens
-*   **Responsive Design:** Mobile-first approach with optimized layouts for all screen sizes
-*   **TypeScript Support:** Full type safety with comprehensive TypeScript definitions
-
 ## Installation
 ```bash
 yarn add @pakt/payment-module
@@ -29,15 +18,14 @@ bun add @pakt/payment-module
 import React from 'react';
 import { ConfigContextType, ITheme, wagmi } from '@pakt/payment-module';
 
-
 const { createConfig, http, chains, connectors } = wagmi;
 const { mainnet, sepolia } = chains; // Import desired chains
-const { injected } = connectors; // Import desired connectors
+const { walletConnect } = connectors; // Import desired connectors
 
 // 1. Create your Wagmi config (v2)
 const wagmiConfig = createConfig({
   chains: [mainnet, sepolia],
-  connectors: [injected()],
+  connectors: [walletConnect()],
   transports: {
     [mainnet.id]: http(),
     [sepolia.id]: http(),
@@ -82,7 +70,7 @@ export default paymentModuleConfig;
 *   `theme?: ITheme`: Optional theme object to customize component appearance.
 *   `cryptoConfig?: { wagmiConfig: Config }`: Optional. Required for crypto payments. Your Wagmi v2 configuration object.
 *   `stripeConfig?: { publicKey: string; clientSecret: string; theme?: "light" | "dark"; }`: Optional. Required for fiat payments. Your Stripe configuration including public key, client secret, and optional theme setting.
-*   `paktConfig: { baseUrl: string; verbose?: boolean }`: **Required.** Pakt API configuration including base URL and optional verbose logging.
+*   `paktConfig: PaktConfig`: **Required.** Pakt API configuration including base URL and optional verbose logging.
 
 ## Usage
 
@@ -95,19 +83,19 @@ import React, { useRef } from 'react';
 import PaktPaymentModule, { 
   PaymentSystemRef, 
   ConfigContextType, 
-  onFinishResponseProps,
+  onResponseProps,
   PaymentData 
 } from '@pakt/payment-module';
 
 function MyPaymentComponent() {
   const paymentRef = useRef<PaymentSystemRef>(null);
 
-  const handlePaymentSuccess = (response: onFinishResponseProps) => {
+  const handlePaymentSuccess = (response: onResponseProps) => {
     console.log('Payment successful:', response);
     // Handle successful payment (e.g., show success message, redirect)
   };
 
-  const handlePaymentError = (response: onFinishResponseProps) => {
+  const handlePaymentError = (response: onResponseProps) => {
     console.error('Payment failed:', response);
     // Handle payment error
   };
@@ -118,9 +106,8 @@ function MyPaymentComponent() {
       amount: 10.5,
       coin: "USDC",
       description: "Service payment",
-      isDirect: true,
-      collectionType: "service",
-      owner: "user-id",
+      isSystemDeposit: true,
+      chainId: "1", // Ethereum mainnet
       name: "Service Name"
     });
   };
@@ -131,9 +118,8 @@ function MyPaymentComponent() {
       amount: 10.5,
       coin: "USDC", 
       description: "Crypto payment",
-      isDirect: true,
-      collectionType: "service",
-      owner: "user-id",
+      isSystemDeposit: true,
+      chainId: "43113",
       name: "Service Name"
     });
   };
@@ -144,9 +130,8 @@ function MyPaymentComponent() {
       amount: 10.5,
       coin: "USD",
       description: "Card payment", 
-      isDirect: false,
-      collectionType: "service",
-      owner: "user-id",
+      isSystemDeposit: false,
+      chainId: "43113",
       name: "Service Name"
     });
   };
@@ -168,8 +153,6 @@ function MyPaymentComponent() {
         config={paymentModuleConfig}
         onPaymentSuccess={handlePaymentSuccess}
         onPaymentError={handlePaymentError}
-        enabledMethods={["crypto", "fiat"]} // Optional: specify which methods to enable
-        isLoading={false}
       />
     </div>
   );
@@ -178,15 +161,11 @@ function MyPaymentComponent() {
 
 **PaktPaymentModule Props:**
 * `config`: ConfigContextType - Your payment module configuration
-* `onPaymentSuccess?`: (response: onFinishResponseProps) => void - Success callback
-* `onPaymentError?`: (response: onFinishResponseProps) => void - Error callback  
-* `enabledMethods?`: ("crypto" | "fiat")[] - Array of enabled payment methods (default: ["crypto", "fiat"])
-* `isLoading?`: boolean - Loading state
+* `onPaymentSuccess?`: (response: onResponseProps) => void - Success callback
+* `onPaymentError?`: (response: onResponseProps) => void - Error callback  
 
 **PaymentSystemRef Methods:**
-* `startPayment(data: PaymentData)`: Start payment with automatic method selection
 * `startCryptoPayment(data: PaymentData)`: Start crypto payment directly
-* `startFiatPayment(data: PaymentData)`: Start fiat payment directly
 * `close()`: Close any open payment modals
 
 **PaymentData Interface:**
@@ -195,14 +174,11 @@ interface PaymentData {
   amount: number;          // Payment amount
   coin: string;           // Currency/token symbol (e.g., "USDC", "USD")
   description: string;    // Payment description
-  isDirect: boolean;      // Whether this is a direct payment
-  collectionType: string; // Type of collection (e.g., "service", "tip")
-  owner: string;          // Owner/recipient ID
+  isSystemDeposit: boolean; // Whether this is a system deposit
+  chainId: string;        // Blockchain network ID
   name: string;           // Collection/service name
 }
 ```
-
-
 
 ## Configuration
 
@@ -222,10 +198,7 @@ interface ConfigContextType {
     theme?: "light" | "dark";
   };
   // Required configuration
-  paktConfig: {
-    baseUrl: string; // Pakt API base URL
-    verbose?: boolean; // Enable debug logging
-  };
+  paktConfig: PaktConfig; // Pakt API configuration from pakt-sdk
   errorHandler?: (errorMessage: string) => void; // Custom error handler
   theme?: ITheme; // Custom theme object
 }
@@ -295,6 +268,58 @@ interface ITheme {
   
   // Layout - Spacing and sizing
   modalBorderRadius?: string;   // Modal corner radius
+  
+  // Legacy Support (deprecated but kept for backward compatibility)
+  primary?: string;
+  secondary?: string;
+  info?: string;
+  line?: string;
+  title?: string;
+  body?: string;
+  warning?: string;
+  success?: string;
+  danger?: string;
+  magnolia?: string;
+  "exhibit-tab-list"?: string;
+  "primary-brighter"?: string;
+  "refer-border"?: string;
+  "btn-primary"?: string;
+  "primary-gradient"?: string;
+  "modal-radius"?: string;
+  "blue-lightest"?: string;
+  "blue-darkest"?: string;
+  
+  // Nested structure for complex token groups (kept for backward compatibility)
+  text?: {
+    primary?: string;
+    secondary?: string;
+    inverse?: string;
+  };
+  
+  input?: {
+    background?: string;
+    border?: string;
+    focus?: string;
+    placeholder?: string;
+    text?: string;
+    label?: string;
+  };
+  
+  states?: {
+    error?: {
+      background?: string;
+      text?: string;
+      border?: string;
+    };
+    success?: {
+      background?: string;
+      text?: string;
+    };
+    warning?: {
+      background?: string;
+      text?: string;
+    };
+  };
 }
 ```
 
@@ -427,156 +452,27 @@ The theme system automatically applies your custom values throughout all compone
 4. **Runtime Updates**: Theme changes are applied immediately without requiring restarts
 
 
-
-## Payment Flow
-
-The payment module supports multiple payment flows depending on your integration needs:
-
-### 1. Unified Payment Flow
-
-The unified flow provides automatic payment method selection with a single integration point:
-
-```mermaid
-graph TD
-    A[User clicks "Pay"] --> B[Payment Module Opens]
-    B --> C{Payment Methods Available?}
-    C -->|Both| D[Method Selection Screen]
-    C -->|Crypto Only| E[Crypto Payment Flow]
-    C -->|Fiat Only| F[Fiat Payment Flow]
-    D -->|User selects Crypto| E
-    D -->|User selects Fiat| F
-    E --> G[Wallet Connection]
-    G --> H[Transaction Confirmation]
-    H --> I[Payment Success]
-    F --> J[Stripe Payment Form]
-    J --> K[Card Processing]
-    K --> I
-    I --> L[Success Callback]
-```
-
-```typescript
-// Unified flow implementation
-const paymentRef = useRef<PaymentSystemRef>(null);
-
-const startPayment = () => {
-  paymentRef.current?.startPayment({
-    amount: 100,
-    coin: "USDC",
-    description: "Service payment",
-    isDirect: true,
-    collectionType: "service",
-    owner: "user-id",
-    name: "Service Name"
-  });
-};
-```
-
-### 2. Direct Crypto Payment Flow
-
-For crypto-specific integrations, bypass method selection:
-
-```mermaid
-graph TD
-    A[startCryptoPayment called] --> B[Crypto Payment Modal Opens]
-    B --> C[Payment Collection Creation]
-    C --> D{Wallet Connected?}
-    D -->|No| E[Wallet Selection]
-    D -->|Yes| F[Payment Details Display]
-    E --> G[Connect Selected Wallet]
-    G --> F
-    F --> H{Payment Type?}
-    H -->|Native Token| I[Direct Transfer]
-    H -->|ERC20 Token| J[Contract Interaction]
-    I --> K[Transaction Broadcast]
-    J --> K
-    K --> L[Transaction Confirmation]
-    L --> M[Payment Verification]
-    M --> N[Success Response]
-```
-
-### 3. Direct Fiat Payment Flow
-
-For fiat-only integrations using Stripe:
-
-```mermaid
-graph TD
-    A[startFiatPayment called] --> B[Stripe Modal Opens]
-    B --> C[Collection Creation]
-    C --> D[Stripe Elements Load]
-    D --> E[User Enters Card Details]
-    E --> F[Payment Processing]
-    F --> G{Payment Result?}
-    G -->|Success| H[Success Response]
-    G -->|Error| I[Error Handling]
-    H --> J[Modal Closes]
-    I --> K[Error Display]
-```
-
-### 4. Hook-Based Payment Flow
-
-For advanced integrations with custom UI:
-
-```typescript
-const {
-  payment,
-  loading,
-  error,
-  initiateCryptoPayment,
-  validateCryptoPayment,
-} = usePaymentModule();
-
-const customPaymentFlow = async () => {
-  // Step 1: Initiate payment
-  const initResponse = await initiateCryptoPayment({
-    amount: 100,
-    coin: "USDC",
-    description: "Custom payment",
-    isSystemDeposit: true,
-    owner: "user-id",
-  });
-  
-  if (initResponse.status === 'success') {
-    // Step 2: Handle the payment with your custom UI
-    // Payment data is available in `payment` state
-    
-    // Step 3: Validate payment after user completes transaction
-    const validationResponse = await validateCryptoPayment(
-      payment.collectionId,
-      5, // retries
-      3000 // retry delay in ms
-    );
-    
-    if (validationResponse.status === 'success') {
-      // Payment confirmed
-    }
-  }
-};
-```
-
 ### Payment States
 
 The payment module manages several states throughout the payment process:
 
 ```typescript
-type PaymentState = 
-  | 'idle'              // No payment in progress
-  | 'initiating'        // Creating payment collection
-  | 'method-selection'  // User selecting payment method
-  | 'connecting'        // Connecting to wallet (crypto)
-  | 'confirming'        // User confirming transaction
-  | 'processing'        // Payment being processed
-  | 'verifying'         // Verifying payment completion
-  | 'success'           // Payment completed successfully
-  | 'error';            // Payment failed
+type PaymentView = 
+  | 'payment-method'    // User selecting payment method
+  | 'crypto-payment'    // Crypto payment in progress
+  | 'fiat-payment'      // Fiat payment in progress
+  | '';                 // No payment in progress
 
 // State is managed automatically and available through callbacks
-const handlePaymentSuccess = (response: onFinishResponseProps) => {
+const handlePaymentSuccess = (response: onResponseProps) => {
   // response.status === 'success'
   // response.txId contains transaction ID
   // response.message contains success message
+  // response.collectionId contains collection ID
+  // response.chainId contains blockchain network ID
 };
 
-const handlePaymentError = (response: onFinishResponseProps) => {
+const handlePaymentError = (response: onResponseProps) => {
   // response.status === 'error'
   // response.message contains error details
 };
@@ -613,82 +509,6 @@ Common error scenarios:
 - **Validation Errors**: Payment not found, verification timeouts
 - **Configuration Errors**: Missing API keys, invalid settings
 
-## Hooks
-
-The package also provides a custom hook for advanced payment operations:
-
-```typescript
-import { usePaymentModule, UsePaymentModuleReturn, PaymentResponse } from '@pakt/payment-module';
-
-function MyComponent() {
-  const {
-    payment,
-    loading,
-    error,
-    initiateCryptoPayment,
-    validateCryptoPayment,
-    clearError,
-    clearPayment
-  } = usePaymentModule();
-
-  const handleCryptoPayment = async () => {
-    const response = await initiateCryptoPayment({
-      // payment data
-    });
-    
-    if (response.status === 'success') {
-      // Payment initiated successfully
-      const validationResponse = await validateCryptoPayment(collectionId);
-      // Handle validation result
-    }
-  };
-
-  const handleClearError = () => {
-    clearError();
-  };
-
-  const handleClearPayment = () => {
-    clearPayment();
-  };
-
-  return (
-    <div>
-      {loading && <p>Loading...</p>}
-      {error && (
-        <div>
-          <p>Error: {error}</p>
-          <button onClick={handleClearError}>Clear Error</button>
-        </div>
-      )}
-      <button onClick={handleCryptoPayment}>
-        Start Crypto Payment
-      </button>
-      <button onClick={handleClearPayment}>
-        Clear Payment Data
-      </button>
-    </div>
-  );
-}
-```
-
-**usePaymentModule Return Type:**
-```typescript
-interface UsePaymentModuleReturn {
-  // State
-  payment: Payment | null;
-  loading: boolean;
-  error: string | null;
-  
-  // Payment Methods
-  initiateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
-  validateCryptoPayment: (collectionId: string, retries?: number, retryDelay?: number) => Promise<PaymentResponse<any>>;
-  
-  // Utility Methods
-  clearError: () => void;
-  clearPayment: () => void;
-}
-```
-
 ## Types Reference
 
 The package exports comprehensive TypeScript types for better development experience:
@@ -708,10 +528,7 @@ interface ConfigContextType {
     clientSecret: string;
     theme?: "light" | "dark";
   };
-  paktConfig: {
-    baseUrl: string;
-    verbose?: boolean;
-  };
+  paktConfig: PaktConfig; // From pakt-sdk
   errorHandler?: (errorMessage: string) => void;
   theme?: ITheme;
 }
@@ -721,18 +538,18 @@ interface PaymentData {
   amount: number;          // Payment amount
   coin: string;           // Currency/token symbol
   description: string;    // Payment description
-  isDirect: boolean;      // Whether this is a direct payment
-  collectionType: string; // Type of collection
-  owner: string;          // Owner/recipient ID
+  isSystemDeposit: boolean; // Whether this is a system deposit
+  chainId: string;        // Blockchain network ID
   name: string;           // Collection/service name
 }
 
 // Response interface for payment callbacks
-interface onFinishResponseProps {
+interface onResponseProps {
   status: "success" | "error";
   message: string;
   txId: string;
   collectionId?: string;
+  chainId?: string;
 }
 
 // Theme customization interface
@@ -792,7 +609,57 @@ interface ITheme {
   // Layout
   modalBorderRadius?: string;
   
-
+  // Legacy Support (deprecated but kept for backward compatibility)
+  primary?: string;
+  secondary?: string;
+  info?: string;
+  line?: string;
+  title?: string;
+  body?: string;
+  warning?: string;
+  success?: string;
+  danger?: string;
+  magnolia?: string;
+  "exhibit-tab-list"?: string;
+  "primary-brighter"?: string;
+  "refer-border"?: string;
+  "btn-primary"?: string;
+  "primary-gradient"?: string;
+  "modal-radius"?: string;
+  "blue-lightest"?: string;
+  "blue-darkest"?: string;
+  
+  // Nested structure for complex token groups (kept for backward compatibility)
+  text?: {
+    primary?: string;
+    secondary?: string;
+    inverse?: string;
+  };
+  
+  input?: {
+    background?: string;
+    border?: string;
+    focus?: string;
+    placeholder?: string;
+    text?: string;
+    label?: string;
+  };
+  
+  states?: {
+    error?: {
+      background?: string;
+      text?: string;
+      border?: string;
+    };
+    success?: {
+      background?: string;
+      text?: string;
+    };
+    warning?: {
+      background?: string;
+      text?: string;
+    };
+  };
 }
 ```
 
@@ -800,11 +667,10 @@ interface ITheme {
 
 ```typescript
 // Main payment module props
-interface PaymentSystemProps {
-  onPaymentSuccess?: (response: onFinishResponseProps) => void;
-  onPaymentError?: (response: onFinishResponseProps) => void;
-  enabledMethods?: ("crypto" | "fiat")[];
-  isLoading?: boolean;
+interface PaymentModuleProps {
+  config: ConfigContextType;
+  onPaymentSuccess?: (response: onResponseProps) => void;
+  onPaymentError?: (response: onResponseProps) => void;
 }
 
 // Payment system ref methods
@@ -814,41 +680,6 @@ type PaymentSystemRef = {
   startFiatPayment: (data: PaymentData) => void;
   close: () => void;
 };
-
-
-```
-
-### Hook Types
-
-```typescript
-// usePaymentModule hook return type
-interface UsePaymentModuleReturn {
-  payment: Payment | null;
-  loading: boolean;
-  error: string | null;
-  initiateCryptoPayment: (payload: any) => Promise<PaymentResponse<any>>;
-  validateCryptoPayment: (collectionId: string, retries?: number, retryDelay?: number) => Promise<PaymentResponse<any>>;
-  clearError: () => void;
-  clearPayment: () => void;
-}
-
-// Payment response type
-interface PaymentResponse<T = any> {
-  status: 'success' | 'error';
-  message: string;
-  data: T;
-  statusCode: number;
-}
-```
-
-### Utility Types
-
-```typescript
-// Generic any type
-type IAny = any;
-
-// Ethereum address type
-type I0xAddressType = `0x${string}`;
 ```
 
 ## Quick Start Example
@@ -865,7 +696,7 @@ import PaktPaymentModule, {
   PaymentSystemRef,
   ConfigContextType,
   PaymentData,
-  onFinishResponseProps,
+  onResponseProps,
   usePaymentModule,
   UsePaymentModuleReturn,
   PaymentResponse
@@ -891,7 +722,7 @@ const config: ConfigContextType = {
     theme: 'dark',
   },
   paktConfig: {
-    baseUrl: 'https://api.pakt.com/v1',
+    baseUrl: 'chainsite-deploy-url',
     verbose: true,
   },
 };
@@ -900,12 +731,12 @@ function App() {
   const paymentRef = useRef<PaymentSystemRef>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePaymentSuccess = (response: onFinishResponseProps) => {
+  const handlePaymentSuccess = (response: onResponseProps) => {
     console.log('Payment successful:', response);
     setIsLoading(false);
   };
 
-  const handlePaymentError = (response: onFinishResponseProps) => {
+  const handlePaymentError = (response: onResponseProps) => {
     console.error('Payment failed:', response);
     setIsLoading(false);
   };
@@ -916,9 +747,8 @@ function App() {
       amount: 100,
       coin: 'USDC',
       description: 'Service payment',
-      isDirect: true,
-      collectionType: 'service',
-      owner: 'user-123',
+      isSystemDeposit: true,
+      chainId: '43114', // Avalanche C-Chain
       name: 'Premium Service'
     };
     paymentRef.current?.startPayment(paymentData);
@@ -935,8 +765,6 @@ function App() {
         config={config}
         onPaymentSuccess={handlePaymentSuccess}
         onPaymentError={handlePaymentError}
-        enabledMethods={['crypto', 'fiat']}
-        isLoading={isLoading}
       />
     </div>
   );
@@ -944,22 +772,6 @@ function App() {
 
 export default App;
 ```
-
-## Changelog
-
-### v0.3.0
-- 🎨 **New**: Comprehensive theme system with 60+ customizable design tokens
-- 🎨 **New**: Semantic color naming for improved maintainability
-- 🎨 **New**: Built-in theme examples (Dark, Minimal, Corporate)
-- 🎨 **New**: CSS custom properties integration with Tailwind
-- 🔄 **New**: Multiple payment flow patterns with detailed documentation
-- 📱 **Enhanced**: Mobile-first responsive design
-- 🔧 **Improved**: Component consistency across all payment interfaces
-- ⚡ **Enhanced**: Button positioning and layout improvements
-- 🎯 **Added**: Comprehensive error handling patterns
-- 📚 **Major**: Complete documentation overhaul with visual flow diagrams
-
-
 
 ## Contributing
 

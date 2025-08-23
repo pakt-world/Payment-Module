@@ -4,7 +4,7 @@ import "./styles/index.css";
 // Main unified payment component (recommended)
 export { default as PaktPaymentModule } from "./components";
 
-export type { PaymentSystemRef, PaymentSystemProps } from "./components/payment-system";
+export type { PaymentSystemRef, PaymentModuleProps } from "./components/payment-system";
 
 // SDK types
 export type { PaymentResponse } from "./lib/pakt-sdk";

@@ -8,13 +8,20 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 import { useConfig } from "../../context/config-context";
-import { onResponseProps } from "../../types";
+import { ConfigContextType, onResponseProps } from "../../types";
 import CryptoPaymentExtended from "./crypto";
 // import FiatPaymentExtended from "./fiat";
 import { usePaymentModule } from "../../hooks/use-payment-module";
 import Logger from "../../lib/logger";
 
 type PaymentView = "payment-method" | "crypto-payment" | "fiat-payment" | "";
+
+interface PaymentModuleProps {
+    config: ConfigContextType;
+    onPaymentSuccess?: (response: onResponseProps) => void;
+    onPaymentError?: (response: onResponseProps) => void;
+    enabledMethods?: ("crypto" | "fiat")[];
+}
 
 interface PaymentSystemProps {
     onPaymentSuccess?: (response: onResponseProps) => void;
@@ -175,4 +182,4 @@ const PaymentSystem = forwardRef<PaymentSystemRef, PaymentSystemProps>(
 );
 
 export { PaymentSystem };
-export type { PaymentSystemProps, PaymentSystemRef };
+export type { PaymentSystemRef, PaymentModuleProps };

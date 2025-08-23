@@ -7,6 +7,7 @@ import {
     ConfigContextType,
     onResponseProps,
     PaymentSystemRef,
+    PaymentData
 } from "..";
 import PaktPaymentModule from "../components";
 
@@ -44,6 +45,14 @@ const wagmiConfig = createConfig({
 
 const App = () => {
     const paymentRef = useRef<PaymentSystemRef>(null);
+    const paymentData: PaymentData = {
+        amount: 1,
+        coin: "usdc",
+        description: "test",
+        isSystemDeposit: true,
+        chainId: "43113",
+        name: "test"
+    }
 
     const onSuccessResponse = (data: onResponseProps) => {
         // setIsLoading(true);
@@ -54,27 +63,9 @@ const App = () => {
         // }, 20000);
     };
 
-    const handleCryptoPayment = () => {
-        console.log("handleCryptoPayment");
-        paymentRef.current?.startCryptoPayment?.({
-            amount: 1,
-            coin: "usdc",
-            description: "test",
-            isSystemDeposit: true,
-            chainId: "43113",
-            name: "test",
-        });
-    };
+    const handleCryptoPayment = () => paymentRef.current?.startCryptoPayment?.(paymentData);
 
-    const handleFiatPayment = () =>
-        paymentRef.current?.startFiatPayment?.({
-            amount: 1,
-            coin: "usdc",
-            description: "test",
-            isSystemDeposit: false,
-            chainId: "43113",
-            name: "test",
-        });
+    const handleFiatPayment = () => paymentRef.current?.startFiatPayment?.(paymentData);
 
     const config: ConfigContextType = {
         cryptoConfig: {

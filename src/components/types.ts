@@ -6,8 +6,8 @@ type PaymentModuleRef = {
 
 interface PaymentModuleProps {
     config: ConfigContextType;
-    onLoginSuccess?: (userData: any) => void;
-    onSignupSuccess?: (userData: any) => void;
+    onPaymentSuccess?: (response: any) => void;
+    onPaymentError?: (response: any) => void;
 }
 
 interface DesktopPaymentModuleProps {
