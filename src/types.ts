@@ -8,6 +8,10 @@ import { WagmiProviderProps, Config } from "wagmi";
 import type { PaktConfig } from "pakt-sdk";
 
 interface ConfigContextType {
+    baseUrl: string;
+    verbose?: boolean;
+    clientId?: string;
+    clientSecret?: string;
     theme?: ITheme; // colors to theme the package
     cryptoConfig?: {
         wagmiConfig: Config;
@@ -19,10 +23,6 @@ interface ConfigContextType {
         publicKey: string;
         theme?: "light" | "dark";
     };
-    baseUrl?: string;
-    verbose?: boolean;
-    clientId?: string;
-    clientSecret?: string;
     errorHandler?: (errorMessage: string) => void; //  Callback to handle Error
 }
 

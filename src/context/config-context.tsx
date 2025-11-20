@@ -96,7 +96,12 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
         }
 
         applyTheme({ ...defaultTheme, ...(config?.theme || {}) });
-        paktSDKService.initialize(config.paktConfig);
+        paktSDKService.initialize({
+            baseUrl: config.baseUrl,
+            clientId: config.clientId,
+            clientSecret: config.clientSecret,
+            verbose: config.verbose,
+        });
     }, [config]);
 
     const setErrorMessage = (message: string | null) => toast.error(message || "An error occurred while making payment.");

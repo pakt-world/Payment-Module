@@ -6,6 +6,8 @@ export interface PaktSDKConfig {
     baseUrl: string;
     testnet?: boolean;
     verbose?: boolean;
+    clientId?: string;
+    clientSecret?: string;
 }
 
 export interface PaymentResponse<T = any> {
