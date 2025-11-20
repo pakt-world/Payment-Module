@@ -19,7 +19,10 @@ interface ConfigContextType {
         publicKey: string;
         theme?: "light" | "dark";
     };
-    paktConfig: PaktConfig;
+    baseUrl?: string;
+    verbose?: boolean;
+    clientId?: string;
+    clientSecret?: string;
     errorHandler?: (errorMessage: string) => void; //  Callback to handle Error
 }
 

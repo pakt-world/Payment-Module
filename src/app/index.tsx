@@ -68,6 +68,12 @@ const App = () => {
     const handleFiatPayment = () => paymentRef.current?.startFiatPayment?.(paymentData);
 
     const config: ConfigContextType = {
+        theme:{
+            brandPrimary: "#007C5B",
+            brandSecondary: "#ecfce5",
+            headingText: "#1F2739",
+            bodyText: "#6C757D",
+        },
         cryptoConfig: {
             wagmiConfig,
         },
@@ -76,10 +82,10 @@ const App = () => {
             clientSecret: "",
             theme: "dark",
         },
-        paktConfig: {
-            baseUrl: "http://localhost:9090/v1",
-            verbose: true,
-        },
+        baseUrl: "http://localhost:9090/v1",
+        verbose: true,
+        clientId: "1234567890",
+        clientSecret: "1234567890",
     };
 
     return (
