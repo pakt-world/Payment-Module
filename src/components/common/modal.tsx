@@ -35,7 +35,7 @@ const Modal: FC<ModalProps> = ({
             <Dialog
                 open={isOpen}
                 as="div"
-                className="pam:relative !pam:z-[1000]"
+                className="pam:relative pam:z-[100]"
                 onClose={() => {
                     if (!disableClickOutside) {
                         closeModal();
@@ -51,7 +51,7 @@ const Modal: FC<ModalProps> = ({
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="pam:fixed pam:inset-0 pam:bg-modal-overlay pam:backdrop-blur-lg !pam:z-[1000]" />
+                    <div className="pam:fixed pam:inset-0 pam:bg-modal-overlay pam:backdrop-blur-lg pam:z-[100]" />
                 </Transition.Child>
                 <Transition.Child
                     as={Fragment}
@@ -62,7 +62,7 @@ const Modal: FC<ModalProps> = ({
                     leaveFrom="opacity-100 scale-100"
                     leaveTo="opacity-0 scale-95"
                 >
-                    <div className="pam:fixed pam:inset-0 pam:overflow-y-auto !pam:z-[1000]">
+                    <div className="pam:fixed pam:inset-0 pam:overflow-y-auto pam:z-[100]">
                         <div className="pam:flex pam:min-h-full pam:items-center pam:justify-center pam:p-4 pam:text-center">
                             <Dialog.Panel
                                 className={cn(
