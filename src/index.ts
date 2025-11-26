@@ -1,14 +1,18 @@
 //  Author: BeardKoda for Pakt (https://github.com/BeardKoda)
 import "./styles/index.css";
 
-// Main unified payment component (recommended)
+export { PaktPaymentProvider } from "./components/payment-provider";
+export { usePaktPayment } from "./context/payment-context";
+export type { PaymentContextType } from "./context/payment-context";
+
 export { default as PaktPaymentModule } from "./components";
 
-export type { PaymentSystemRef, PaymentModuleProps } from "./components/payment-system";
+export type {
+    PaymentSystemRef,
+    PaymentModuleProps,
+} from "./components/payment-system";
 
-// SDK types
 export type { PaymentResponse } from "./lib/pakt-sdk";
 
-// Utilities and types
 export * as wagmi from "./components/wagmi";
 export * from "./types";
