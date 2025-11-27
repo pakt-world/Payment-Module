@@ -20,15 +20,15 @@ const DisclaimerDialog = ({ isOpen, closeModal }: { isOpen: boolean; closeModal:
 			closeModal={() => {
 				closeModal();
 			}}
-			// disableClickOutside
+		// disableClickOutside
 		>
 			<div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-4 vsm:max-w-[400px]">
-				<div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-6 pam:bg-form-background pam:p-6 pam:sm:pam:rounded-2xl pam:sm:pam:border pam:sm:pam:border-border-color">
+				<div className="pam:mx-auto pam:flex pam:w-full pam:flex-col pam:gap-6 pam:bg-form-background pam:p-6 pam:sm:pam:rounded-2xl pam:sm:pam:border pam:sm:pam:border-border-color pam:backdrop-blur-md">
 					<div className="pam:flex pam:w-full pam:items-center pam:justify-between">
 						<h2 className="pam:text-2xl pam:font-bold pam:text-heading-text">Disclaimer</h2>
 
 						<button
-							                        className="pam:rounded-full pam:border pam:border-border-color pam:p-2 pam:text-heading-text pam:duration-200 pam:hover:pam:border-error-text pam:hover:pam:text-error-text"
+							className="pam:rounded-full pam:border pam:border-border-color pam:p-2 pam:text-heading-text pam:duration-200 pam:hover:pam:border-error-text pam:hover:pam:text-error-text"
 							onClick={() => {
 								closeModal();
 							}}

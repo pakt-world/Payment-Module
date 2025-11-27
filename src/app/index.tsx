@@ -68,11 +68,22 @@ const App = () => {
     const handleFiatPayment = () => paymentRef.current?.startFiatPayment?.(paymentData);
 
     const config: ConfigContextType = {
-        theme:{
-            brandPrimary: "#007C5B",
-            brandSecondary: "#ecfce5",
-            headingText: "#1F2739",
-            bodyText: "#6C757D",
+        theme: {
+            brandPrimary: "rgba(255, 255, 255, 0.9)",
+            brandSecondary: "rgba(255, 255, 255, 0.1)",
+            headingText: "rgba(255, 255, 255, 0.95)",
+            bodyText: "rgba(255, 255, 255, 0.7)",
+            formBackground: "rgba(20, 20, 20, 0.6)",
+            modalOverlay: "rgba(0, 0, 0, 0.6)",
+            borderColor: "rgba(255, 255, 255, 0.1)",
+            inputBackground: "rgba(0, 0, 0, 0.2)",
+            inputBorder: "rgba(255, 255, 255, 0.1)",
+            cardBackground: "rgba(255, 255, 255, 0.03)",
+            tabBackground: "rgba(0, 0, 0, 0.2)",
+            tabText: "rgba(255, 255, 255, 0.6)",
+            tabActiveBackground: "rgba(255, 255, 255, 0.1)",
+            tabActiveText: "#FFFFFF",
+            errorText: "#ff6b6b",
         },
         cryptoConfig: {
             wagmiConfig,
@@ -87,6 +98,7 @@ const App = () => {
         verbose: true,
         clientId: "1234567890",
         clientSecret: "1234567890",
+
     };
 
     return (

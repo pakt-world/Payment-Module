@@ -132,8 +132,8 @@ const ConnectWallet = ({
                 </button>
             </p>
 
-            <div className="pam:flex pam:items-center pam:justify-between pam:gap-2 pam:rounded-2xl pam:border pam:border-brand-primary pam:bg-brand-secondary pam:px-4 pam:py-6 pam:text-brand-primary pam:max-sm:pam:h-[43px]">
-                <span className="pam:text-lg">Total Amount:</span>
+            <div className="pam:flex pam:items-center pam:justify-between pam:gap-2 pam:rounded-2xl pam:border pam:border-border-color pam:bg-brand-secondary pam:px-4 pam:py-6 pam:text-brand-primary pam:max-sm:pam:h-[43px]">
+                <span className="pam:text-lg pam:text-brand-primary">Total Amount:</span>
                 <span className="pam:text-lg pam:font-bold">
                     {amount} {coin.toUpperCase()}
                 </span>
